@@ -1,0 +1,13 @@
+<div class="col-md-12">
+    <label>Historical Object Viewer</label>
+    <table border="1" style="width: 100%;">
+        <tr>
+            <td width="10%">ObjectType</td>
+            <td>{{historical.type}}</td>
+        </tr>
+        <tr ng-repeat="variable in dataVariables">
+            <td>{{variable.key}}</td>
+            <td>{{variable.value}}</td>
+        </tr>
+    </table>
+</div>

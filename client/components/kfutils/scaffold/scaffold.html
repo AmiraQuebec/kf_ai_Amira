@@ -1,0 +1,27 @@
+<div ng-controller="ScaffoldCtrl" class="col-md-12" style="padding: 0px;" id="scaffoldContainer">
+    <div>
+        <select class="KFScaffoldMenu" ng-model="current" ng-options="s.title for s in scaffolds" context-menu data-target="menu-B">
+        </select>
+    </div>
+    <div style="height: 5px;">
+    </div>
+    <div  ng-if="current.data.isTemplate">
+        <div class="KFSupportButton" ng-click="allClicked(current);">All</div>
+    </div>
+    <div style="width: 232px;
+    position: relative;
+    left: -7px;
+    font-size: 14px;">
+        <div class="KFSupportButton" ng-repeat="s in current.supports" ng-click="supportClicked(s);" context-menu="onContextOpen(this)" data-target="menu-A">{{s._to.title}}</div>
+    </div>
+    <div class="dropdown position-fixed" id="menu-A">
+        <ul class="dropdown-menu" role="menu">
+            <li class="menuitem" ng-click="openInWindow()">Open In Window</li>
+        </ul>
+    </div>
+    <div class="dropdown position-fixed" id="menu-B">
+        <ul class="dropdown-menu" role="menu">
+            <li class="menuitem" ng-click="scaffoldOpenInWindow()">Open In Window</li>
+        </ul>
+    </div>
+</div>

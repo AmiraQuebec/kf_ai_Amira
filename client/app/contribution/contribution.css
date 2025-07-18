@@ -1,0 +1,376 @@
+
+.floating-panel {
+    position: fixed;
+    top: 20%;
+    left: 30%;
+    width: 40%;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+}
+
+.panel-header {
+    padding: 10px;
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #ccc;
+    cursor: move; /* Make header draggable */
+}
+
+.panel-body {
+    padding: 15px;
+}
+
+.close-button {
+    float: right;
+    border: none;
+    background: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.floating-panel {
+    position: fixed;
+    top: 20%;
+    left: 30%;
+    width: 40%;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: none; /* Initially hidden */
+}
+
+.panel-header {
+    padding: 10px;
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #ccc;
+    cursor: move; /* Indicates the element is draggable */
+}
+
+.panel-body {
+    padding: 15px;
+}
+
+.close-button {
+    float: right;
+    border: none;
+    background: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.modal-dialog {
+    position: fixed;
+    top: 100px;
+    left: 100px;
+    margin: 0;
+}
+
+.modal-content {
+    resize: both;
+    overflow: auto;
+}
+.modal-content-spell-checking {
+    border-style: solid !important;
+    border-color: #073B7D !important;
+    border-width: 4px !important;
+    width: 600px !important;
+    position: relative !important;
+    left: 0px !important;
+    resize: both;
+    overflow: auto;
+}
+
+.modal-header .close {
+    margin-top: -2px;
+    float: right;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    opacity: .5;
+}
+
+.modal-header .close:hover,
+.modal-header .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+    opacity: .75;
+}
+.modal-content-spell-checking {
+    border-style: solid !important;
+    border-color: #073B7D !important;
+    border-width: 4px !important;
+    width: 600px !important;
+    position: relative !important;
+    left: 0px !important;
+    resize: both; /* Make resizable */
+    overflow: auto;
+}
+
+.resizable-handle {
+    width: 10px;
+    height: 10px;
+    background-color: #333;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    cursor: se-resize;
+}
+
+.annotator-wrapper{
+    height: 100%;
+}
+.KFPermission td, th {
+    padding: 3px;
+}
+.KFContribution {
+    padding: 2px;
+}
+.KFTitle {
+    font-weight: 500;
+    font-size: 16px;
+    padding-left: 5px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    margin-bottom: 0px;
+}
+.KFModified {
+    font-size: 8px;
+    padding-left: 10px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    margin-bottom: 0px;
+}
+/* utility container extends by "well" class */
+/* now we use on attachments on editing tab */
+
+.KFContainer {
+    min-height: 20px;
+    padding: 3px;
+    margin-bottom: 0px;
+    background-color: #f5f5f5;
+    border: 1px solid #e3e3e3;
+    border-radius: 4px;
+
+}
+.KFContainer > p {
+    margin-bottom: 0px;
+}
+
+.KFContainer .selected{
+    border: 1px solid red;
+}
+
+.video_area{
+    width:100%;
+    float:left;
+    display:block;
+    border-bottom:1px solid #e3e3e3;
+}
+
+.content_area{
+    width:100%;
+    float:left;
+    display:block;
+    height:250px;
+}
+
+.content_area .text_area{
+    float:left;
+    width:100%;
+    height:calc(100% - 35px);
+    overflow-y:scroll;
+    overflow-x:scroll;
+    border:1px solid #e3e3e3;
+}
+
+.content_area .btn_area{
+    float:left;
+    width:100%;
+    height:30px;
+    margin-top:5px;
+    text-align:left;
+}
+
+.videoRow{
+    display: block;
+    float: left;
+    width: 100%;
+    height: 20px;
+    padding-top: 2px;
+    cursor: pointer;
+}
+
+.videoRow:hover{
+    color:red;
+}
+
+.videoRow .videoTitle{
+    width:70%;
+    display:inline-block;
+    font-size:11px;
+}
+
+
+/* tab related */
+
+.KFTabSet {
+    height: 100%;
+    height: calc(100% - 50px);
+}
+.KFTabSet .ng-isolate-scope {
+    height: 100%;
+}
+.KFTabSet .tab-content {
+    overflow: auto;
+    vertical-align: top;
+    height: 100%;
+    height: calc(100% - 19px);
+}
+.KFTabSet .tab-pane {
+    height: 100%;
+}
+.nav > .KFTab > a {
+    padding: 1px 10px;
+    cursor: pointer;
+}
+
+.promisingbtn:hover
+{
+background-image:none !important;
+/*background-color:#ff00ff !important;*/
+}
+
+.tooltip1 {
+    position: absolute;
+}
+
+.tooltip1 .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 100;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+.tooltip1 .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.tooltip1:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+#attachment-panel {
+    position: absolute;
+    top: 0px;
+    left: 50px;
+    width: 75%;
+    background-color: white;
+    z-index: 100;
+}
+
+.attachment-center-panel {
+    padding-left: 50px;
+}
+
+.attachment-hint {
+    color: grey;
+    margin-top: 15px;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
+
+.attachment-header {
+    padding-top: 5px;
+    padding-bottom: 10px;
+    font-size: 12px;
+}
+
+.attachment-container {
+    margin-top: 5px;
+}
+
+.attachment-container > p {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.attachment-thumbnail, .attachment-buttons {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.attachment-thumbnail {
+    width: 93px;
+    height: 80px;
+}
+
+.attachment-thumbnail img {
+    max-width: 93px;
+    max-height: 80px;
+    vertical-align: top;
+}
+
+.attachment-info p {
+    margin: 0px;
+}
+
+.attachment-buttons {
+    margin-left: 10px;
+}
+
+.attachment-box {
+    display: inline-block;
+    margin: 5px;
+    padding-right: 10px;
+    border-right: solid 1px #DDDDDD;
+    vertical-align: top;
+}
+
+.attachment-separator {
+    border-right: solid 1px grey;
+    vertical-align: top;
+}
+
+.delete-attachment, .download-attachment{
+    background-color: transparent;
+    border: 0px;
+    margin-top: 0px;
+    padding: 0px;
+    font-size: 20px;
+}
+.btn-spell-checker {
+    color: #ffffff;
+    background-color: #59a629;
+    border-color: #3d6c20;
+}
+.modal-content-spell-checking {
+    border-style: solid !important;
+    border-color: #073B7D !important;
+    border-width: 4px !important;
+    width: 600px !important;
+    position: relative !important;
+    left: 0px !important;
+}

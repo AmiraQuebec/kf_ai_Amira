@@ -1,0 +1,279 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script>
+    $(function () {
+        $("#myModal").appendTo("body");
+    });
+</script>
+
+<div ng-include="'components/navbar/navbar.html'"></div>
+<div class="bg-img-wrapper">
+    <div class="bg-overlay">
+        <div class="container login-content">
+            <div class="row">
+                <div style=" color: #073B7D;" class="col-sm-6">
+                    <h1 style="font-size: 50px" class="text-center">Knowledge Forum</h1>
+                    <br>
+
+                    <p style="font-size: 20px" class="text-justify">Le Knowledge Forum (KF) est une plateforme numérique
+                        dédiée à la coélaboration de connaissances,
+                        soit
+                        une forme avancée de collaboration à des fins de compréhension de problèmes complexes, voire de
+                        leur
+                        résolution. </p>
+                </div>
+                <div style="    padding-right: 59px;" class="col-sm-6 login-separator">
+                    <h1 class="new-kf-color text-center">Connexion</h1>
+                    <h3 style="margin-top: -5px; padding-bottom: 16px;" class="text-center new-kf-color">avec</h3>
+                    <div class="login-div">
+
+
+                        <a href="" style="background-color:#073B7D" data-toggle="modal" data-target="#modalLoginLocal"
+                           class="btn btn-lg login-btn login-local"><span
+                            class="login-btn">{{ 'account_local' | translate }}</span></a>
+
+
+                        <a href="" class="btn btn-lg idul-btn" data-toggle="modal" data-target="#modalLoginIdul"
+                           style=" background-color:#073B7D; height: 54px!important;width: 174px;margin-right: 40px;"><span
+                            style="position: relative;
+                            top: -3px;" class=" login-btn">{{ 'account_idul' | translate }}</span></a>
+                    </div>
+                    <p style="padding-top: 30px" class="new-kf-color text-center">
+                        {{ 'login_signup_invite' | translate }}:
+                        <br>
+                        <br>
+                        <a href="" data-toggle="modal" data-target="#modalRegister"
+                           style="background-color:#073B7D; width: 179px;" class="btn btn-lg"><span
+                            class="login-btn">{{ 'register' | translate }}</span></a>
+                </div>
+            </div>
+
+        </div>
+        <span class="new-kf-color app-version">v 6.11.14</span>
+        <br>
+        <span class="new-kf-color app-version">IKIT/OISE/UT</span>
+        <br>
+        <span class="new-kf-color app-version">Adaptation par et pour la communauté TACT</span>
+        <br>
+        <br>
+        <br>
+        <br>
+        <!-- Modal LOCAL -->
+        <div id="modalLoginLocal" class="modal fade center" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title text-center new-kf-color">CONNEXION</h4>
+                        <h5 class="modal-title text-center new-kf-color">COMPTE KF LOCAL</h5>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="local-form" class="form" name="form" ng-submit="login(form)" novalidate>
+                            <div class="form-group">
+                                <label class="new-kf-color login-form-label">{{ 'username' | translate }}</label>
+                                <input type="text" name="userName" class="form-control modal-input"
+                                       ng-model="user.userName"
+                                       required>
+                            </div>
+                            <div class="form-group">
+                                <label style="padding-top: 44px;"
+                                       class="new-kf-color login-form-label">{{ 'password' | translate }}</label>
+                                <input type="password" name="password" class="form-control modal-input"
+                                       ng-model="user.password" required>
+                            </div>
+                            <div class="form-group has-error">
+                                <p class="help-block"
+                                   ng-show="form.userName.$error.required && form.password.$error.required && submitted">
+                                    {{ 'login_error_nameAndPass' | translate }}
+                                </p>
+                                <p class="help-block" ng-show="form.userName.$error.email && submitted">
+                                    {{ 'login_error_email' | translate }}
+                                </p>
+                                <p class="help-block">{{ errors.other }}</p>
+                            </div>
+                            <div>
+                                <button style="background-color: #073B7D;
+                                            border-color: #073B7D; text-transform: uppercase"
+                                        class="btn btn-default btn-lg btn-login btn-primary submit-login" type="submit">
+                                    {{ 'login' | translate }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal IDUL -->
+        <div id="modalLoginIdul" class="modal fade center" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title text-center new-kf-color">CONNEXION</h4>
+                        <h5 class="modal-title text-center new-kf-color">IDUL ULAVAL</h5>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="idul-form" class="form" name="form" ng-submit="loginIDUL(form)" novalidate>
+                            <div class="form-group">
+                                <label class="new-kf-color login-form-label">{{ 'username' | translate }}</label>
+                                <input placeholder="IDUL" type="text" name="userName" class="form-control modal-input"
+                                       ng-model="user.userName"
+                                       required>
+                            </div>
+                            <div class="form-group">
+                                <label style="padding-top: 44px;"
+                                       class="new-kf-color login-form-label">{{ 'password' | translate }}</label>
+                                <input type="password" name="password" class="form-control modal-input"
+                                       ng-model="user.password" required>
+                            </div>
+                            <div class="form-group has-error">
+                                <p class="help-block"
+                                   ng-show="form.userName.$error.required && form.password.$error.required && submitted">
+                                    {{ 'login_error_nameAndPass' | translate }}
+                                </p>
+                                <p class="help-block" ng-show="form.userName.$error.email && submitted">
+                                    {{ 'login_error_email' | translate }}
+                                </p>
+                                <p class="help-block">{{ errors.other }}</p>
+                            </div>
+                            <div>
+                                <button style="background-color: #073B7D;
+                                            border-color: #073B7D; text-transform: uppercase"
+                                        class="btn btn-default btn-lg btn-login btn-primary submit-login" type="submit">
+                                    {{ 'login' | translate }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--        Modal REGISTER-->
+        <div id="modalRegister" class="modal fade center" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content-register">
+                    <div class="modal-header">
+                        <h4 class="modal-title text-center new-kf-color text-capitalize">{{ 'register' | translate
+                            }}</h4>
+                        <button style="bottom: 55px!important;" type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form" name="form" ng-submit="register(form)" novalidate>
+                            <div class="form-group"
+                                 ng-class="{ 'has-success': form.email.$valid && submitted, 'has-error': form.email.$invalid && submitted }">
+                                <label class="new-kf-color login-form-label">{{ 'email' | translate }}</label>
+                                <input type="email" name="email" class="form-control modal-input-register" ng-model="user.email"
+                                       mongoose-error/>
+                                <p class="help-block" ng-show="form.email.$error.email && submitted">
+                                    {{ 'register_error_email_invalid' | translate }}
+                                </p>
+                                <!-- <p class="help-block" ng-show="form.email.$error.required && submitted">
+                                    {{ 'register_error_email_required' | translate }}
+                                </p> -->
+                                <p class="help-block" ng-show="form.email.$error.mongoose">
+                                    {{ errors.email }}
+                                </p>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group"
+                                         ng-class="{ 'has-success': form.firstName.$valid && submitted, 'has-error': form.firstName.$invalid && submitted }">
+                                        <label class="new-kf-color">{{ 'firstName' | translate }}</label>
+                                        <input type="text" name="firstName" class="form-control modal-input-register"
+                                               ng-model="user.firstName"
+                                               required/>
+                                        <p class="help-block" ng-show="form.firstName.$error.required && submitted">
+                                            {{ 'register_error_firstName' | translate }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group"
+                                         ng-class="{ 'has-success': form.lastName.$valid && submitted, 'has-error': form.lastName.$invalid && submitted }">
+                                        <label class="new-kf-color">{{ 'lastName' | translate }}</label>
+                                        <input type="text" name="lastName" class="form-control modal-input-register" ng-model="user.lastName"
+                                               required/>
+                                        <p class="help-block" ng-show="form.lastName.$error.required && submitted">
+                                            {{ 'register_error_lastName' | translate }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- TODO i18n -->
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group"
+                                         ng-class="{ 'has-success': form.userName.$valid && submitted, 'has-error': form.userName.$invalid && submitted }">
+                                        <label class="new-kf-color">{{ 'username' | translate }}</label>
+                                        <input type="text" name="userName" class="form-control modal-input-register" ng-model="user.userName"
+                                               ng-minlength="2" ng-maxlength="50"
+                                               ng-pattern="/^[a-zA-Z][.0-9a-zA-Z@_-]{1,100}$/" required mongoose-error/>
+                                        <p class="help-block"
+                                           ng-show="!form.userName.$error.minlength && !form.userName.$error.maxlength && form.userName.$error.pattern">
+                                            The userName cannot be accepted. You can use only alphabetic characters,
+                                            numbers,
+                                            and "._@-". Non alphabetic characters cannot be used at the first.
+                                        </p>
+                                        <p class="help-block" ng-show="form.userName.$error.required && submitted">
+                                            {{ 'register_error_username_required' | translate }}
+                                        </p>
+                                        <p class="help-block"
+                                           ng-show="form.userName.$error.minlength && !form.userName.$error.required">
+                                            The userName is too short.
+                                        </p>
+                                        <p class="help-block" ng-show="form.userName.$error.maxlength">
+                                            The userName is too long.
+                                        </p>
+                                        <p class="help-block" ng-show="form.userName.$error.mongoose">
+                                            {{ errors.userName }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group"
+                                         ng-class="{ 'has-success': form.password.$valid && submitted, 'has-error': form.password.$invalid && submitted }">
+                                        <label class="new-kf-color">{{ 'password' | translate }}</label>
+                                        <input type="password" name="password" class="form-control modal-input-register"
+                                               ng-model="user.password"
+                                               ng-minlength="4" required mongoose-error/>
+                                        <p class="help-block"
+                                           ng-show="(form.password.$error.minlength || form.password.$error.required) && submitted">
+                                            {{ 'password_restrictions' | translate }}
+                                        </p>
+                                        <p class="help-block" ng-show="form.password.$error.mongoose">
+                                            {{ errors.password }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group" ng-class="{ 'has-error': !captchaSigned && submitted }">
+                                <label class="new-kf-color">{{ 'security_check' | translate }}</label>
+                                <div vc-recaptcha size="normal" on-success="setResponse(response)"></div>
+                                <p class="help-block" ng-show="(!captchaSigned && submitted)">Please confirm that you
+                                    are not a robot</p>
+                            </div>
+                            <br/>
+                            <div>
+                                <button style="background-color: #073B7D;
+                                        border-color: #073B7D; text-transform: uppercase" class="btn btn-default btn-lg btn-login btn-primary submit-register" type="submit"
+                                        ng-disabled="!captchaSigned">
+                                    {{ 'register' | translate }}
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#local-form').submit(function () {
+        $('#modalLoginLocal').modal('hide');
+    });
+</script>

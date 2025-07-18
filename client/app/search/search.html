@@ -1,0 +1,287 @@
+<div class="col-md-12">
+    <link rel="stylesheet" type="text/css" href="/manual_assets/kfmce.css" />
+    <h3 class="text-center"><label><span class="glyphicon glyphicon-search"></span> {{selected.searchType.title}} {{ 'search' | translate }} {{ 'in' | translate }} {{community.community.title}}</label></h3>
+    <hr>
+    <div class="container">
+        <div class="row well">
+            <div class="col-md-2">
+                <ui-select ng-model="selected.searchType" theme="bootstrap"
+                           title="Choose Search Type"
+                           append-to-body="true"
+                           search-enabled="false">
+                    <ui-select-match placeholder="Action">{{$select.selected.title}}</ui-select-match>
+                    <ui-select-choices repeat="type in searchTypeList | filter: $select.search | orderBy:'title'| limitTo:80">
+                        <div ng-bind-html="type.title | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            <div class="col-md-9">
+                <p style="width: 100%">
+                    <span ng-if="hideUserNameInAuthorSelector === true" >
+                        <input ng-readonly="selected.searchType.type === 'students'" class="form-control" placeholder="{{ 'search_placeholder' | translate }}" id="queryStringWrapper" ng-model="queryStringWrapper" type="search" name="SearchWrapper" ng-keypress="searchWithEnterKey($event)">
+                    <small class="small">{{ 'author_annonimus' | translate }}</small>
+                    </span>
+                    <span ng-if="hideUserNameInAuthorSelector !== true">
+                        <input ng-readonly="selected.searchType.type === 'students'" class="form-control" placeholder="{{ 'search_placeholder' | translate }}" id="queryString" ng-model="queryString" type="search" name="Search" ng-keypress="searchWithEnterKey($event)">
+                    </span>
+                    <div ng-if="selected.searchType.type === 'students'">
+                        <label>{{ 'authors' | translate }}:</label>
+                        <div style="width: 400px;" ng-include="'components/kfutils/authorselector/authorselector.html'"></div>
+                    </div>
+                    <span class="input-group-btn">
+                            <button type="submit" class="btn btn-primary" ng-click="search()"><span class="glyphicon glyphicon-search"></span> {{ 'search' | translate }}</button>
+                            <!-- <div class="col-md-1 nopadding" ng-if="selected.searchType.type !== 'students'"> -->
+                                <button ng-if="selected.searchType.type !== 'students'" class="btn btn-primary " ng-click="status.detailCollapsed = !status.detailCollapsed"><span class="glyphicon glyphicon-search"></span>   {{ 'advanced' | translate }}</button>
+                            <!-- </div> -->
+                            <button class="btn btn-warning" ng-click="reset()"> <span class="glyphicon glyphicon-repeat"></span> {{ 'reset' | translate }}</button>
+                    </span>
+                </p>
+            </div>
+            <!--<div class="col-md-1 nopadding">-->
+                <!--<button class="btn btn-info btn-block" ng-click="reset()"> <span class="glyphicon glyphicon-repeat"></span> {{ 'reset' | translate }}</button>-->
+            <!--</div>-->
+            <!-- <div class="col-md-1 nopadding" ng-if="selected.searchType.type !== 'students'">
+                <button class="btn btn-default btn-block " ng-click="status.detailCollapsed = !status.detailCollapsed">{{ 'advanced' | translate }}</button>
+            </div> -->
+            <!--<div class="col-md-1 btn-group nopadding text-center">-->
+                <!--<button class="btn btn-default" ng-click="status.detailCollapsed = !status.detailCollapsed">{{ 'advanced' | translate }}</button>-->
+            <!--</div>-->
+        </div>
+        <!--<div class="col-md-1">-->
+            <!--<button class="btn btn-primary btn-block" ng-click="exportCommunityData()"> <span class="glyphicon glyphicon-export"></span> {{ 'Export Community Data' | translate }}</button>-->
+        <!--</div>-->
+    </div>
+    <div collapse="status.detailCollapsed">
+        <div class="well well-lg">
+
+                <div  ng-if="selected.searchType.type !== 'notes' " style="padding: 15px;">
+                <label>{{ 'search_views' | translate}}:</label>
+                <button type="button" class="btn btn-primary kfbutton" ng-click="addSearchView()">{{'on' | translate}}</button>
+            </div>
+            <div style="padding: 15px;">
+                <label>{{'search_private_notes' | translate}}:</label>
+                <button type="button" class="btn btn-primary kfbutton" ng-click="addPrivateMode()">{{'on' | translate}}</button>
+            </div>
+            <div style="padding: 15px" ng-if="selected.searchType.type === 'notes'">
+
+                <label>{{'scaffolds_repository' | translate}} : </label>
+                    <ui-select theme="select2" ng-model="selected.scaffold" ng-disabled="disabled" style="width: 300px;">
+                        <ui-select-match placeholder="{{ 'scaffold_select' | translate }} ">{{selected.scaffold.title}}
+                        </ui-select-match>
+                        <ui-select-choices repeat="scaffold in scaffolds ">
+                            <div> {{scaffold.title}}</div>
+                        </ui-select-choices>
+                    </ui-select>
+                    <ui-select theme="select2" multiple ng-model="selected.scaffoldsupports"
+                        on-select="filterNotesByScaffold(selected.scaffoldsupports)" ng-disabled="disabled" style="min-width: 300px;max-width:600px">
+                        <ui-select-match placeholder="{{ 'scaffold_select_add' | translate }} ">{{$item._to.title}}
+                        </ui-select-match>
+                        <ui-select-choices repeat="support in selected.scaffold.supports ">
+                            <div> {{support._to.title}}</div>
+                        </ui-select-choices>
+                    </ui-select>
+
+                    <button type="button" class="btn btn-primary kfbutton" ng-click="addScaffoldSupport()">{{'add' | translate}}</button>
+
+
+            </div>
+            <div style="padding: 15px;">
+                <label>{{'view' | translate}}</label>
+                <ui-select ng-model="selected.views" theme="select2" multiple ng-disabled="disabled" style="width: 80%;">
+                    <ui-select-match placeholder="{{'view_select' | translate}}...">{{$item.title}}</ui-select-match>
+                    <ui-select-choices repeat="view in views | filter: $select.search | orderBy:'title'| limitTo:80">
+                        <div ng-bind-html="view.title | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
+                <button type="button" class="btn btn-primary kfbutton" ng-click="addViews()">{{'add' | translate}}</button>
+            </div>
+            <div style="padding: 15px;">
+                <label>{{ 'authors' | translate }}:</label>
+                <div style="width: 400px;" ng-include="'components/kfutils/authorselector/authorselector.html'"></div>
+            </div>
+            <div style="height: 100px;">
+                <div class="col-md-6">
+                    <label>{{ 'dates' | translate }}:</label>
+                    <br>
+                    <input type="hidden" class="form-control" datepicker-popup="{{format}}" ng-model="from" is-open="fromOpened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="{{ 'close' | translate }}" />
+                    <button type="button" class="btn btn-primary kfbutton" ng-click="openFrom($event)">{{ 'from' | translate }}</button>
+                    <input type="hidden" class="form-control" datepicker-popup="{{format}}" ng-model="to" is-open="toOpened" datepicker-options="dateOptions" show-weeks="false" date-disabled="disabled(date, mode)" ng-required="true" close-text="{{ 'close' | translate }}" />
+                    <button type="button" class="btn btn-primary kfbutton" ng-click="openTo($event)">{{ 'to' | translate }}</button>
+                </div>
+            </div>
+            <div style="height: 100px;">
+                <div class="col-md-6">
+                    <label>{{'pagesize' | translate}}:</label>
+                    <br>
+                    <input type="text" class="form-control" ng-model="pager.pagesize">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="KFSearchResult">
+        <div ng-if="status.status === 'searching'">
+            {{'searching' | translate}}
+        </div>
+        <div ng-if="status.status === 'noresult'">
+            {{'no_contributions_found' | translate}}
+        </div>
+        <div ng-if="status.status === 'searched'">
+
+            <!--<div ng-if="isManager()" style="float: right;">-->
+            <div style="float: right;">
+                <pagination style="margin-top: 2px; margin-bottom: 2px;" total-items="pager.total" ng-model="pager.page" max-size="maxSize" items-per-page="pager.pagesize" class="pagination-sm" boundary-links="true" rotate="false" ng-change="pageChanged()"></pagination>
+            </div>
+            <div style="width: 100%; float: left;">
+                <div style="float: left;" ng-if="selected.searchType.type !== 'students'">
+                    <button type="button" ng-csv="getTable()" csv-header="getTableHeader()" filename="searchresult.csv" add-bom="true">{{ 'csv_download' | translate }}</button>
+                    <span ng-if="selected.searchType.type !== 'annotation'">
+                        <button ng-if="!displayExtraInfo" type="button" ng-click="showExtraInfo()" >{{ 'display_info' | translate }}</button>
+                        <button ng-if="displayExtraInfo" type="button" ng-click="hideExtraInfo()" class="btn btn-tiny btn-primary">{{ 'hide_info' | translate }}</button>
+                    </span>
+                    <input type="checkbox" id="markFlag" ng-model="markFlag" ng-change="highlighter(markFlag)"><label for="markFlag">  {{ 'highlight_search_term' | translate }} </label>
+                </div>
+                <div style="text-align: right;">
+                    {{ 'page_current' | translate }}: {{pager.page}} ({{pager.getStart()}} - {{pager.getEnd()}}) / Total: {{pager.total}} .
+                </div>
+            </div>
+            <br>
+            <div ng-if="status.loading === true">
+            </div>
+            <div ng-if="status.loading !== true">
+                <table ng-if="selected.searchType.type !== 'students'" border='1' style="width: 100%;">
+                        <tr ng-if="selected.searchType.type !== 'annotation'">
+                        <!--<th ng-if="displayExtraInfo">ID</th>-->
+                        <th style="width: 15%;">{{ 'title' | translate }}</th>
+                        <th style="max-width: 15%;">{{ 'author-s' | translate }}</th>
+                        <th>{{ 'body' | translate }}
+                            <button type="button" ng-if="!showScaffoldClicked && selected.scaffoldsupports.length===0" class="btn btn-default" ng-click="showScaffold()">{{ 'scaffold_show' | translate }}</button>
+                            <button type="button" ng-if="showScaffoldClicked && selected.scaffoldsupports.length===0" class="btn btn-default" ng-click="hidescaffold()">{{ 'scaffold_hide' | translate }}</button>
+                        </th>
+                        <th ng-if="displayExtraInfo">{{ 'scaffolds' | translate }}</th>
+                        <th ng-if="displayExtraInfo">{{ 'keyword-s' | translate }}</th>
+                        <th style="max-width: 15%;">{{ 'created' | translate }}</th>
+                        <th ng-if="displayExtraInfo">{{ 'views' | translate }}</th>
+                        <th ng-if="displayExtraInfo">{{ 'build-on' | translate }}</th>
+                        <th ng-if="displayExtraInfo">{{ 'edit_by' | translate }}</th>
+                        <th ng-if="displayExtraInfo">{{ 'read_by' | translate }}</th>
+                        <th>{{ 'comment' | translate }}</th>
+                    </tr>
+                    <tr ng-if="selected.searchType.type === 'annotation'">
+                        <th style="width: 15%;">{{ 'quote' | translate }}</th>
+                        <th style="width: 15%;">{{ 'author-s' | translate }}</th>
+                        <th ng-init="showScaffold()">{{ 'annotation_body' | translate }}
+
+                        </th>
+                        <th style="width: 15%;">{{ 'created' | translate }}</th>
+                        <th style="width: 15%;">{{ 'comment' | translate }}</th>
+                    </tr>
+                    <tr class="KFSearchResult" ng-repeat="contribution in detailedTableData" on-finish-render="ngRepeatFinished">
+                        <!--<td ng-if="displayExtraInfo">{{contribution._id}}</td>-->
+                        <td>
+                            <div kfelement draggable="true">
+                                <span><img ng-src="{{getIcon(contributionsMap[contribution._id])}}" draggable="false"></span>
+                                <a ng-if="selected.searchType.type !== 'annotation'" class="KFSearchLink" href="contribution/{{contribution._id}}" target="_blank" draggable="false"><span class="search_body">{{contribution.title}}</span></a>
+                                <span  ng-if="selected.searchType.type === 'annotation'" class="search_body">{{contribution.title}}</span>
+                            </div>
+                        </td>
+                        <td>{{contribution.authors}} </td>
+                        <td ng-if="(selected.searchType.type !== 'notes')|| (selected.searchType.type === 'notes' && selected.scaffoldsupports.length===0)">
+                            <div ng-bind-html="contribution.body" kf-notedoby class="search_body"></div>
+                        </td>
+                        <td ng-if=" selected.searchType.type === 'notes' && selected.scaffoldsupports.length!==0">
+                            <span class="glyphicon glyphicon-plus" ng-if="!contribution.scaffoldFlag" ng-click="contribution.scaffoldFlag=!contribution.scaffoldFlag"></span>
+                            <span class="glyphicon glyphicon-minus" ng-if="contribution.scaffoldFlag" ng-click="contribution.scaffoldFlag=!contribution.scaffoldFlag"></span>
+                            <span  ng-bind-html="getscaffoldlinOnly(contribution.scaffoldFlag,contribution.body)" kf-notedoby class="search_body"></span>
+                        </td>
+                        <td ng-if="displayExtraInfo">{{contribution.scaffolds}}</td>
+                        <td ng-if="displayExtraInfo">{{contribution.keywords}}</td>
+                        <td>{{contribution.created}}</td>
+                        <td ng-if="displayExtraInfo">{{contribution.views}}</td>
+                        <td ng-if="displayExtraInfo">{{contribution.buildson}}</td>
+                        <td ng-if="displayExtraInfo">{{contribution.editBy}}</td>
+                        <td ng-if="displayExtraInfo">{{contribution.readBy  }}</td>
+                        <td ng-if="isManager()"><a href="#" editable-text="contribution.comments" onaftersave="saveComments(contribution)">{{ contribution.comments || "empty" }}</a></td>
+                        <td ng-if="!isManager()"> {{ contribution.comments || " None "}}</td>
+                    </tr>
+                </table>
+                <table ng-if="selected.searchType.type === 'students'" border='1' style="width: 100%;">
+                    <tr>
+                        <!--<th style="width: 15%;">Author id</th>-->
+                        <th style="width: 12%;">{{ 'author_name' | translate }}</th>
+                        <th style="width: 15%;">{{ 'not_created' | translate }}</th>
+                        <th style="width: 15%;">{{ 'author_name' | translate }}</th>
+                        <th style="width: 15%;">{{ 'notes_read_of' | translate }}<br>{{ 'grouped_by_note_author' | translate }}</th>
+                        <th style="width: 15%;">{{ 'notes_modified_of' | translate }}f<br>({{ 'grouped_by_note_author' | translate }})</th>
+                        <th style="width: 15%;">{{ 'notes_build_on' | translate }}<br>({{ 'grouped_by_note_author' | translate }})</th>
+                        <th style="width: 20%;">{{ 'notes_annotated_on' | translate }} <br> ({{ 'grouped_by_note_author' | translate }})</th>
+
+
+                    <tr class="KFSearchResult" ng-repeat="author in studentTableData" on-finish-render="ngRepeatFinished">
+                        <!--<td>{{author._id}}</td>-->
+                        <td>{{author.authName}}</td>
+                        <td>
+                            <div kfelement draggable="true"  ng-repeat="note in author.notesCreated">
+                                <span><img ng-src="{{getIcon(contributionsMap[note])}}" draggable="false"></span>
+                                <a class="KFSearchLink" href="contribution/{{contributionsMap[note]._id}}" target="_blank" draggable="false"><span class="search_body">{{contributionsMap[note].title}}</span></a>
+                            </div>
+                        </td>
+                        <td>
+                        <div kfelement draggable="true"  ng-repeat="note in author.coAuthoredNotes">
+                            <span><img ng-src="{{getIcon(contributionsMap[note])}}" draggable="false"></span>
+                            <a class="KFSearchLink" href="contribution/{{contributionsMap[note]._id}}" target="_blank" draggable="false"><span class="search_body">{{contributionsMap[note].title}}</span></a>
+                        </div>
+                    </td>
+                        <td>
+                            <div kfelement draggable="true"  ng-repeat="(auth,notelist) in author.notesRead">
+                                <div>
+                                    {{memberList[auth].name}}
+                                    <div kfelement draggable="true"  ng-repeat="note in notelist">
+                                        <span ng-if="contributionsMap[note].title !== 'forbidden'"><img ng-src="{{getIcon(contributionsMap[note])}}" draggable="false"></span>
+                                        <a ng-if="contributionsMap[note].title !== 'forbidden'" class="KFSearchLink" href="contribution/{{contributionsMap[note]._id}}" target="_blank" draggable="false"><span class="search_body">{{contributionsMap[note].title}}</span></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div kfelement draggable="true"  ng-repeat="(auth,notelist) in author.notesModified">
+                                <div>
+                                    {{memberList[auth].name}}
+                                    <div kfelement draggable="true"  ng-repeat="note in notelist">
+                                        <span ng-if="contributionsMap[note].title !== 'forbidden'"><img ng-src="{{getIcon(contributionsMap[note])}}" draggable="false"></span>
+                                        <a ng-if="contributionsMap[note].title !== 'forbidden'" class="KFSearchLink" href="contribution/{{contributionsMap[note]._id}}" target="_blank" draggable="false"><span class="search_body">{{contributionsMap[note].title}}</span></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div kfelement draggable="true"  ng-repeat="(auth,notelist) in author.notesBuildOn">
+                                <div>
+                                    {{memberList[auth].name}}
+                                    <div kfelement draggable="true"  ng-repeat="note in notelist">
+                                        <span ng-if="contributionsMap[note].title !== 'forbidden'"><img ng-src="{{getIcon(contributionsMap[note])}}" draggable="false"></span>
+                                        <a ng-if="contributionsMap[note].title !== 'forbidden'" class="KFSearchLink" href="contribution/{{contributionsMap[note]._id}}" target="_blank" draggable="false"><span class="search_body" style="font-weight: bold">{{contributionsMap[note].title}} </span></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div kfelement draggable="true"  ng-repeat="(auth,noteMap) in author.notesAnnotatedOn">
+                                <div>
+                                    {{memberList[auth].name}}
+                                    <div kfelement draggable="true"  ng-repeat="(note,annotList) in noteMap">
+                                        <span ng-if="contributionsMap[note].title !== 'forbidden'"><img ng-src="{{getIcon(contributionsMap[note])}}" draggable="false"></span>
+                                        <a ng-if="contributionsMap[note].title !== 'forbidden'" class="KFSearchLink" href="contribution/{{contributionsMap[note]._id}}" target="_blank" draggable="false"><span class="search_body">{{contributionsMap[note].title}}</span></a>
+                                        <div ng-repeat="annot in annotList">
+                                            {{contributionsMap[annot].data.quote}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

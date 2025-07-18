@@ -1,0 +1,93 @@
+<div class="col-md-12">
+    <div>
+        <div>
+            <label>{{ 'view_add' | translate }}</label>
+            <p class="input-group well">
+                <input type="text" class="form-control" placeholder="{{ 'title_placeholder' | translate }}" ng-model="input.title">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-primary" ng-click="addView()">{{ 'add' | translate }}</button>
+                </span>
+            </p>
+        </div>
+    </div>
+    <br>
+    <div>
+        <label>{{ 'view_management' | translate }}</label>
+
+        <div  style='float: right;'>
+            <button type="submit" class="btn btn-primary" ng-click="viewModeToggle()"> {{viewModeLable}}</button>
+            <button ng-show="isManager()" type="submit" class="btn btn-primary" ng-click="editModeToggle()">{{editLable}}</button>
+        </div>
+
+
+    </div>
+</div>
+
+
+<script type="text/ng-template" id="nodes_renderer.html">
+    <div ui-tree-handle class="tree-node tree-node-content">
+        <a class="btn btn-success btn-xs" ng-if="(node.child && node.child > 0) || (node.nodes && node.nodes.length > 0)" data-nodrag ng-click="beofeToggle(this)"><span
+            class="glyphicon"
+            ng-class="{
+          'glyphicon-chevron-right': collapsed,
+          'glyphicon-chevron-down': !collapsed
+        }"></span></a> <span><a  href='view/{{node.id}}' >{{node.title}}</a></span>
+        <!--<a class="pull-right btn btn-danger btn-xs" data-nodrag ng-click="remove(this)"><span-->
+            <!--class="glyphicon glyphicon-remove"></span></a>-->
+        <!--<a class="pull-right btn btn-primary btn-xs" data-nodrag ng-click="newSubItem(this)" style="margin-right: 8px;"><span-->
+            <!--class="glyphicon glyphicon-plus"></span></a>-->
+    </div>
+    <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}">
+        <li ng-repeat="node in node.nodes" ui-tree-node collapsed="true;" ng-include="'nodes_renderer.html'" >
+        </li>
+    </ol>
+</script>
+
+
+<!--<pre class="code">{{ viewTreeData | json }}</pre>-->
+
+<div ng-if="input.viewMode">
+    <ul>
+    <li ng-repeat="view in views">
+    <a href='view/{{view._id}}'>{{view.title}}</a>&nbsp;&nbsp;
+    <button ng-show="input.editMode" type="submit" class="btn btn-primary" ng-click="removeView(view)">x</button>
+    </li>
+    </ul>
+</div>
+
+<div ng-if="!input.viewMode">
+    <div class="row" ng-if="!input.editMode">
+    <div class="col-sm-12">
+        <div ui-tree="treeOptions" id="tree-root_1" data-drop-enabled="false" data-drag-enabled="false">
+            <ol ui-tree-nodes ng-model="viewTreeData">
+                <li ng-repeat="node in viewTreeData"  ui-tree-node ng-include="'nodes_renderer.html'"></li>
+                <!--<li ng-repeat="node in viewTreeData" collapsed="true;"  ui-tree-node ng-include="'nodes_renderer.html'"></li>-->
+            </ol>
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <div class="info">
+            {{info}}
+        </div>
+
+    </div>
+</div>
+    <div class="row" ng-if="input.editMode">
+    <div class="col-sm-12">
+        <div ui-tree="treeOptions" id="tree-root">
+            <ol ui-tree-nodes ng-model="viewTreeData">
+                <li ng-repeat="node in viewTreeData"  ui-tree-node ng-include="'nodes_renderer.html'"></li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <div class="info">
+            {{info}}
+        </div>
+
+    </div>
+</div>
+</div>
+

@@ -1,0 +1,14 @@
+.tableRow{
+	height: 25px;
+}
+.ui-select-bootstrap .ui-select-toggle {
+    position: relative !important;
+    border: 2px solid #286090 !important;
+    text-align: left !important;
+    left: 0px !important;
+    top: 0!important;
+}
+span .btn {
+    margin-bottom: 0px!important;
+    margin-right: 0px!important;
+}

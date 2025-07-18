@@ -1,0 +1,25 @@
+<div ng-controller="ScaffoldeditorCtrl" class="col-md-12">
+    <label>{{ 'scaffolds_editor' | translate }}</label>
+
+    <div>
+        <label>{{ 'supports' | translate }}</label>
+        <ul ui-sortable ng-model="contribution.supports">
+            <li ng-repeat="supportref in contribution.supports">
+                <a class="KFScaffoldManagerAnchor" ng-click="selectSupport(supportref)">{{supportref._to.title}}</a>&nbsp;&nbsp;
+                <a class="KFGroupManagerAnchor trash" ng-click="removeSupport(supportref)"><span class="glyphicon glyphicon-trash"></span></a>
+            </li>
+        </ul>
+    </div>
+
+    <div>
+        <label>{{ 'support_new' | translate }}</label>
+        <p class="input-group">
+            <input type="text" class="form-control" placeholder="{{ 'support_new' | translate }}" ng-model="input.supportTitle">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary" ng-click="addSupport()">{{ 'support_add' | translate }}</button>
+             </span>
+        </p>
+    </div>
+
+
+</div>

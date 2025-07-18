@@ -1,0 +1,34 @@
+<h1>{{ 'social_network_visualizer' | translate }}</h1>
+<div class="col-md-12">
+    <div style="width: 80%; display: inline-block;" id="chart-line-hitsperday">
+    </div>
+    <!--<div style="display: inline-block;">
+        <span>Mode: {{mode}}</span>
+        <br>
+        <button type="button" class="btn btn-primary kfbutton" ng-click="changeMode()">Change</button>
+    </div>-->
+    <br>
+    <div style="width: 100%; clear: left;">
+        <button class="btn btn-primary" ng-click="graphSettingChanged()">Initialiser le diagramme circulaire </button>
+    </div>
+    <div >
+        <div style="width: 45%; display: inline-block;">
+            <div id="reading-chord"></div>
+            <h6 class="text-center">Réseau des contributions écrites</h6>
+        </div>
+        <div style="width: 45%; display: inline-block;">
+            <div id="beingread-chord"></div>
+            <h6 class="text-center">Réseau des contributions lues</h6>
+        </div>
+        <hr>
+
+        <div id="socialnetwork" style="width: 80%; height: 800px; display: inline-block;"></div>
+        <div style="width: 40%; display: inline-block;">
+
+        </div>
+    </div>
+    <div style="width: 100%; clear: left;"></div>
+    <hr>
+
+</div>
+

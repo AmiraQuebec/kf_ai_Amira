@@ -1,0 +1,46 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+<div class="container">
+    <label>{{ 'user_management' | translate }}:</label>
+    <p class="input-group">
+        <input type="text" class="form-control" placeholder="{{ 'filter_text' | translate }}" ng-model="queryString">
+        <span class="input-group-btn">
+        <button type="submit" class="btn btn-primary" ng-click="count()">{{ 'filter' | translate }}</button>
+      </span>
+    </p>
+    <div>
+        <div style="float: right;">
+            <pagination total-items="pager.total" ng-model="pager.page" max-size="maxSize" items-per-page="pager.pagesize" class="pagination-sm" boundary-links="true" rotate="false" ng-change="pageChanged()"></pagination>
+        </div>
+        <div style="clear: both;"></div>
+        <div style="width: 100%; float: left; text-align: right;">
+            {{ 'current_page' | translate }}: {{pager.page}} ({{pager.getStart()}} - {{pager.getEnd()}}) / Total: {{pager.total}} {{ 'user_found' | translate }}.
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+    <div style="height: 10px;"></div>
+    <div>
+        <table style="width: 100%;">
+          <thead>
+            <tr>
+              <th>{{ 'firstName' | translate }}</th>
+              <th>{{ 'lastName' | translate }}</th>
+              <th>{{ 'username' | translate }}</th>
+              <th>{{ 'email' | translate }}</th>
+              <th></th>
+            </tr>
+          </thead>
+            <tr ng-repeat="user in users">
+                <td>{{user.firstName}}</td>
+                <td>{{user.lastName}}</td>
+                <td>{{user.userName}}</td>
+                <td>
+                    <span class="text-muted">{{user.email}}</span>
+                </td>
+                <td style="text-align: right;">
+                    <input type="text" placeholder="{{ 'new_password_here' | translate }}." ng-model="user.password">
+                    <button ng-click="resetPassword(user)" class="trash">{{ 'reset' | translate }}</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,120 @@
+<!-- <link rel="stylesheet" href="manual_components/select2-css/3.4.5/select2.css"> -->
+<br/>
+<label style="font-size:  15pt; "><b>KF Croissance d'échafaudage</b></label>
+<br/>
+<br/>
+<p style="text-align: left;">
+  <button ng-class="{true: 'btn-primary', false: 'btn-default'}[status.detailCollapsed]" ng-click="status.detailCollapsed = !status.detailCollapsed">{{ 'selector' | translate }}</button>
+</p>
+
+    <div collapse="status.detailCollapsed">
+        <div ng-include="'components/kfutils/viewauthordateselector/viewauthordateselector.html'"></div>
+        <div style="padding: 15px;">
+            <label>Scaffolds::</label>
+            <select class="KFSupport" style="width: 300px;height:25px;" ng-model="current" ng-options="s.title for s in scaffolds"></select>
+            <button ng-click=" search()" ng-model="queryString">{{ 'scaffold_tracker' | translate }}:</button>
+            <div class="panel">
+                <div class="check-box-panel">
+                    <div ng-repeat="s in current.supports">
+                        <div class="action-checkbox">
+                            <input id="{{s._to.title}}" type="checkbox" value="{{s._to.title}}" ng-checked="selectedSupports.indexOf(s) > -1" ng-click="toggleSelection(s)" />
+                            <label for="{{s._to.title}}"></label>
+                            {{s._to.title}}
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="check-box-panel">
+                    <span style="color:white;" class="selected-item">{{ 'selected_support_items' | translate }}:</span>
+                    <div ng-repeat="support in selectedSupports" class="selected-item">
+                        {{support._to.title}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-if="selectedSupports.length != 0 &&  status.detailCollapsed ">
+        <div ng-if="queryString === ''">
+            <label style="font-size:  12pt; "><b>{{ 'scaffold_support' | translate }} {{currentCommunity.community.title}} {{ 'community' | translate }} </b></label>
+        </div>
+        <div ng-if="queryString !== ''">
+            <label style="font-size:  12pt; "><b>Suivi de fréquence de support d'échafaudage via des critères sélectionnés ({{views}} / {{authors}} / {{fromdate}} / {{todate}})</b></label>
+        </div>
+        <button ng-class="{true: 'btn-primary', false: 'btn-default'}[status.detailsCollapsed]" ng-click="detailsControl()">Details:</button>
+        <button ng-class="{true: 'btn-primary', false: 'btn-default'}[status.extraInfoCollapsed]" ng-click="status.extraInfoCollapsed = !status.extraInfoCollapsed" ng-if="!status.detailsCollapsed">Informations supplémentaires</button>
+        <button ng-class="{true: 'btn-primary', false: 'btn-default'}[status.barchartCollapsed]" ng-click="barchartControl()">Diagramme à bandes:</button>
+        <button ng-class="{true: 'btn-primary', false: 'btn-default'}[status.radarchartCollapsed]" ng-click="radarchartControl()">Carte radar:</button>
+        <button  class="btn-primary" type="button" ng-click="createRiseabove(supportsCountInNote)">Ajouter une note à la perspective</button>
+        <!-- </div> -->
+        <br>
+        <div class="container row" style="display: inline-block;" ng-if="showViewsforRiseabove">
+            <h5>Sélectionner la parspective por la note élever-le-propos</h5>
+            <ui-select ng-model="selectedView" theme="select2" on-select="onSelectedView($item)" style="width: 300px;">
+                <ui-select-match placeholder="Choisir une perspective">{{selectedView.title}} </ui-select-match>
+                <ui-select-choices repeat="view in  viewsforRiseabove | filter: $select.search ">
+                    <div ng-bind-html="view.title| highlight: $select.search"></div>
+                </ui-select-choices>
+        </ui-select>
+        <button class="btn-primary" ng-click="createViewLinksforNotes()">Ajouter à la perspective</button>
+        <button class="btn-primary" ng-click="createRiseabovetoview()">Créer une note Élevé-le-propos à la perpsective</button>
+        </div>
+        <div style="padding: 5px;" collapse="status.barchartCollapsed">
+            <canvas id="bar" class="chart chart-bar" chart-data="data" chart-labels="labels" chart-options="barOptions">
+            </canvas>
+        </div>
+        <div style="padding: 5px;" collapse="status.radarchartCollapsed">
+            <canvas id="radar" class="chart chart-radar" chart-data="data" chart-labels="labels" chart-options="radarOptions">
+            </canvas>
+        </div>
+        <div style="padding: 5px;" collapse="status.detailsCollapsed">
+            <div class="KFSearchResult">
+                <div ng-if="status.status === 'searching'">
+                    {{ 'search' | translate }} {{currentCommunity.community.title}}...
+                </div>
+                <div ng-if="status.status === 'noresult'">
+                    Il n'y avait aucune contribution à égaler.
+                </div>
+                <div ng-if="status.status === 'searched'">
+                    <button ng-hide="!status.extraInfoCollapsed" type="button" ng-csv="tableData" csv-header="getHeader()" filename="scaffold_growth.csv" add-bom="true"> {{ 'export_csv' | translate }}</button>
+                    <button ng-hide="status.extraInfoCollapsed" type="button" ng-csv="detailedTableData" csv-header="getDetailedHeader()" filename="scaffold_growth.csv" add-bom="true">{{ 'export_csv' | translate }}</button>
+                    <br>
+                    <br>
+                    <div ng-if="status.loading === true">
+                    </div>
+                    <div ng-if="status.loading !== true">
+                        <table border='1' style="width: 100%;" id="table1">
+                            <tr>
+                                <th style="width: 10%;"> Soutien</th>
+                                <th style="width: 10%;">La fréquence</th>
+                                <!--<th ng-hide="status.extraInfoCollapsed">User_ID_Author</th>-->
+                                <th ng-hide="status.extraInfoCollapsed">Auteur du nom d'utilisateur</th>
+                                <th ng-hide="status.extraInfoCollapsed">Date de création</th>
+                                <!--<th ng-hide="status.extraInfoCollapsed">ViewID</th>-->
+                                <th ng-hide="status.extraInfoCollapsed">Nom de la perspective</th>
+                                <th>Dans une contribution</th>
+                            </tr>
+                            <tbody ng-repeat="spt in tableData">
+                            <tr class="KFSearchResult" ng-repeat="info in supportsCountInNote[spt.supportTitle]">
+                                <td rowspan="{{supportsCountInNote[spt.supportTitle].length}}" ng-if="info == supportsCountInNote[spt.supportTitle][0]">{{spt.supportTitle}}</td>
+                                <td rowspan="{{supportsCountInNote[spt.supportTitle].length}}" ng-if="info == supportsCountInNote[spt.supportTitle][0]">{{spt.frequency}}</td>
+                                <!--<td ng-hide="status.extraInfoCollapsed">{{info.note.authors[0]}}</td>-->
+                                <td ng-hide="status.extraInfoCollapsed">{{getNameString(info.note.authors[0])}}</td>
+                                <td ng-hide="status.extraInfoCollapsed">{{getDateString(info.note.created)}}</td>
+                                <!--<td ng-hide="status.extraInfoCollapsed">{{info.views[0].from}}</td>-->
+                                <td ng-hide="status.extraInfoCollapsed">{{info.views[0]._from.title}}</td>
+                                <td kfelement draggable="true">
+                                    <span><img ng-src="{{getIcon(info.note)}}" draggable="false"></span>
+                                    <a class="KFSearchLink" href="contribution/{{info.note._id}}" target="_blank" draggable="false">{{info.note.title}}</a>--{{info.count }}
+                                    <input type="checkbox"  ng-model="info.selectContribution" >
+                                </td>
+
+                            </tr>
+                        </table>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+    </div>

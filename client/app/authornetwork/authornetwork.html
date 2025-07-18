@@ -1,0 +1,99 @@
+<div class="container">
+<div class="col-md-12">
+  <h1 class="text-center">{{ 'authornetwork_title' | translate }}</h1>
+    <hr>
+  <div id="legendes">
+    <p>{{ 'authornetwork_explanation1' | translate }}</p>
+    <p>{{ 'authornetwork_explanation2' | translate }}</p>
+    <p>{{ 'authornetwork_explanation3' | translate }}</p>
+    <ul>
+      <li><span style="background: #008;"></span>{{ 'authornetwork_legend1' | translate }}</li>
+      <li><span style="background: #080;"></span>{{ 'authornetwork_legend2' | translate }}</li>
+      <li><span style="background: #800;"></span>{{ 'authornetwork_legend3' | translate }}</li>
+    </ul>
+  </div>
+    <!----------------RD 2------------------->
+    <div class="row well filters" >
+        <div class = "col-md-3">
+            <div id="groups" class="authorNetworkGroups col-md-12">
+                <h4>{{ 'groups' | translate }}</h4>
+                <select ng-model="selectedGroup" ng-change="refreshByGroup2()">
+                    <option value="allGroups">&nbsp;{{ 'all_users' | translate }}</option>
+                    <option ng-repeat="group in groups" value="{{group._id}}">&nbsp;{{group.title}}</option>
+                </select>
+            </div>
+            <div id="views" class="authorNetworkViews col-md-12">
+                <h4>{{ 'views' | translate }}</h4>
+                <select ng-model="selectedView" ng-change="refreshByView()">
+                    <option value="allViews">&nbsp;{{ 'all_views' | translate }}</option>
+                    <option ng-repeat="view in views" value="{{view._id}}">&nbsp;{{view.title}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="col-md-6 date-time-selector" style="vertical-align: middle;">
+            <div class=""><h4>{{ 'from' | translate }} Date / {{ 'time' | translate }}:</h4></div>
+            <div class="">
+            <timepicker ng-model="fromDate" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+            <p class="input-group">
+                <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="fromDate" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+            </p>
+            </div>
+
+        </div>
+            <div class="col-md-6 date-time-selector">
+            <div class=""><h4>{{ 'to' | translate }} Date / {{ 'time' | translate }}:</h4></div>
+            <div class="">
+                <timepicker ng-model="toDate" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+                <p class="input-group">
+                    <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="toDate" is-open="popup2.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+                    <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+                </p>
+            </div>
+
+            <hr>
+        </div>
+        </div>
+        <div class="col-md-12 text-center">
+            <button class="btn btn-primary" ng-click="refreshByTime()">
+            {{ 'filter_by_time' | translate }}
+            </button>
+        </div>
+    </div>
+    <!--/--------------RD2------------------->
+    <hr>
+
+	<div id="authornetwork" class="row">
+        <div class="col-md-9" id="network" ng-model ="network"></div>
+        <div class="col-md-3 well" id="infos"></div>
+        <h1>{{network.height}}</h1>
+  </div>
+    <hr>
+</div>
+</div>
+
+<script>
+    var network = document.getElementById('network');
+
+    // Checking if its not  ipad and iphone as ResizeOBserver is not supported in ipad or iphone
+    if(! / iPhone|iPad|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+    var observer = new ResizeObserver(function(entries) {
+        var newHeight = entries[0].contentRect.height;
+        var newWidth = entries[0].contentRect.width;
+        if(Math.abs(newHeight - $("#network_svg").height()) >= 4){
+            $("#network_svg").height(newHeight-4);
+        }
+
+        if(newWidth - $("#network_svg").width() >= 0){
+            $("#network_svg").width(newWidth - 20);
+        }
+    });
+
+    observer.observe(network);
+}
+</script>

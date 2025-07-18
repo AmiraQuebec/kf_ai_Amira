@@ -1,0 +1,39 @@
+<div ng-controller="ScaffoldsettingsubeditorCtrl" class="col-md-12">
+    <label>{{ 'scaffold_setting_context' | translate }}</label>
+    <div>
+        <table style="width: 100%;">
+            <tr>
+                <td style="width: 50%; vertical-align: top;">
+                    <label>{{ 'scaffold_use' | translate }}</label>
+                    <ul ui-sortable ng-model="scaffoldlinks">
+                        <li ng-repeat="scaffoldlink in scaffoldlinks">
+                            <a class="KFScaffoldManagerAnchor" ng-click="selectSupport(scaffoldlink)">{{scaffoldlink._to.title}}</a>&nbsp;&nbsp;
+                            <a class="KFGroupManagerAnchor trash" ng-click="removeSupport(scaffoldlink)"><span class="glyphicon glyphicon-trash"></span></a>
+                        </li>
+                    </ul>
+                </td>
+                <td style="vertical-align: top;">
+                    <label>{{ 'scaffolds_repository' | translate }}: </label> <a ng-click="openScaffoldManager()">{{ 'click' | translate }}</a> {{ 'to_open' | translate }}
+                    <ul>
+                        <li ng-repeat="scaffold in registeredScaffolds" ng-if="!includes(scaffold)">
+                            <span>
+                                <button type="submit" class="btn btn-primary" ng-click="useScaffold(scaffold)">&lt;- {{ 'use' | translate }}</button>
+                                {{scaffold.title}}
+                            </span>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+        <div style="height: 10px;"></div>
+        <div>
+            <label>{{ 'scaffolds_new' | translate }}: </label>
+            <p class="input-group">
+                <input type="text" class="form-control" placeholder="{{ 'input_new_scaffold_title' | translate }}" ng-model="input.scaffoldTitle">
+                <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary" ng-click="addScaffold()">{{ 'scaffolds_add' | translate }}</button>
+             </span>
+            </p>
+        </div>
+    </div>
+</div>

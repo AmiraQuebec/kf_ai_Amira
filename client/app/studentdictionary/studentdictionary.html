@@ -1,0 +1,56 @@
+<div class="container-fluid">
+    <h4>{{ 'select_author' | translate }}</h4>
+
+    <ui-select ng-model="selectedauthor" theme="bootstrap" on-select="onSelectedAuthor($item)" style="width: 300px;">
+            <ui-select-match placeholder="{{ 'author_select' | translate }}">{{selectedauthor.firstName+selectedauthor.lastName}} </ui-select-match>
+            <ui-select-choices repeat="author in authors | filter: $select.search ">
+                <div ng-bind-html="author.firstName+author.lastName| highlight: $select.search"></div>
+            </ui-select-choices>
+    </ui-select>
+
+    <div ng-if="noWords">
+     <h4>{{ 'author_any_note' | translate }}.</h4>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <!-- <h3 ng-if="!noWords">Wordcloud</h3>
+            <div id="studentwcloud"></div> -->
+            <div ng-if="!noWords" class="container-fluid">
+                <h3>{{ 'note_with_phrases' | translate }} </h3>
+                <!-- <table >
+                    <tr ng-repeat="phrase in phraseWords">
+                        <td class="studentword">{{phrase.phrase}} <span class="badge">{{phrase.count}}</span></td>
+                    </tr>
+                </table> -->
+
+
+                <table  border="1" style="width: 100%;">
+                    <tr >
+                        <th style="padding: 4px;width: 40%;">Phrase</th>
+                        <th style="padding: 4px;width:60%">Notes</th>
+                    </tr>
+                    <tr ng-repeat="keyconcept in authorKeyconcepts" >
+                        <td style="padding: 4px;width: 40%">
+                            {{keyconcept.phrase}}
+                        </td>
+                        <td style="padding: 4px;width: 60%">
+                            <span ng-repeat="note in keyconcept.notes">
+                             <a href="/contribution/{{note._id}}" target="_blank" data-toggle="tooltipkeyconcept" title={{showPhraseSentence(keyconcept.phrase,note)}} > {{note.title}}</a><br>
+                            </span>
+                        </td>
+                        </tr>
+                </table>
+            </div>
+
+
+        </div>
+        <div class="col-md-4">
+            <h3 ng-if="!noWords">{{ 'word_count' | translate }}</h3>
+            <div class="col-md-6" ng-repeat="word in authorwords">
+                <a class="studentword">{{word.word}} <span class="badge">{{word.count}}</span></a><br>
+            </div>
+        </div>
+    </div>
+
+</div>

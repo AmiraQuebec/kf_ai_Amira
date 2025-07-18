@@ -1,0 +1,362 @@
+var {Configuration, OpenAIApi} = require("openai");
+var Promise = require('bluebird');
+var fetch = require('node-fetch');
+var https = require('https');
+var striptags = require('striptags');
+var he = require('he');
+var cheerio = require('cheerio');
+var KObject = require('../KObject/KObject.model');
+var KLink = require('../KLink/KLink.model');
+var User = require('../user/user.model');
+var Community = require('../KCommunity/KCommunity.model');
+var Log = require('./ai.model');
+
+const http = require('http');
+
+const axios = require('axios');
+
+function localMixtral(action, inputText, res) {
+    console.log('localMixtral: enter function');
+    return new Promise((resolve, reject) => {
+        const data = JSON.stringify({
+            messages: [
+                { role: "system", content: action },
+                { role: "user", content: inputText }
+            ],
+            temperature: 0.7,
+            max_tokens: -1,
+            stream: true // Enable streaming mode
+        });
+
+        const options = {
+            hostname: 'localhost',
+            port: 1234,
+            path: '/v1/chat/completions',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Content-Length': Buffer.byteLength(data)
+            }
+        };
+
+        const req = http.request(options, (apiRes) => {
+            apiRes.setEncoding('utf8');
+            let accumulatedData = '';
+            let partialResponse = '';
+
+            apiRes.on('data', (chunk) => {
+                // Strip the "data: " prefix if it exists
+                if (chunk.startsWith('data: ')) {
+                    chunk = chunk.slice(6);
+                }
+
+                accumulatedData += chunk;
+
+                try {
+                    // Attempt to parse the accumulated data
+                    const json = JSON.parse(accumulatedData);
+                    if (json.choices && json.choices[0].delta) {
+                        partialResponse += json.choices[0].delta.content || '';
+                        console.log('Received chunk:', json.choices[0].delta.content);
+                        // Send partial update to the front-end
+                        res.write(JSON.stringify({ partial: partialResponse }));
+                        // Reset accumulated data after successful parsing
+                        accumulatedData = '';
+                    }
+                } catch (e) {
+                    // If parsing fails, keep accumulating data
+                    if (e instanceof SyntaxError) {
+                        // Expected, we will accumulate more data
+                    } else {
+                        // Unexpected error, reject promise
+                        res.status(500).send("An error occurred during API interaction.");
+                    }
+                }
+            });
+
+            apiRes.on('end', () => {
+                resolve(partialResponse); // Final response
+                res.end(); // End the response
+            });
+        });
+
+        req.on('error', (e) => {
+            res.status(500).send("An error occurred during API interaction.");
+            reject(e);
+        });
+
+        req.write(data);
+        req.end();
+    });
+}
+
+
+
+
+function countLogsLast24Hours(logs) {
+    const now = new Date();
+    const last24Hours = new Date(now.getTime() - (24 * 60 * 60 * 1000));
+    const count = logs.filter(log => new Date(log.timestamp) >= last24Hours).length;
+    return count;
+}
+
+function removeKfSupportStartLabel(html) {
+    const $ = cheerio.load(html);
+    $('span.kfSupportStartLabel').remove();
+    $('img').remove();
+    $('a').remove();
+    return $.html();
+}
+
+
+function removeHtmlTagsAndDecodeHtml(text) {
+    text = text.replace(/<script[^>]*>([\s\S]*?)<\/script>/gi, '');
+    text = text.replace(/<style[^>]*>([\s\S]*?)<\/style>/gi, '');
+    var strippedText = striptags(text);
+    var decodedText = he.decode(strippedText);
+    decodedText = decodedText.replace(/\s+/g, ' ').trim();
+    return decodedText;
+}
+
+
+function replaceNewlinesWithBreaks(text) {
+    return text.replace(/(\r\n|\n|\r)/gm, '<br>');
+}
+
+function highlightWords(sentence1, sentence2) {
+    // Replace apostrophe encoding variations with standard apostrophe character
+    // const words1 = sentence1.replace(/’|&#x27;/g, "'").split(/\s+|[.,;!?]/);
+    // const words2 = sentence2.replace(/’|&#x27;/g, "'").split(/\s+|[.,;!?]/);
+    // let result = "";
+    //
+    // // Iterate over words in sentence 2 and highlight missing words
+    // words2.forEach(word => {
+    //     if (!words1.includes(word)) {
+    //         result += `<strong>${word}</strong>`;
+    //     } else {
+    //         result += word;
+    //     }
+    //
+    //     // Add punctuation to highlighted/regular words
+    //     const nextChar = sentence2.charAt(sentence2.indexOf(word) + word.length);
+    //     if (nextChar.match(/[.,;!?]/)) {
+    //         result += `${nextChar} `;
+    //     } else {
+    //         result += " ";
+    //     }
+    // });
+
+    return sentence2.trim();
+}
+
+
+exports.spellCheck = function (req, res) {
+    console.log("params:", JSON.stringify(req.body.params, null, 2));
+    const contributionId = req.body.params.contribution_id;
+
+    if (!contributionId) {
+        return res.status(400).send('Contribution ID is required');
+    }
+
+    let logTexts = '';
+
+    // Function to find KLinks recursively
+    function findKLinks(ids, foundIds, callback) {
+        KLink.find({
+            $or: [
+                { from: { $in: ids } },
+                { to: { $in: ids } }
+            ],
+            type: "buildson"
+        }).exec(function(err, results) {
+            if (err) {
+                return callback(err, null);
+            }
+
+            const newIds = [];
+            results.forEach(result => {
+                if (!foundIds.includes(result.from.toString())) {
+                    newIds.push(result.from.toString());
+                }
+                if (!foundIds.includes(result.to.toString())) {
+                    newIds.push(result.to.toString());
+                }
+            });
+            if (newIds.length === 0) {
+                return callback(null, foundIds);
+            }
+            foundIds = foundIds.concat(newIds);
+            findKLinks(newIds, foundIds, callback);
+        });
+    }
+
+    function processUniqueIds(ids, callback) {
+        let count = 0;
+
+        ids.forEach(id => {
+            KObject.findById(id, function(err, kobj) {
+                if (err) {
+                    console.error("Error fetching KObject:", err);
+                    checkCompletion();
+                } else if (kobj && kobj.text4search) {
+                    if (kobj.authors && kobj.authors.length > 0) {
+                        const authorId = kobj.authors[0];
+                        KObject.findById(authorId, function(err, author) {
+                            if (err) {
+                                console.error("Error fetching author:", err);
+                            } else if (author) {
+                                logTexts += `Auteur: ${author.firstName} ${author.lastName}\n`;
+                            }
+                            printKObject(kobj);
+                        });
+                    } else {
+                        printKObject(kobj);
+                    }
+                } else {
+                    checkCompletion();
+                }
+            });
+        });
+
+        function printKObject(kobj) {
+            logTexts += `Titre du text: ${kobj.title}\n`;
+            logTexts += `Corps du texte: ${kobj.text4search}\n`;
+            logTexts += '**********************\n';
+            checkCompletion();
+        }
+
+        function checkCompletion() {
+            count++;
+            if (count === ids.length) {
+                callback();
+            }
+        }
+    }
+
+    // Initialize the recursion with the initial contribution ID
+    findKLinks([contributionId], [contributionId], function(err, allIds) {
+        if (err) {
+            console.error("Error fetching data:", err);
+            return res.status(500).send('Error fetching data');
+        }
+        console.log("All unique IDs:", allIds);
+
+        processUniqueIds(allIds, function() {
+            if (req.body.params.kf_user_id && req.body.params.community_id) {
+                Community.findById(req.body.params.community_id, function (err, community) {
+                    if (err) { console.error(err); return; }
+                    KObject.findById(req.body.params.viewId, function (err, kobj) {
+                        if (err) { console.error(err); return; }
+                        User.findById(req.body.params.kf_user_id, function (err, user) {
+                            if (err) { console.error(err); return; }
+                            if (!user) { console.error('User not found'); return; }
+                            Log.find({ userID: req.body.params.kf_user_id }, function (err, logs) {
+                                if (err) { console.error(err); return; }
+                                var requestInLast24h = countLogsLast24Hours(logs);
+                                console.log("request in last 24h : " + requestInLast24h);
+                                if (requestInLast24h >= 40) {
+                                    res.send(['Vous avez atteint la limite de 40 corrections par jour', 40 - requestInLast24h]);
+                                    return;
+                                }
+                                var rawText = req.body.text;
+                                rawText = removeKfSupportStartLabel(rawText);
+                                rawText = removeHtmlTagsAndDecodeHtml(rawText);
+                                if (req.query.spell === "gpt3_5") {
+                                    var action = "Tu corriges les fautes dans le texte suivant";
+                                    localMixtral(action, rawText)
+                                        .then(outputText => {
+                                            var response = JSON.parse(outputText);
+                                            var correctedText = response.choices[0].message.content;
+                                            saveLogAndRespond(res, correctedText, rawText, user, kobj, community, requestInLast24h, req);
+                                        }).catch(error => {
+                                        console.error("Error in localMixtral:", error);
+                                        res.status(500).send("An error occurred during API interaction.");
+                                    });
+                                } else if (req.query.spell === "gpt4") {
+                                    var action = "Corrige sans trop réécrire. Highlight les erreurs dans un '<strong>' et en mettant en couleur red en css inline, puis me donner dans une énumération une explication pour chaque correction. S'il s'agit d'un accord, bien préciser de quel type de mot il s'agit et avec quoi il s'accorde. S'il s'agit d'un participe passé, préciser la règle. Pour l'accord des verbes, préciser le temps, la personne et le nombre. : \n\n ";
+                                    localMixtral(action, rawText)
+                                        .then(outputText => {
+                                            var response = JSON.parse(outputText);
+                                            var correctedText = response.choices[0].message.content;
+                                            saveLogAndRespond(res, correctedText, rawText, user, kobj, community, requestInLast24h, req);
+                                        }).catch(error => {
+                                        console.error("Error in localMixtral:", error);
+                                        res.status(500).send("An error occurred during API interaction.");
+                                    });
+                                } else if (req.query.explain === "turboExplain" || req.query.explain === "turboExplain2" || req.query.explain === "turboExplain3") {
+                                    console.log("logTexts: " + logTexts);
+                                    rawText = `Important! Répondre uniquement en français. Tu dois aider un étudiant universitaire à répondre au premier texte dans la liste. Fais-lui des recommandations et donne-lui des idées, mais ne donne pas la réponse ; guide-le. Les autres textes sont liés ; tu dois les prendre en compte lors de tes recommandations pour éviter de répéter ce qui a déjà été dit. Voici les textes :\n*******************\n${logTexts}`;
+
+                                    // rawText = logTexts;
+
+                                    var action = determineExplainAction(req.query.explain);
+                                    localMixtral(action, rawText, res)
+                                        .then(outputText => {
+                                            // Processing is handled by localMixtral, so this part might be redundant
+                                            console.log('Final output:', outputText);
+                                        })
+                                        .catch(error => {
+                                            console.error("Error in localMixtral:", error);
+                                            res.status(500).send("An error occurred during API interaction.");
+                                        });
+                                }
+                            });
+                        });
+                    });
+                });
+            }
+        });
+    });
+};
+
+
+
+
+
+
+
+function saveLogAndRespond(res, outputText, rawText, user, kobj, community, requestsLeft, req) {
+    var log = new Log({
+        viewId: kobj._id,
+        viewName: kobj.title,
+        communityId: community._id,
+        communityName: community.title,
+        userID: user._id,
+        userName: user.name,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        textOriginal: rawText,
+        textCorrected: outputText,
+        contribution_id: req.body.params.contribution_id
+    });
+    log.save(function (err) {
+        if (err) {
+            console.error("Error saving log:", err);
+            return res.status(500).send('Error saving data.');
+        }
+        res.send([outputText, 40 - requestsLeft]);
+    });
+}
+
+
+function determineExplainAction(queryParam, rawText) {
+    var action = "";
+    switch (queryParam) {
+        // case "turboExplain":
+        //     action = "Tu réponds comme le ferait un professeur pour des enfants de 8 ans. Donne une énumération d'idées en 5 points à l'enfant pour approfondir le texte. Retourne seulement les idées en HTML, sans bloc de code.";
+        //     break;
+        case "turboExplain":
+            action = "Tu dois aider l'étudiant à répondre à ce blog post donne lui des suggestion";
+            break;
+        case "turboExplain2":
+            action = "Tu réponds comme le ferait un professeur pour des jeunes de 14-16 ans. Donne une énumération d'idées en 5 points à l'étudiant pour approfondir sa contribution au blog. Retourne seulement les idées en HTML, sans bloc de code.";
+            break;
+        // case "turboExplain3":
+        //     action = "Tu réponds comme le ferait un professeur pour des étudiants universitaires. Donne une énumération d'idées en 5 points à l'étudiant pour approfondir sa contribution au blog. Utilise un ton universitaire et retourne seulement les idées en HTML, sans bloc de code.";
+        //     break;
+        case "turboExplain3":
+            action = "Important! Répondre uniquement en en français. Tu dois aider un étudiant universitaire à répondre au premier texte dans la liste. Fais-lui des recommandations et donne-lui des idées, mais ne donne pas la réponse ; guide-le. Les autres textes sont liés ; tu dois les prendre en compte lors de tes recommandations pour éviter de répéter ce qui a déjà été dit. Voici les textes :";
+            break;
+    }
+    return action + " Voici la contribution au blog: \n\n" + rawText;
+}

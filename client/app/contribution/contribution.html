@@ -1,0 +1,1060 @@
+<style>
+    .nav-tabs {
+        position: initial;
+    !important;
+        margin-top: 5px;
+    !important;
+    }
+
+    .KFTabSet .tab-pane {;
+        padding-top: 14px;
+    }
+
+    .annotator-widget::after {
+        display: none;
+    }
+
+    .KFTabSet .tab-pane {
+        padding-top: 5px;
+    }
+
+    .ui-dialog {
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    }
+    /*a {*/
+    /*    position: fixed;*/
+    /*    bottom: 2%;*/
+    /*    display: block;*/
+    /*    text-align: center;*/
+    /*    color: #0fa;*/
+    /*    font-family: "Lato", sans-serif;*/
+    /*    text-decoration: none !important;*/
+    /*    width: 100%;*/
+    /*}*/
+
+
+
+    .loading-ai {
+        width: 81px;
+        height: 84px;
+        border-radius: 100%;
+        position: absolute;
+        top: 28%;
+        left: calc(50% - 50px);
+    }
+
+    .circle {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+    }
+    .circle .inner {
+        width: 100%;
+        height: 100%;
+        border-radius: 100%;
+        border: 5px solid rgba(0, 255, 170, 0.7);
+        border-right: none;
+        border-top: none;
+        backgroudn-clip: padding;
+        box-shadow: inset 0px 0px 10px rgba(0, 255, 170, 0.15);
+    }
+
+    @-webkit-keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+    .circle:nth-of-type(0) {
+        transform: rotate(0deg);
+    }
+    .circle:nth-of-type(0) .inner {
+        -webkit-animation: spin 2s infinite linear;
+        animation: spin 2s infinite linear;
+    }
+
+    .circle:nth-of-type(1) {
+        transform: rotate(70deg);
+    }
+    .circle:nth-of-type(1) .inner {
+        -webkit-animation: spin 2s infinite linear;
+        animation: spin 2s infinite linear;
+    }
+
+    .circle:nth-of-type(2) {
+        transform: rotate(140deg);
+    }
+    .circle:nth-of-type(2) .inner {
+        -webkit-animation: spin 2s infinite linear;
+        animation: spin 2s infinite linear;
+    }
+
+    .loading-ai {
+        -webkit-animation: spin 5s infinite linear;
+        animation: spin 5s infinite linear;
+    }
+
+</style>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<!-- Floating Panel -->
+<div id="floatingPanel" class="floating-panel" style="display: none;">
+    <div class="panel-header">
+        <span style="font-size: 19px" class="panel-title">Voici les suggestions générées par l'IA.</span>
+        <button onclick="closePanel()" class="close-button">&times;</button>
+    </div>
+    <div style="margin: 18px; max-height: 65vh; overflow-y: auto;" class="panel-body">
+        <div class='loading-ai'>
+            <div class='circle'><div class='inner'></div></div>
+            <div class='circle'><div class='inner'></div></div>
+            <div class='circle'><div class='inner'></div></div>
+            <div class='circle'><div class='inner'></div></div>
+            <div class='circle'><div class='inner'></div></div>
+        </div>
+        <div style="font-size: 15px" id="spell-check-text">Un instant svp...</div>
+        <p id="spell-check-explain-text"></p>
+    </div>
+    <div class="panel-footer">
+        <small id="spell-check-left"></small>
+        <button onclick="closePanel()" class="btn btn-default">Fermer</button>
+    </div>
+</div>
+
+
+
+<script>
+    function closePanel() {
+        var floatingPanel = document.getElementById('floatingPanel');
+        if (floatingPanel) {
+            floatingPanel.style.display = 'none';
+        } else {
+            console.error('Failed to find the floating panel element.');
+        }
+    }
+
+</script>
+
+<!-- dialogs -->
+<div ng-hide="status.error" class="col-md-12 KFContribution"
+     style="height: 100%;display:block; width:100%;float:left; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
+
+
+    <div class="well" collapse="status.isContributionCollapsed"
+         style=" padding-left: 50px; position: absolute; top: 0px; left: 0px; width: 100%; height: 400px; background-color: white; z-index: 100;">
+        <div>
+            <span ng-if="status.contribution==='saving'">Saving...</span>
+            <span ng-if="status.contribution==='success'">{{ 'contribution_success' | translate }}</span>
+            <span ng-if="status.contribution==='failure'">{{ 'contribution_fail' | translate }}</span>
+            <span ng-if="status.contribution==='stored'">{{ 'contribution_fail' | translate }}</span>
+
+        </div>
+        <div style="text-align: right; padding-right: 100px; padding-top: 5px;">
+            <button ng-show="status.contribution!=='saving'" type="submit" class="btn btn-primary kfbutton"
+                    ng-click="status.isContributionCollapsed=true">{{
+                'contribution_continueEditing' | translate }}
+            </button>
+            <button id="closeRequest" ng-show="status.contribution==='success'" type="submit"
+                    class="btn btn-primary kfbutton"
+                    ng-click="closeRequest()">{{ 'contribution_finish' | translate }}
+            </button>
+        </div>
+    </div>
+    <div class="well" id="attachment-panel" collapse="status.isAttachmentsCollapsed">
+        <div class="attachment-header">
+            <span ng-hide="inLineAttachment">{{ 'insert_file_as_an_attachment' | translate }}</span>
+            <button type="submit" class="btn btn-primary kfbutton pull-right"
+                    ng-click="status.isAttachmentsCollapsed = true;">{{
+                'close' | translate }}
+            </button>
+        </div>
+        <div ng-include="'components/kfutils/attachmentuploader/attachmentuploader.html'"
+             class="attachment-center-panel"></div>
+        <p class="attachment-hint" ng-hide="inLineAttachment">{{ 'hint_upload_file' | translate }}</p>
+    </div>
+    <div style="overflow: hidden;" ng-if="contribution.type === 'Note' &&  multilanguageEnabled">
+        <div ng-repeat="l in langObj">
+            <button ng-class="{'btn btn-primary' : l == lang}" id="{{''+l}}" style="display:none; float: left"
+                    ng-click="onLanguageChange(l)">{{l}}
+            </button>
+        </div>
+    </div>
+
+    <!-- title header part -->
+    <div id="title_area" style="overflow: hidden;">
+        <div style="float: left; overflow: hidden; max-height: 18px; max-width: calc(100% - 180px);">
+            <span class="KFTitle" title="{{contribution.title}}">&nbsp;{{isMobile() && contribution.title.length > 21 ?
+                contribution.title.substring(0, 21) + '...' : contribution.title}}</span>
+        </div>
+        <div style="font-size: 15px;">
+            <span ng-if="context.data.plugins.enableFavourites && contribution.status==='active'">
+                <span ng-if="isFavnote()" class="btn glyphicon glyphicon-star" style="color:#d4af37;"
+                      ng-click="remNoteFromFavourite()"></span>
+                <span ng-if="!isFavnote()" class="btn glyphicon glyphicon-star" style="color:#b6b6b6;"
+                      ng-click="addNoteToFavourite()"></span>
+            </span>
+        </div>
+        <div style="float: right; padding-right: 20px;">
+            <p class="KFModified">{{ 'createdBy' | translate }}: {{getAuthorString()}}</p>
+            <p class="KFModified">{{ 'lastModified' | translate }}: {{getTimeString(contribution.modified)}}</p>
+        </div>
+    </div>
+    <!-- tab and contents part -->
+    <div class="KFTabSet">
+        <tabset>
+            <tab heading="{{ 'read' | translate }}" class="KFTab" select="tabSelected('read')"
+                 deselect="readDeselected()">
+                <div style="position: relative; ">
+                    <button ng-mouseup="clearSelection();" class="btn btn-primary KFToolBarButton promisingbtn tooltip1"
+                            ng-style="promisingobj" type="submit"
+                            ng-click=" status.ispromisingideaCollapsed = !status.ispromisingideaCollapsed; status.hidecontributeButtonBar = !status.hidecontributeButtonBar;"
+                            ng-show="selectedText!=''&&context.data.plugins.promisingnessidea=== true"><img
+                        style="width: 30px;" src="manual_assets/kf6images/promising-idea-normal.png"
+                        title="{{ 'promising_ideas' | translate }}">
+                        <span class="tooltiptext">{{ 'promising_ideas' | translate }}</span>
+                    </button>
+                </div>
+                <div ng-mouseup="setSelectedText($event)" style="padding: 10px; padding-top: 29px; height: 100%;">
+                    <div style="height: 100%;" ng-if="contribution.type === 'Note'">
+                        <link rel="stylesheet" type="text/css" href="/manual_assets/kfmce.css"/>
+                        <div annotatable
+                             style="height: auto; padding-top: 2px; padding-left: 10px; padding-right: 10px;"
+                             ng-show="!contribution.isRiseabove()">
+                            <div style="height: 100%;" class="kfDragSource promising"
+                                 ng-bind-html="trustAsHtml(copy.body)"></div>
+                        </div>
+                        <div style="height: 100%; width: 100%;" ng-hide="!contribution.isRiseabove()">
+                            <div class="kfDragSource promising"
+                                 style="float: left; width: 40%; height: 100%; overflow: auto;"
+                                 ng-bind-html="copy.body"></div>
+                            <div style="height: 100%; overflow: hidden;">
+                                <label>{{ 'rise-above_view' | translate }}:</label>
+                                <button class="btn btn-default" ng-click="openRiseaboveView()">
+                                    {{ 'openInWindow' | translate }}
+                                </button>
+                                <div class="riseabovediv" ng-init="prepareRiseabove()"
+                                     style="height: calc(100% - 20px); text-align: center; border: 1px solid black;">
+                                    <br><br>{{ 'when_the_view_does_not_open' | translate }}.
+                                </div>
+                            </div>
+                        </div>
+                        <div style="float:left;margin-top:10px;width:100%;padding-left:10px;"
+                             ng-if="!contribution.isRiseabove() && isGoogleDoc">
+                            <label>Videos:</label>
+                            <span class="videoRow" ng-repeat="attachment in images"
+                                  ng-if="attachment.data.type.indexOf('video/') === 0"
+                                  ng-click="playVideo(attachment)">
+                                <img src="manual_assets/kf6images/icon_video_x16.png"></img>
+                                <span class="videoTitle">{{attachment.title}}</span>
+                            </span>
+                        </div>
+                        <div ng-if="images.length > 0" class="KFContainer attachment-container">
+                            <p>Attachm{{ 'attachments' | translate }}</p>
+                            <div ng-repeat="attachment in images" class="attachment-box">
+                                <div class="attachment-inner-box">
+                                    <div class="attachment-thumbnail">
+                                        <img kfImgDrag ng-if="attachment.data.type.indexOf('image/') === 0" class=""
+                                             ng-attr-src="{{attachment.data.url}}" ng-click="selectedImg($event)"
+                                             data-mce-src="{{attachment.data.url}}"></img>
+                                        <a ng-if="attachment.data.type.indexOf('image/') === -1"
+                                           href="{{attachment.data.downloadUrl || attachment.data.url}}"
+                                           target="_blank" title="{{attachment.title}}}" download>
+                                            <img kfFileDrag src="/manual_assets/kf6images/03-toolbar-attachment.png"
+                                                 title="{{attachment.title}}">
+                                        </a>
+                                    </div>
+                                    <div class="attachment-buttons">
+                                        <a href="{{contribution.data.downloadUrl || attachment.data.url}}"
+                                           target="_blank"
+                                           title="{{attachment.title}}" download>
+                                            <img class="download-attachment"
+                                                 src="/manual_assets/kf6images/cloud-download-2x.png"
+                                                 alt="Download" height="15px">
+                                        </a>
+                                    </div>
+                                    <div class="attachment-info">
+                                        <p title="{{attachment.title}}">{{getFileNameString(attachment.title)}}</p>
+                                        <p>{{getFileSizeString(attachment.data.size)}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="contribution.type === 'Attachment'">
+                        <div>
+                            <a ng-click="downloadAttachment(contribution)">{{ 'download' | translate }}</a>
+                            ({{contribution.data.filename}}, {{contribution.data.type}},
+                            {{contribution.data.size}}Bytes)
+                        </div>
+                        <div ng-if="isImage(contribution)">
+                            <img ng-attr-src="{{contribution.data.url}}">
+                        </div>
+                        <div ng-if="isVideo(contribution)">
+                            <div data-ng-init="initVideo()">
+                                <video id="video" style=" width:500px;" src="{{contribution.data.url}}"
+                                       controls></video>
+                                <div>
+                                    <div id="eventTelop"
+                                         style="position:absolute; width:500px; top:280px; left:150px; color:red; font-size:50px;"></div>
+                                    <div id="commentTelop"
+                                         style="position:absolute; width:500px; top:150px; left:500px;color:white; font-size:50px; "></div>
+                                    <button class="btn btn-default" ng-click="playVideo()">{{ 'play' | translate }}
+                                    </button>
+                                    <button class="btn btn-default" ng-click="pauseVideo()">{{ 'pause' | translate }}
+                                    </button>
+                                    <span id="playtime">00:00:00</span>
+                                    <button ng-click="gain10seconds">10s&lt;</button>
+                                    <button ng-click="back10seconds">&gt;10s</button>
+                                    <input type="range" id="seekbar" style=" width:180px;" value="0" min="0">
+                                </div>
+                                <div>
+                                    <!-- <span style="position:relative; left:107px;">EVENT</span> -->
+                                    <span>{{ 'comment' | translate }}</span>
+                                </div>
+                                <div>
+                                    <!-- <input id="eventBox" type="text" style="width:138px;"> -->
+                                    <input id="commentBox" type="text" style="width:138px;">
+                                    <input type="button" value="Post" ng-click="postComment()">
+                                    <input type="button" value="Refresh(for Debug)" ng-click="showComment()">
+                                </div>
+                                <table id="table" border="1" style="position:absolute; top:67px; left:512px;">
+                                </table>
+                            </div>
+                        </div>
+                        <!--
+                        <div ng-if="isVideo(contribution)">
+                            <a ng-click="playVideo(contribution)">Play Video</a>
+                        </div>
+                        -->
+                    </div>
+                    <div ng-if="contribution.type === 'Group'">
+                        <div ng-include="'components/kfutils/group/groupreader.html'"></div>
+                    </div>
+                    <div ng-if="contribution.type === 'Scaffold'">
+                        <div ng-include="'components/kfutils/scaffoldeditor/scaffoldreader.html'"></div>
+                    </div>
+                </div>
+            </tab>
+            <tab class="KFTab" ng-show="isEditable()" heading="{{ 'edit' | translate }}" active="status.edittabActive"
+                 select="tabSelected('edit')">
+                <div style="padding: 2px; height: 100%;">
+                    <div>
+                        <div ng-if="contribution.type === 'Note'" style="float: left;">
+                            <button class="btn btn-default"
+                                    ng-click="status.isScaffoldCollapsed = !status.isScaffoldCollapsed">
+                                <img src="manual_assets/kf6images/Arrow-UpDown.png">
+                            </button>
+                        </div>
+                        <div style="float: left; width: 10px;">&nbsp;</div>
+                        <div style="overflow: hidden;">
+                            <!-- <div style="float: left;">title:</div> -->
+                            <div style="overflow: hidden;">
+                                <input type="text" class="form-control" style="overflow: hidden;"
+                                       placeholder="{{ 'title_placeholder' | translate }}"
+                                       ng-model="contribution.title">
+                            </div>
+                        </div>
+                    </div>
+                    <div style="height: 5px;"></div>
+                    <div ng-if="isGoogleDoc" style="height: 100%; height: calc(100% - 24px);">
+                        <div class="video_area">
+                            <label>Videos:</label>
+                            <button class="btn btn-default"
+                                    ng-click="status.isAttachmentsCollapsed = !status.isAttachmentsCollapsed">{{
+                                'attach' | translate }}
+                            </button>
+                            <span class="videoRow" ng-repeat="attachment in images"
+                                  ng-if="attachment.data.type.indexOf('video/') === 0"
+                                  ng-click="playVideo(attachment)">
+                                <img src="manual_assets/kf6images/icon_video_x16.png"></img>
+                                <span class="videoTitle">{{attachment.title}}</span>
+                            </span>
+                        </div>
+                        <div class="content_area">
+                            <div class="text_area">
+                                <p ng-if="contribution.data.body ===''" style="text-align:center;padding-top:100px;">
+                                    {{ 'empty_content' | translate }} .</p>
+                                <div ng-if="contribution.data.body !==''" ng-bind-html="contribution.data.body"></div>
+                            </div>
+                            <div class="btn_area">
+                                <button class="btn btn-primary" ng-click="editGoogleDoc()" name="edit_googledoc">{{
+                                    'Edit in Google Doc' | translate }}
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div ng-if="contribution.type === 'Note'  && !isGoogleDoc" style="height: calc(100% - 24px);">
+                        <div style="float: left; height: auto; overflow-y: auto; overflow-x: hidden;">
+                            <div collapse="status.isScaffoldCollapsed" valign="top"
+                                 style="width: 230px; padding: 5px;height:auto;">
+                                <div style="max-width: 175px;">
+                                    <div style="height: 7px;"></div>
+                                    <label>{{ 'scaffolds' | translate }}:</label>
+                                    <div ng-include="'components/kfutils/scaffold/scaffold.html'"></div>
+                                </div>
+                                <div style="height: 10px;"></div>
+                                <div>
+                                    <label>{{ 'keyword-s' | translate }}:</label>
+                                    <button class="btn btn-default" ng-click="addKeyword()">
+                                        <img src="manual_assets/kf4images/button-key-on.png">
+                                    </button>
+                                    <input type="text" class="form-control" style="max-width: 175px;" placeholder=""
+                                           ng-model="copy.keywords">
+                                </div>
+                                <div style="height: 7px;"></div>
+                                <div style="height: 3px;"></div>
+                                <div>
+                                    <label>{{ 'tools' | translate }}:</label>
+                                    <br>
+                                    <button ng-disabled="!status.recoverable" class="btn btn-default"
+                                            ng-click="recover()">{{
+                                        'recovery' | translate }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="overflow: hidden;">
+
+                            <div ng-show="!mceEditor">{{ 'editor_not_initialized' | translate }}.
+                                <span>{{ 'never_edit_now' | translate }}/span></div>
+                            <textarea ng-show="mceEditor" ui-tinymce="tinymceOptions" ng-model="copy.body"
+                                      id="noteee"></textarea>
+                            <div class="KFContainer" ng-if="isGoogleDoc" style="float:left;margin-top:1px;width: 100%;">
+                                <label>Videos:</label>
+                                <span class="videoRow" ng-repeat="attachment in images"
+                                      ng-if="attachment.data.type.indexOf('video/') === 0"
+                                      ng-click="playVideo(attachment)">
+                                    <img src="manual_assets/kf6images/icon_video_x16.png"></img>
+                                    <span class="videoTitle">{{attachment.title.length > 25 ?
+                                        attachment.title.substring(0, 16) + '***.mp4' : attachment.title}}</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div style="margin-top: 10px;">
+                            <label>{{ 'insert_image' | translate }}:</label>
+                            <button class="btn btn-default" ng-click="openAttachPanel(true)">{{ 'inline' | translate
+                                }}
+                            </button>
+                            <button class="btn btn-default" ng-click="openAttachPanel(false)">{{ 'as_attachment' |
+                            translate }}
+                            </button>
+                            <button ng-disabled="!status.insertable" class="btn btn-default" ng-click="insertImg()">
+                                {{'insert' | translate }}
+                            </button>
+                            <button class="btn btn-spell-checker" ng-click="spellCheckQuick(modalIds[contributionId], $event)">Corriger la forme (rapide)</button>
+                            <button class="btn btn-spell-checker" ng-click="spellCheckFull(modalIds[contributionId], $event)">Corriger la forme</button>
+
+                            <button   class="btn btn-spell-checker" ng-click="spellCheckTurboExplain(modalIds[contributionId], $event, 1)">Me faire des suggestions sur le fond (6-11)
+                            </button>
+                            <button   class="btn btn-spell-checker" ng-click="spellCheckTurboExplain(modalIds[contributionId], $event, 2)">Me faire des suggestions sur le fond (11-16)
+                            </button>
+                            <button   class="btn btn-spell-checker" ng-click="spellCheckTurboExplain(modalIds[contributionId], $event, 3)">Me faire des suggestions sur le fond (adulte)
+                            </button>
+                            <button style="position: relative; top: 34px; float: right; z-index: 10000"
+
+                                  type="submit" class="btn btn-primary" ng-click="contribute()">
+                                contribuer
+                            </button>
+
+                            <div id="attachment-container" class="KFContainer attachment-container">
+                                <div ng-repeat="attachment in images" class="attachment-box">
+                                    <div class="attachment-inner-box">
+                                        <div class="attachment-thumbnail">
+                                            <img class="{{attachment._id}}" kfImgDrag
+                                                 ng-if="attachment.data.type.indexOf('image/') === 0"
+                                                 class="" ng-attr-src="{{attachment.data.url}}"
+                                                 ng-click="selectedImg($event)"
+                                                 data-mce-src="{{attachment.data.url}}"></img>
+                                            <a ng-if="attachment.data.type.indexOf('image/') === -1"
+                                               href="{{attachment.data.downloadUrl || attachment.data.url}}"
+                                               target="_blank" title="{{attachment.title}}}" download>
+                                                <img class="{{attachment._id}}" kfFileDrag
+                                                     src="/manual_assets/kf6images/03-toolbar-attachment.png"
+                                                     title="{{attachment.title}}">
+                                            </a>
+                                        </div>
+                                        <div class="attachment-buttons">
+                                            <p>
+                                                <a href="{{attachment.data.downloadUrl || attachment.data.url}}"
+                                                   target="_blank"
+                                                   title="{{attachment.title}}" download>
+                                                    <img class="download-attachment"
+                                                         src="/manual_assets/kf6images/cloud-download-2x.png"
+                                                         alt="Download" height="15px">
+                                                </a>
+                                            </p>
+                                            <p>
+                                                <button class="delete-attachment"
+                                                        ng-click="deleteAttachment(getFromLink(attachment))"><img
+                                                    src="/manual_assets/kf6images/trash.png" width="10px" height="15px">
+                                                </button>
+                                            </p>
+                                        </div>
+                                        <div class="attachment-info">
+                                            <p title="{{attachment.title}}">{{getFileNameString(attachment.title)}}</p>
+                                            <p>{{getFileSizeString(attachment.data.size)}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p ng-if="images.length !== 0">{{ 'drag_and_drop_editor' | translate }}!</p>
+                                <p ng-if="images.length === 0">{{ 'attachments_image_not' | translate }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="contribution.type === 'Drawing'">
+                        <div id="svgeditdiv"></div>
+
+                    </div>
+
+                    <div ng-if="contribution.type !== 'Note'">
+                        <button
+
+                                type="submit" class="btn btn-primary" ng-click="contribute()">
+                            contribuer
+                        </button>
+                    </div>
+<!--                    <div ng-if="contribution.type !== 'Drawing'">-->
+<!--                        <button-->
+
+<!--                            type="submit" class="btn btn-primary" ng-click="contribute()">-->
+<!--                            contribuer-->
+<!--                        </button>-->
+<!--                    </div>-->
+                    <div ng-if="contribution.type === 'Group'">
+                        <div ng-include="'components/kfutils/group/groupeditor.html'"></div>
+                    </div>
+                    <div ng-if="contribution.type === 'Scaffold'">
+                        <div ng-include="'components/kfutils/scaffoldeditor/scaffoldeditor.html'"></div>
+                    </div>
+                    <div ng-if="contribution.type === 'View'">
+                        <div ng-include="'components/kfutils/vieweditor/vieweditor.html'"></div>
+                    </div>
+                    <div ng-if="contribution.type === 'Context'">
+                        <div ng-include="'components/kfutils/contexteditor/contexteditor.html'"></div>
+                    </div>
+                </div>
+            </tab>
+            <!-- <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css"> -->
+            <link rel="stylesheet" href="manual_components/select2-css/3.4.5/select2.css">
+            <tab class="KFTab" heading="{{ 'author-s' | translate }}" select="tabSelected('authors')">
+                <div style="height: 100%;">
+                    <table style="width: 100%;">
+                        <tr>
+                            <td width="50%" valign="top">
+                                <h4>{{ 'author-s' | translate }}:</h4>
+                                <ul ui-sortable ng-model="authors">
+                                    <li style="cursor: move;" ng-repeat="author in authors">
+                                        {{author.getName()}}
+                                        <button ng-show="isEditable()" type="submit" class="btn btn-primary"
+                                                ng-click="removeAuthor(author)">x
+                                        </button>
+                                    </li>
+                                </ul>
+                                <h4>{{ 'group' | translate }}:</h4>
+                                <div style="padding-left: 30px;">
+                                    <div ng-if="!isEditable()">
+                                        {{selected.group.title}}
+                                    </div>
+                                    <div ng-if="isEditable()">
+                                        <select ng-model="selected.group"
+                                                ng-options="g.title for g in community.groupsArray"
+                                                ng-change="updateDirtyStatus()">
+                                            <option value="">{{ 'select' | translate }}</option>
+                                        </select>
+                                    </div>
+                                    <div ng-show="selected.group._id" style="padding: 10px 10px;">
+                                        {{ 'click' | translate }}
+                                        <a ng-href="contribution/{{contribution.group}}"
+                                           target="{{contribution.group}}">{{ 'here' | translate }}</a>
+                                        {{ 'to_check_member' | translate }}
+                                    </div>
+                                </div>
+                            </td>
+                            <td width="100%" valign="top">
+                                <div ng-show="isEditable()">
+                                    <h4>{{ 'author_add' | translate }}:</h4>
+                                    <div style="width: 100%;"
+                                         ng-include="'components/kfutils/authorselector/authorselector.html'"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </tab>
+            <tab class="KFTab" heading="{{ 'connections' | translate }}" select="tabSelected('connections')">
+                <div>
+                    <label>{{ 'contribution_connection_buildsOnto' | translate }}:</label>
+                    <ul>
+                        <li ng-repeat="conn in fromConnections" ng-if="conn.type==='buildson'">
+                            <a href="/contribution/{{conn.to}}" target="{{conn.to}}">{{conn._to.title}}</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <label>{{ 'contribution_connection_builtOnto' | translate }}:</label>
+                    <ul>
+                        <li ng-repeat="conn in toConnections" ng-if="conn.type==='buildson'">
+                            <a href="/contribution/{{conn.from}}" target="{{conn.from}}">{{conn._from.title}}</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <label>{{ 'contribution_connection_views' | translate }}:</label>
+                    <ul>
+                        <li ng-repeat="conn in toConnections"
+                            ng-if="conn.type ==='contains' && conn._from.type === 'View'">
+                            <a href="/view/{{conn.from}}" target="{{conn.from}}">{{conn._from.title}}</a>
+                        </li>
+                    </ul>
+                </div>
+                <div ng-show="contribution.type === 'Note'">
+                    <label>{{ 'note_connection_supportedBy' | translate }}:</label>
+                    <ul>
+                        <li ng-repeat="conn in toConnections" ng-if="conn.type==='supports'">
+                            <a href="/contribution/{{conn.from}}" target="{{conn.from}}">{{conn._from.title}}</a>
+                        </li>
+                    </ul>
+                </div>
+                <div ng-show="contribution.type === 'Support'">
+                    <label>T{{ 'support_supports' | translate }}:</label>
+                    <ul>
+                        <li ng-repeat="conn in fromConnections" ng-if="conn.type==='supports'">
+                            <a href="/contribution/{{conn.to}}" target="{{conn.to}}">{{conn._to.title}}</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <label>{{ 'contribution_connection_references' | translate }}:</label>
+                    <ul>
+                        <li ng-repeat="conn in fromConnections" ng-if="conn.type==='references'">
+                            <a href="/contribution/{{conn.to}}" target="{{conn.to}}">{{conn._to.title}}</a>
+                        </li>
+                    </ul>
+                    <label>{{ 'contribution_connection_referencedBy' | translate }}:</label>
+                    <ul>
+                        <li ng-repeat="conn in toConnections" ng-if="conn.type==='references'">
+                            <a href="/contribution/{{conn.from}}" target="{{conn.from}}">{{conn._from.title}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </tab>
+
+            <tab ng-if="itmEnabled && contribution.type === 'Note'" class="KFTab" heading="{{ 'thread' | translate }}"
+                 select="tabSelected('itm')">
+                <div class="">
+                    <div class="current-thread col-sm-6">
+                        <h4>{{ 'note_belongs_to_thread' | translate }}:</h4>
+                        <ul>
+                            <li ng-repeat="thrd in belongsToThreads">{{thrd.title}}</li>
+                        </ul>
+                    </div>
+                    <div class="add-thread col-sm-6">
+                        <h4>{{ 'add_to_another_thread' | translate }}</h4>
+                        <div class="form-group">
+                            <label class="">Project: </label>
+                            <select name="project" ng-model="project" class="form-control">
+                                <option value="all" selected>All projects</option>
+                                <option ng-repeat="proj in projects" value="{{proj.id}}">{{proj.title}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="">{{ 'thread' | translate }}: </label>
+                            <select name="thread" ng-model="thread" class="form-control">
+                                <option
+                                    ng-repeat="thrd in threads | filterByProject:project | filterBelongsToThread:belongsToThreadsObj"
+                                    value="{{thrd.id}}">{{thrd.title}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary kfbutton" ng-disabled="!thread"
+                                    ng-click="addToITMThread(thread)">{{ 'add' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="text-center text-primary" ng-show="status.savedToITM">
+                        {{ 'add_thread_succeeded' | translate }}
+                    </div>
+                    <div class="text-center text-danger" ng-show="status.savedToITMError">{{status.savedToITMError}}
+                    </div>
+                </div>
+            </tab>
+
+            <tab class="KFTab" heading="{{ 'history' | translate }}" select="tabSelected('history')">
+                <div>
+                    <label>{{ 'edit_logs' | translate }}:</label>
+                    <ul>
+                        <li ng-repeat="record in records" ng-if="record.type!=='read'">
+                            {{record.getTime()}}: {{record.user.getName()}}
+                            <span ng-if="record.historicalObjectId">
+                                <a ng-href="historicalobject/{{record.historicalObjectId}}"
+                                   target="{{record.historicalObjectId}}">{{
+                                    'technical_data' | translate }}</a>
+                            </span>
+                        </li>
+                    </ul>
+                    <label>{{ 'read_logs' | translate }}:</label>
+                    <ul>
+                        <li ng-repeat="record in records" ng-if="record.type==='read'">
+                            {{record.getTime()}}: {{record.user.getName()}}
+                        </li>
+                    </ul>
+                </div>
+            </tab>
+            <!--<tab class="KFTab" heading="{{ 'attachments' | translate }}" select="tabSelected('attachments')">-->
+            <!--<div>-->
+            <!--<label>{{ 'attachments' | translate }}:</label>-->
+            <!--<ul>-->
+            <!--<li ng-repeat="conn in fromConnections" ng-if="conn.type==='attach'">-->
+            <!--<a href="/contribution/{{conn.to}}" target="{{conn.to}}">{{conn._to.title}}</a> &nbsp; &nbsp;-->
+            <!--<span ng-show="isEditable()">-->
+            <!--<a ng-click="deleteAttachment(conn)">delete</a>-->
+            <!--</span>-->
+            <!--</li>-->
+            <!--</ul>-->
+            <!--</div>-->
+            <!--<div ng-show="isEditable()">-->
+            <!--<label>{{ "attachments_add" | translate }}:</label>-->
+            <!--<button class="btn btn-default" ng-click="status.isAttachmentsCollapsed = !status.isAttachmentsCollapsed">{{ 'attach' | translate }}</button>-->
+            <!--</div>-->
+            <!--</tab>-->
+            <tab class="KFTab" ng-show="isEditable()" heading="{{ 'properties' | translate }}"
+                 select="tabSelected('properties')">
+                <div>
+                    <label>{{ 'properties' | translate }}:</label>
+                    <div style="padding: 10px;">
+                        <label>{{ 'permission' | translate }}:</label>
+                        <div style="padding: 20px;">
+                            <table class="KFPermission">
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td>{{ 'author' | translate }}</td>
+                                    <td>{{ 'group_members' | translate }}</td>
+                                    <td>{{ 'others' | translate }}</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="radio" ng-model="contribution.permission"
+                                               value="private">&nbsp;{{ 'privat' | translate }}
+                                    </td>
+                                    <td>rw</td>
+                                    <td>rw</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="radio" ng-model="contribution.permission" value="protected">&nbsp;{{ 'protected' | translate
+                                        }}
+                                    </td>
+                                    <td>rw</td>
+                                    <td>rw</td>
+                                    <td>r</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="radio" ng-model="contribution.permission"
+                                               value="public">&nbsp;{{ 'public' | translate }}
+                                    </td>
+                                    <td>rw</td>
+                                    <td>rw</td>
+                                    <td>rw</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <label>{{ 'status' | translate }}:</label>
+                        <div style="padding: 20px;">
+                            {{contribution.status}}
+                        </div>
+                        <label>{{ 'template' | translate }}:</label>
+                        <div style="padding: 20px;">
+                            isTemplate
+                            <input type="checkbox" ng-model="contribution.data.isTemplate">
+                        </div>
+                    </div>
+                    <div style="padding: 10px;" ng-if="contribution.type === 'Note'">
+                        <label>{{ 'rise-above' | translate }}:</label>
+                        <ul ng-if="contribution.isRiseabove()">
+                            {{ 'rise-above_note' | translate }}.
+                        </ul>
+                        <ul ng-if="!contribution.isRiseabove()">
+                            <button type="submit" class="btn btn-primary" ng-click="makeRiseabove()">
+                                {{ 'rise-above_create' | translate }}
+                            </button>
+                        </ul>
+                    </div>
+                </div>
+            </tab>
+            <tab class="KFTab" heading="Idées prometteuses" select="promisingIdeaSelected()"
+                 deselect="promisingIdeaDeselected()"
+                 ng-show="status.ispromisingideaTabDisplayed&&context.data.plugins.promisingnessidea=== true">
+                <label>{{ 'promising_idea' | translate }}:</label>
+                <div ng-repeat="conn in toConnections" ng-if="conn.type==='promisings'">
+                    <div ng-hide="deletedIndex==$index">
+                        <div ng-hide="selectedIndex==$index ||newnoteIndex==$index ">
+                            <label style="float: left; color:red; font-size:  9pt"
+                                   ng-if="!hasSubString(conn.data.idea)">{{ 'promising_ideas_content_no_longer_exist' | translate
+                                }}</label>
+                            <div style="text-align: right; padding-right: 20px; padding-top: 1px;">
+                                <button type="submit" class="btn btn-primary kfbutton"
+                                        ng-click="setnewnoteIndex($index); setnewnoteInfo(conn.data.idea)">
+                                    {{ 'export_idea' | translate }}
+                                </button>
+                                <button type="submit"
+                                        ng-show="isPromisingIdeaCreator(promisingIdeaobjs[conn.from].authors)||isManager()"
+                                        class="btn btn-primary kfbutton" ng-click="setIndex($index)"
+                                        title="Edit Justification & Highlight">{{ 'edit' | translate }}
+                                </button>
+                                <button type="submit"
+                                        ng-show="isPromisingIdeaCreator(promisingIdeaobjs[conn.from].authors)||isManager()"
+                                        class="btn btn-primary kfbutton"
+                                        ng-click="promisingIdeaobjDeleted(conn);deletedIndex=$index"
+                                        title="Delete the idea from database">{{ 'delete' | translate }}
+                                </button>
+                            </div>
+                            <label style="clear:both; float: left; font-size:  9pt"
+                                   ng-if="getPromisingIdeacolorobjupdatemsg(promisingIdeaobjs[conn.from].data.color)">
+                                <b> {{ 'colour_group_attribution' | translate }} : {{updatemsg}}</b>
+                            </label>
+                            <label style="clear:both;float: left; font-size:  9pt">{{ 'idea' | translate }} : {{updatemsg}}
+                                : </label>
+                            <tt class="box"
+                                ng-style="{ 'background-color': promisingIdeaobjs[conn.from].data.color}"></tt>
+                            <tt style="clear:both; float: left" ng-bind-html="trustAsHtml(conn.data.idea)"></tt>
+                            <br>
+                            <tt style="float:right">-({{ 'by' | translate }}
+                                {{getPromisingIdeaCreator(promisingIdeaobjs[conn.from].authors)}}
+                                {{getPromisingIdeaCreated(promisingIdeaobjs[conn.from].modified)}})</tt>
+                            <br style="clear:both">
+                            <label style="float: left; font-size:  9pt">
+                                <b>{{ 'justification_for_selection_of_promising_idea' | translate }}:</b>
+                            </label>
+                            &nbsp;&nbsp; {{promisingIdeaobjs[conn.from].data.reason}}
+
+                        </div>
+                        <div style="padding: 1px ;" ng-show="newnoteIndex==$index">
+                            <div style="text-align: right; padding-right: 20px; padding-top: 1px;">
+                                <button type="submit" class="btn btn-primary kfbutton" ng-click="setnewnoteIndex(-1)">{
+                                    'cancel' | translate }}
+                                </button>
+                            </div>
+                            <label>{ 'title' | translate }}:</label>
+                            <input type="text" class="form-control" style="overflow: hidden; width:400px; "
+                                   placeholder="{{  'put_your_title_here' | translate }}"
+                                   ng-model="promisingnoteTitle"/>
+                            <label>Views:</label>
+                            <div style="width: 400px;"
+                                 ng-include="'components/kfutils/viewselector/viewselector.html'"></div>
+                            <br>
+                            <label style="float: left;font-size:  9pt">{{ 'idea' | translate }} : </label>
+                            <tt style="float: left" ng-bind-html="trustAsHtml(conn.data.idea)"></tt>
+                            <br>
+                        </div>
+                        <div ng-show="selectedIndex==$index ">
+                            <div style="text-align: right; padding-right: 20px; padding-top: 1px;">
+                                <button type="submit" class="btn btn-primary kfbutton"
+                                        ng-click="promisingIdeaobjUpdated(conn);setIndex(-1)">{{ 'save' | translate }}
+                                </button>
+                                <button type="submit" class="btn btn-primary kfbutton"
+                                        ng-click="setIndex(-1); updatepromisingIdeaobjs()">{{ 'cancel' | translate }}
+                                </button>
+                            </div>
+                            <label style="font-size:  9pt"
+                                   ng-if="getPromisingIdeacolorobjupdatemsg(promisingIdeaobjs[conn.from].data.color)">
+                                <b> {{ 'colour_group_attribution' | translate }} : {{updatemsg}}</b>
+                            </label>
+                            <button type="submit" style="clear: both" class="btn btn-primary kfbutton"
+                                    ng-if="promisingIdeaobjs[conn.from].data.color!==''"
+                                    ng-click="promisingIdeaobjs[conn.from].data.color=''">{{ 'clear_colour' | translate
+                                }}
+                            </button>
+                            <ngjs-color-picker selected-color="promisingIdeaobjs[conn.from].data.color"
+                                               custom-colors="colors"></ngjs-color-picker>
+                            <label style="float: left;font-size:  9pt">{{ 'idea' | translate }} : </label>
+                            <tt class="box"
+                                ng-style="{ 'background-color': promisingIdeaobjs[conn.from].data.color }"></tt>
+                            <tt style="float: left" ng-bind-html="trustAsHtml(conn.data.idea)"></tt>
+                            <br>
+                            <tt style="float:right">-({{'by' | translate }}
+                                {{getPromisingIdeaCreator(promisingIdeaobjs[conn.from].authors)}}
+                                {{getPromisingIdeaCreated(promisingIdeaobjs[conn.from].modified)}})</tt>
+                            <br style="clear:both">
+                            <label style="float: left; font-size:  9pt"> <b>
+                                {{'justification_for_selection_of_promising_idea' | translate }}:</b></label>
+                            <br>
+                            <textarea id="promising-idea-reason" cols="70" rows="2"
+                                      ng-model="promisingIdeaobjs[conn.from].data.reason"></textarea>
+                        </div>
+                        <hr style="clear:both; height: 2px;background-color: #33BBFF; "/>
+                    </div>
+                </div>
+            </tab>
+        </tabset>
+    </div>
+
+    <div class="well" collapse="status.ispromisingideaCollapsed"
+         style="padding-left: 0px; position: absolute; top:0px; left: 0px; width: 100%; min-height: 100% !important; height: 100%;background-color: white; z-index: 100;">
+
+        <label style="font-size:  11pt; text-align: center; text-decoration: underline; padding-left: 10px;">
+            <b>{{'add_promising_idea' | translate }}</b>
+        </label>
+
+        <div style="padding-left: 20px; height: 90%; overflow: scroll; width:100%; float: left">
+            <label style="font-size:  9pt">
+                <b> {{'colour_group_attribution' | translate }}: {{createmsg}}</b>
+            </label>
+            <button type="submit" style="clear: both" class="btn btn-primary kfbutton" ng-if="obj.targetColor!==''"
+                    ng-click="clearColor();">{{'clear_colour' | translate }}
+            </button>
+            <br>
+            <ngjs-color-picker selected-color="obj.targetColor" custom-colors="colors"></ngjs-color-picker>
+            <label style="float: left;font-size:  9pt">{{'idea' | translate }} : </label>
+            <tt class="box" ng-style="{ 'background-color': obj.targetColor}"></tt>
+            <tt style="float: left" ng-bind-html="trustAsHtml(selectedText)"></tt>
+            <br>
+            <br>
+            <label style="float: left; font-size:  9pt">
+                <b>{{'justification_for_selection_of_promising_idea' | translate }}:</b>
+            </label>
+
+            <br>
+            <textarea id="text" cols="70" rows="2" ng-model="obj.textareaText"></textarea>
+        </div>
+        <div style="clear:both; text-align: right; padding-right: 10px; padding-top: 5px; height: 10%">
+            <button type="submit" class="btn btn-primary kfbutton" ng-click="promisingIdeaobjProcessCancel()">
+                {{'cancel' | translate }}
+            </button>
+            <button type="submit" class="btn btn-primary kfbutton"
+                    ng-click="promisingIdeaobjProcess(); status.ispromisingideaCollapsed = true; status.hidecontributeButtonBar = false;">
+                {{'save' | translate }}
+            </button>
+        </div>
+        <hr>
+    </div>
+
+    <div ng-show="!status.hidecontributeButtonBar">
+        <div style="margin-top: 8px;float: right; padding-top: 0px; padding-right: 10px;">
+            <button ng-show="context.data.plugins.translateToEnglish && contribution.type === 'Note'"
+                    ng-click="translateToLang('en')"> {{'translate_to_english' | translate }}
+            </button>
+            <button ng-show="context.data.plugins.translateToChinese && contribution.type === 'Note'"
+                    ng-click="translateToLang('zh')"> {{'translate_to_chinise' | translate }}
+            </button>
+
+
+        </div>
+        <div style="margin-top: -13px;float: right; padding-top: 0px; padding-right: 10px;">
+            <button ng-hide="status.hidebuildson" type="submit" class="btn btn-primary" ng-click="buildson()">
+                {{ 'build-on' | translate }}
+            </button>
+        </div>
+        <div style="margin-top: -13px;float: right; padding-top: 0px; padding-right: 10px;">
+            <button ng-hide="status.hidebuildson || !googleEnabled" type="submit" class="btn btn-primary"
+                    ng-click="openGoogleDocSetting_buildson()">{{ 'build-on_with_Google_doc' | translate }}
+            </button>
+        </div>
+        <div ng-if="contribution.data.isTemplate" style="float: right; padding-top: 0px; padding-right: 10px;">
+            <button ng-hide="status.hidebuildson" type="submit" class="btn btn-primary" ng-click="makeFromTemplate()">
+                {{ 'new_note_using_template' | translate }}
+            </button>
+        </div>
+        <div style="margin-top: -13px;float: left; padding-top: 0px; padding-right: 5px;">
+            <button ng-show="(haspromisingidea&&!status.hidebuildson)&&context.data.plugins.promisingnessidea=== true"
+                    type="submit" class="btn btn-primary" ng-click="showPromisingIdeasInReadMode()">{{promisingmsg}}
+            </button>
+        </div>
+    </div>
+
+    <pre ng-show="isiOS()" id="copyboard" style="font-size: 1px;"></pre>
+</div>
+<div ng-show="status.error">
+    Error: {{status.errorMessage}}
+</div>
+
+<script type="text/ng-template" id="NoteTranslator.html">
+    <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">
+            Note in English</h3>
+    </div>
+    <div class="modal-body" id="modal-body">
+        <div ng-bind-html="translatedNoteText"></div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-warning" type="button" ng-click="cancel()">{ 'close' | translate }}</button>
+    </div>
+    <!-- Floating Panel
+
+</script>
+
+<script>
+
+
+    // every 2 second set left .annotator-editor to 5
+    setInterval(function () {
+        var left = $('.annotator-editor').css('left');
+        if (left != '5px') {
+            $('.annotator-editor').css('left', '5px');
+        }
+    }, 2000);
+
+
+
+    function renderSpellCheckText() {
+        var spellCheckTextDiv = document.getElementById('spell-check-text');
+        if (spellCheckTextDiv) {
+            // Temporarily store the content
+            var content = spellCheckTextDiv.innerHTML;
+
+            // Clear the existing content
+            spellCheckTextDiv.innerHTML = '';
+
+            // Recreate the content and set it back
+            spellCheckTextDiv.innerHTML = content.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+            console.log('Rendered content:', spellCheckTextDiv.innerHTML);
+        }
+    }
+
+    // Call renderSpellCheckText function every 5 seconds
+    setInterval(renderSpellCheckText, 5000);
+
+</script>
+
+
+
+<script type="text/ng-template" id="spell-check-modal-template">
+    <div class="modal fade" role="dialog" id="spellCheckModal">
+        <div class="modal-dialog" style="margin: 5px auto;">
+            <div class="modal-content modal-content-spell-checking">
+                <div class="modal-header" style="cursor: move;">
+                    <h3 class="modal-title">Suggestions</h3>
+                    <button type="button" class="close" ng-click="close()">&times;</button>
+                </div>
+                <div class="modal-body" style="height: 400px; overflow-y: auto;">
+                    <div id="spell-check-text"></div>
+                </div>
+                <div class="resize-handle" style="position: absolute; bottom: 0; right: 0; width: 10px; height: 10px; cursor: se-resize;"></div>
+                <div class="modal-footer" style="text-align: unset">
+                    <span class="small"></span>
+                    <div style="text-align: right">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

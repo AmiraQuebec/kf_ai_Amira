@@ -1,0 +1,45 @@
+<div ng-controller="UserUploaderCtrl">
+    <div class="col-md-12">
+    	<br>
+    	<label>{{ 'upload_multiple_csv' | translate }}</label><br>
+        <label>{{ 'sample_csv' | translate }}</label><br>
+        <table border="2">
+            <tr>
+                <th>{{ 'firstName' | translate }}</th>
+                <th>{{ 'lastName' | translate }}</th>
+                <th>{{ 'email' | translate }}</th>
+                <th>{{ 'username' | translate }}</th>
+                <th>{{ 'password' | translate }}</th>
+            </tr>
+            <tr>
+                <td>John</td>
+                <td>Smith</td>
+                <td>jsmith@email.com</td>
+                <td>jsmith</td>
+                <td>{{ 'password' | translate }}</td>
+            </tr>
+            <tr>
+                <td>Jane</td>
+                <td>Smith</td>
+                <td>janes@email.com</td>
+                <td>janes</td>
+                <td>{{ 'password' | translate }}</td>
+            </tr>
+        </table><br><br>
+        <label>{{ 'check_file_format_message' | translate }}.</label>
+        <input type="file" ng-file-select="onFileSelect($files)">
+        <br>
+        <button ng-click="validate()" ng-disabled="exists">{{ 'check_file_format' | translate }}</button>
+        <br>
+        <br>
+        <button ng-click="submit()" ng-disabled="show">{{ 'submit' | translate }}</button>
+        <br><br>
+        <label ng-show="res">{{message}}</label>
+        <ul ng-repeat="user in users">
+        	<li>
+        		Row: {{user.index}}<br>
+        		Error: {{user.msg}}
+        	</li>
+        </ul>
+    </div>
+</div>

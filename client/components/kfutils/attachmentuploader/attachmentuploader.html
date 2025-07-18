@@ -1,0 +1,9 @@
+<div ng-controller="AttachmentUploaderCtrl">
+    <div class="">
+        <input type="file" ng-file-select="onFileSelect($files)">
+        <div class="drop-box" ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="optional-css-class-name-or-function" ng-show="dropSupported">{{ 'attachments_drop' | translate }}</div>
+        <div ng-file-drop-available="dropSupported=true" ng-show="!dropSupported">{{ 'attachments_drop_notSupported' | translate }}</div>
+        <progressbar ng-if="progress>=0" animate="true" value="progress" type="success"><b>{{progress}} %</b>
+        </progressbar>
+    </div>
+</div>

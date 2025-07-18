@@ -1,0 +1,18 @@
+/* 
+    Document   : kfmce
+    Author     : Yoshiaki
+*/
+
+@import url("kf.css");
+
+body {
+    font-size: 11px;
+}
+/* Display the URLs in note contribution as underlined. */
+a {
+    color: -webkit-link;
+    text-decoration: underline;
+}
+a[uib-tab-heading-transclude] {
+    text-decoration: none;
+}

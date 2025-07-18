@@ -1,0 +1,704 @@
+.KFViewNavBar {
+    position: fixed;
+    width: 100%;
+    height: 58px;
+    border-width: 1px;
+    border-color: #979797;
+    background-color: #073B7D;
+    color: #FFFFFF;
+    padding-top: 0px;
+    padding-left: 0px;
+}
+
+/* for google doc setting dialog */
+.head_area{
+    text-align:center;
+    display:block;
+    float:left;
+    width:100%;
+}
+
+.table_head{
+    float:left;
+    width:100%;
+    height:40px;
+    height:3.63em;
+    text-align:center;
+    line-height:40px;
+    line-height:3.63em;
+    background: #eee;
+    font-weight:bold;
+    border:1px solid #ddd;
+}
+
+.column_op{
+    float:left;
+    width:20%;
+}
+
+.column_fn{
+    float:right;
+    width:50%;
+    text-align:left;
+}
+
+.column_ct{
+    float:right;
+    width:30%;
+    text-align:left;
+}
+
+#file_list_area{
+    display:block;
+    float:left;
+    width:100%;
+
+}
+
+.table_row{
+    float:left;
+    width:100%;
+    text-align:center;
+    height:28px;
+    height:2.55em;
+    line-height: 30px;
+    line-height: 2.73em;
+}
+
+.page_area{
+    float:left;
+    width:20%;
+    text-align:center;
+    margin-top:5px;
+    margin-top:0.45em;
+}
+
+.title_area{
+    display:block;
+    float: left;
+    height: 30px;
+    height: 2.73em;
+    width:100%;
+}
+
+.title_area label{
+    width:20%;
+    font-weight: bold;
+    text-align:center;
+    font-size:13px;
+    font-size:1.18em;
+}
+
+.title_area input{
+    width:60%;
+}
+
+.setting_area{
+    display:block;
+    float: left;
+    width:100%;
+}
+
+.gmsg_area{
+    text-align: right;
+    color: red;
+    float:left;
+    width:60%;
+}
+
+.gstatus_area{
+    text-align: right;
+    float:left;
+    width:60%;
+}
+
+.setting_area fieldset{
+    display: block;
+    -webkit-margin-start: 2px;
+    -webkit-margin-end: 2px;
+    -webkit-padding-before: 0.35em;
+    -webkit-padding-start: 0.75em;
+    -webkit-padding-end: 0.75em;
+    -webkit-padding-after: 0.625em;
+    min-width: -webkit-min-content;
+    border-width: 1px;
+    border-style: groove;
+    border-image: initial;
+    width:49%;
+    float:left;
+    height:200px;
+    height:18.2em;
+}
+
+fieldset legend{
+    -webkit-padding-start: 5px;
+    border-style: none;
+    width:80px;
+    width:7.27em;
+    font-size:13px;
+    font-size:1.18em;
+    font-weight:bold;
+    margin-bottom:0px;
+}
+
+.author_data{
+    display:block;
+    float:left;
+    width:100%;
+    height:90%;
+    overflow-y:scroll;
+}
+
+.author_data div{
+    width:50%;
+    float:left;
+    display:block;
+}
+
+.button_area{
+    display:block;
+    float:left;
+    width:100%;
+    text-align:right;
+    margin-top:5px;
+    margin-top:0.45em;
+    padding-right:30px;
+    padding-right:2.73em;
+}
+.KFScaffoldMenu {
+    font-size: 10px;
+    font-size: 0.91em;
+    /*text-align: center; no effect*/
+}
+
+.KFSupportButton {
+    margin: 1px 2px 1px !important;
+    cursor: pointer !important;
+    border: 1px solid !important;
+    border-color: #efb137 !important;
+    border-radius: 9px !important;
+    padding: 0px 7px 0px 7px !important;
+    /*width: 100px;*/
+    overflow: hidden;
+    text-align: center !important;
+    font-size: 0.91em !important;
+    height: 25px !important;
+}
+.KFSupportButton:hover {
+    color: #FFFFFF;
+    background-color: #E48E00;
+}
+.KFSupportButton:active {
+    color: #000000;
+    background-color: #E48E00;
+}
+/* end of googld doc setting dialog */
+
+/* for video play dialog */
+.video_content{
+    text-align:center;
+}
+/* end of video play dialog */
+
+
+.KFViewRightBar{
+    border-radius: 4px;
+    transform: rotate(270deg);
+    display: block;
+    color: white;
+    float: right;
+    position: relative;
+    top: 200px;
+    right: 2px;
+    height: 35px;
+    background: #073B7D;
+    border:1px solid #DDD;
+    font-weight: bold;
+    font-size: 15px;
+    text-align: center;
+    line-height: 35px;
+    width: 60px;
+    cursor:pointer;
+    z-index:100;
+}
+.KFViewRightBar:hover{
+    border-color: #BBB;
+    background-color: #BBB;
+    color:white;
+}
+.KFCommunityTitle {
+    height: 100%;
+    /*border: 1px solid black;    */
+    float: left;
+    padding-top: 10px;
+    padding-left: 50px;
+    padding-right: 10px;
+    font-size: 23px;
+}
+.KFViewTitle {
+    height: 100%;
+    float: left;
+    padding-top: 16px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 16px;
+}
+.KFUserName {
+    height: 100%;
+    /* border: 1px solid black; */
+    padding-top: 36px;
+    font-size: 14px;
+    float: right;
+    padding-left: 20px;
+    padding-right: 20px;
+
+}
+.KFViewToolBar {
+    box-shadow: 2px 3px 6px 0px rgba(0,0,0,0.21);
+    -webkit-box-shadow: 2px 3px 6px 0px rgba(0,0,0,0.21);
+    -moz-box-shadow: 2px 3px 6px 0px rgba(0,0,0,0.21);
+
+
+    padding-bottom: 8px;
+    padding-top: 8px;
+    position: fixed;
+    top: 65px;
+    width: 48px;
+    z-index: 0;
+}
+.KFViewMainCanvas {
+    position: absolute;
+    /*border: 1px solid #000000;*/
+
+    overflow: scroll;
+    top: 30px;
+    left: 34px;
+    width: calc(100% - 34px);
+    height: 100vh;
+    /* for safari <7.0  */
+
+    height: calc(100vh - 30px);
+}
+
+/* This style is going to be added to maincanvas for riseabove */
+.KFViewMainCanvas0 {
+    position: absolute;
+    overflow: scroll;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100vh;
+}
+
+.KFViewContributionCanvas {
+    position: absolute;
+    left: 0pt;
+    top: 0pt;
+    width: 3000px;
+    height: 3000px;
+}
+.KFViewSelectedCanvas {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+}
+.kfViewMarqueeCanvas {
+    position: absolute;
+    left: 0pt;
+    top: 0pt;
+    width: 3000px;
+    height: 3000px;
+    z-index: 2;
+    /*background-color: rgba(255, 255, 0, 0.3);*/
+}
+.KFViewWindowsCanvas {
+    position: absolute;
+    left: 0pt;
+    top: 0pt;
+    width: 3000px;
+    height: 3000px;
+    pointer-events: none;
+    z-index: -100;
+}
+/* for view ref presentation */
+
+.kfViewRef {
+    position: absolute;
+    z-index: 5;
+}
+.kfIcon:visited {
+    color: black;
+}
+.kfIcon:hover {
+    color: black;
+}
+.kfIcon {
+    color: black;
+}
+.KFToolBarButton {
+    width: 47px!important;
+    border-color: white!important;
+    background-color: white!important;
+    padding: 3px!important;
+}
+.KFToolBarImage{
+    width: 30px;
+}
+.KFToolBarButton:hover {
+    border-color: #BBB;
+    background-color: #BBB;
+}
+.KFTimeLabel {
+    font-size: 9px;
+}
+.kfNewRef {
+    border: thin solid red;
+    border-radius: 5px;
+    padding: 2px;
+    margin: -2px;
+}
+/* for handles */
+
+.ui-resizable {
+    /*position: relative;*/
+}
+.ui-resizable-handle {
+    position: absolute;
+    font-size: 0.1px;
+    display: block;
+    -ms-touch-action: none;
+    touch-action: none;
+}
+.ui-resizable-disabled .ui-resizable-handle, .ui-resizable-autohide .ui-resizable-handle {
+    display: none;
+}
+.ui-resizable-n {
+    cursor: n-resize;
+    height: 7px;
+    width: 100%;
+    top: -5px;
+    left: 0;
+}
+.ui-resizable-s {
+    cursor: s-resize;
+    height: 7px;
+    width: 100%;
+    bottom: -5px;
+    left: 0;
+}
+.ui-resizable-e {
+    cursor: e-resize;
+    width: 7px;
+    right: -5px;
+    top: 0;
+    height: 100%;
+}
+.ui-resizable-w {
+    cursor: w-resize;
+    width: 7px;
+    left: -5px;
+    top: 0;
+    height: 100%;
+}
+.ui-resizable-se {
+    cursor: se-resize;
+    width: 12px;
+    height: 12px;
+    right: 1px;
+    bottom: 1px;
+}
+.ui-resizable-sw {
+    cursor: sw-resize;
+    width: 9px;
+    height: 9px;
+    left: -5px;
+    bottom: -5px;
+}
+.ui-resizable-nw {
+    cursor: nw-resize;
+    width: 9px;
+    height: 9px;
+    left: -5px;
+    top: -5px;
+}
+.ui-resizable-ne {
+    cursor: ne-resize;
+    width: 9px;
+    height: 9px;
+    right: -5px;
+    top: -5px;
+}
+#nwgrip, #negrip, #swgrip, #segrip, #ngrip, #egrip, #sgrip, #wgrip {
+    width: 8px;
+    height: 8px;
+    background-color: #ffffff;
+    border: 1px solid #000000;
+}
+#segrip {
+    right: -5px;
+    bottom: -5px;
+}
+/* for context menu */
+
+.position-fixed {
+    position: fixed;
+}
+.menuitem {
+    padding-left: 10px;
+    padding-left: 0.91em;
+    height: 25px;
+    height: 2.27em;
+    line-height: 25px;
+    line-height: 2.27em;
+    cursor: default;
+    background-color: white;
+}
+.menuitem:hover {
+    color: white;
+    background-color: #0070FF;
+}
+
+.unclickable{
+    color:gray;
+}
+/* endo of context menu */
+/* window related */
+
+.ui-dialog .ui-dialog-titlebar {
+    padding: 0px 10px;
+}
+.ui-dialog .ui-dialog-title {
+    /*float: left;*/
+    /*margin: .1em 0;*/
+    /*white-space: nowrap;*/
+    /*width: 90%;*/
+    /*overflow: hidden;*/
+    /*text-overflow: ellipsis;*/
+}
+.ui-widget-header {
+    /*border: 1px solid #aaaaaa;*/
+    /*background: #cccccc url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") 50% 50% repeat-x;*/
+
+    background: #D9D9D9;
+    /*color: #222222;*/
+    /*font-weight: bold;*/
+
+    font-weight: normal;
+}
+.ui-widget {
+    /* reset to bootstrap */
+
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    /* font-family: Verdana,Arial,sans-serif; */
+    /* font-size: 1.1em; */
+}
+
+.btn-dialog{
+    margin-right:20px;
+    margin-right: 1.82em;
+    width:60px;
+    width: 5.45em;
+}
+
+.drawingEditor{
+    position:absolute;
+    top:20%;
+    left:20%;
+    width:60%;
+    height:400px;
+    display:none;
+    float:left;
+    z-index:999;
+    border-radius:3px;
+    -webkit-box-shadow: 0 0 5px 2px #888888;
+    -moz-box-shadow: 0 0 5px 2px #888888;
+    box-shadow: 0 0 5px 2px #888888;
+    background: white;
+}
+.drawing-btn-area{
+    position:absolute;
+    top:30px;
+    right:0px;
+    z-index: 103;
+}
+.drawing-btn{
+    box-shadow: 0 2px 2px 0 rgb(230, 230, 230), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+    background-color: #1A9FFF;
+    border-color:#1A9FFF;
+    color: #fff;
+    margin-right:5px;
+    padding: 1px 7px;
+    font-size: 12px;
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: normal;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+
+.submitLink {
+  background-color: transparent;
+  border: none;
+  color: #4185C1;
+  cursor: pointer;
+  padding: 0px;
+}
+
+submitLink:focus {
+  outline: none;
+}
+
+/* end of window related */
+.languageFlag{
+    filter: opacity(100%) !important;
+}
+
+
+ /* Favourite contribution on the view */
+.favNote {
+    border: 2px solid #ffcf40;
+    border-radius: 8px;
+    padding: 1px;
+}
+
+/*Hide refs whith filter */
+.hideRef{
+    opacity: 0.4;
+}
+.notelistView{
+    position: relative;
+    margin-top: 25px;
+    margin-left: 25px;
+    width: 95%;
+    /* height: calc(98vh - 40px) !important; */
+    overflow: scroll;
+    background-color: white;
+    z-index: 85;
+    }
+
+.hireachyNotesContaincer{
+    height:calc(98vh - 40px)!important;
+    padding:20px
+}
+.hirerachyNoteIcon {
+font-size: 15px;
+float: right;
+padding-right: 10px;
+color: #5a5959;
+}
+.hireachyNotesList{
+    height:calc(95vh - 80px)!important;
+    padding:20px;
+    padding-top: 0px;
+    overflow-y: scroll;
+}
+
+.hireachyNotesListContent{
+    height:calc(98vh - 80px)!important;
+    padding:20px;
+    overflow-y: scroll;
+}
+
+.hirerachy-note{
+    padding-left: 30px;
+    border-left:3px solid grey;
+    padding-top:10px;
+    padding-bottom:10px;
+    border-bottom:0.5px solid #C4C2C2  ;
+    border-top:0.5px solid #C4C2C2 ;
+    border-right:1px solid #C4C2C2 ;
+    margin-left:0px !important;
+    width: 100%;
+}
+ .readableNote{
+     max-height:200px;
+     overflow-y: scroll;
+     margin:8px 0 ;
+ }
+
+ .notelistViewmodal{
+     top: 0;
+     bottom: 0;
+     left: 0;
+     right: 0;
+     position: fixed;
+     width: 100%;
+     height: 100%;
+     background-color: rgba(0, 0, 0, 0.12);
+     z-index: 84;
+ }
+
+/* scaffold support label */
+
+.KFSupportStart {
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.KFSupportEnd {
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.kfSupportStartLabel {
+    border-color: #EFB137;
+    border-style: solid;
+    border-width: 1px;
+    padding: 1px 2px 1px 1px;
+}
+
+.kfSupportEndMark {
+    background-color: #EFB137;
+    border-color: #EFB137;
+    color: #EFB137;
+    border-radius: 0 10px 10px 0;
+    border-style: solid;
+    border-width: 1px;
+    padding: 1px 0 1px 2px;
+}
+
+.kfSupportStartMark {
+    background-color: #EFB137;
+    border-color: #EFB137;
+    color: #EFB137;
+    border-radius: 10px 0 0 10px;
+    border-style: solid;
+    border-width: 1px;
+    padding: 1px 0 1px 2px;
+}
+
+.kfTemplateStartLabel {
+    border-style: none;
+}
+
+.kfTemplateStartMark {
+    background-color: transparent;
+    border-style: none;
+}
+
+.kfTemplateEndMark {
+    background-color: transparent;
+    border-style: none;
+}
+
+.filterHirerachy{
+    opacity: 0.3;
+    display: none;
+}
+.removeBorder{
+    padding-top:0px;
+    padding-bottom: 0px;
+    border-top: 0px;
+    border-bottom: 0px;
+}

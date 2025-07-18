@@ -1,0 +1,99 @@
+<div class="navbar navbar-default navbar-static-top" ng-controller="NavbarCtrl">
+    <div class="container">
+        <div class="navbar-header">
+            <button class="navbar-toggle" type="button" ng-click="isCollapsed = !isCollapsed">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="/" class="navbar-brand">Knowledge Forum 6</a>
+            <span style="cursor: pointer;" class="navbar-text" >
+
+<!--                <span ng-click="openWhatsNewDialog()">{{ 'announcement' | translate }}-->
+                <!--                        <span ng-if='$localStorage.changeLogViewedVersion != version.version'-->
+                <!--                        class="glyphicon glyphicon glyphicon-asterisk small"-->
+                <!--                        style="color:rgb(128,0,0)" aria-hidden="true"></span>-->
+                <!--                </span>-->
+            </span>
+
+            <script type="text/ng-template" id="VersionModalContent.html">
+                <div class="modal-header">
+                    <h1 class="modal-title">Knowledge Forum</h1>
+                    <table border="0">
+                        <tr>
+                            <td>Version:</td>
+                            <td>{{version.version}}</td>
+                        </tr>
+                        <tr>
+                            <td>Build:</td>
+                            <td>{{version.build}}</td>
+                        </tr>
+                    </table>
+                    <br><br>
+                    <div>
+                        <label>User Agent:</label>
+                        <table>
+                            <tr>
+                                <td>browser?:</td>
+                                <td>{{browser()}}</td>
+                            </tr>
+                            <tr>
+                                <td>iOS?:</td>
+                                <td>{{isiOS()}}</td>
+                            </tr>
+                            <tr>
+                                <td>Android?:</td>
+                                <td>{{isAndroid()}}</td>
+                            </tr>
+                            <tr>
+                                <td>Mobile?:</td>
+                                <td>{{isMobile()}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </script>
+            <script type="text/ng-template" id="ChangeLogContent.html">
+                <div class="modal-header">
+                    <h2 class="modal-title">Change Log</h2>
+                </div>
+                <div class="modal-body">
+                    <div ng-repeat="changeInfo in changeLog.versions">
+                        <div ng-if="changeInfo.version">
+                            <h2 >Version : {{changeInfo.version}}, {{changeInfo.date}}</h2>
+                            <p markdown-to-html="changeInfo.body"></p>
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+            </script>
+
+        </div>
+        <div collapse="isCollapsed" class="navbar-collapse collapse" id="navbar-main">
+            <ul class="nav navbar-nav">
+                <li ng-show="isLoggedIn()" ng-repeat="item in menu" ng-class="{active: isActive(item.link)}">
+                    <a ng-href="{{item.link}}">{{ item.title | translate}}</a>
+                </li>
+                <li ng-show="isAdmin()" ng-class="{active: isActive('/admin')}"><a
+                    href="/admin">{{ 'admin' | translate }}</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+
+                <li >
+                    <p class="navbar-text">{{ getCurrentUser().getName() }}</p>
+                </li>
+                <li ><a target="_blank"
+                        href="/manual_assets/KF_6_11_14_guide_utilisation.pdf">Aide</a>
+                </li>
+                <li ng-show="isLoggedIn()" ng-class="{active: isActive('/settings')}"><a href="/settings"><span
+                    class="glyphicon glyphicon-cog"></span></a>
+                </li>
+                <li ng-show="isLoggedIn()" ng-class="{active: isActive('/logout')}"><a href=""
+                                                                                       ng-click="logout()">{{ 'logout' | tryou need anslate }}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

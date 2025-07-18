@@ -1,0 +1,490 @@
+<div ng-hide="status.error" class="col-md-12" style="padding: 0px;">
+    <div class="well" collapse="status.isViewlinkCollapsed" style="padding-left: 50px; position: absolute; top: 0px; left: 50px; width: 50%; height: 400px; background-color: white; z-index: 100;">
+        <div style="text-align: right; padding-right: 50px; padding-top: 5px;">
+            <button type="submit" class="btn btn-primary kfbutton" ng-click="createViewlink()">{{ 'close' | translate }}</button>
+        </div>
+        <label>{{ 'view_link' | translate }}</label>
+        <ul>
+            <li>{{ 'view_link_add_dragNdrop' | translate }}</li>
+        </ul>
+        <div style="height: 400px; overflow: scroll;">
+            <div ng-repeat="view in views">
+                <div viewlink style="white-space: nowrap;">
+                    <img class="workspace-icon" draggable="false" src="manual_assets/kf4images/icon-view.png">
+                    <a draggable="false" ng-href="view/{{view._id}}">{{view.title}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="well" collapse="status.isViewManagerCollapsed" style="padding-left: 50px; position: absolute; top: 0px; left: 50px; width: 50%; height: 400px; background-color: white; z-index: 100;">
+        <div style="text-align: right; padding-right: 50px; padding-top: 5px;">
+            <button type="submit" class="btn btn-primary kfbutton" ng-click="status.isViewManagerCollapsed = true;">{{ 'close' | translate }}</button>
+        </div>
+        <div style="height: 400px; overflow: scroll;">
+            <div ng-include="'app/viewmanager/viewmanager.html'" ng-controller="ViewmanagerCtrl"></div>
+        </div>
+    </div>
+    <div class="well" collapse="status.isAttachmentCollapsed" style="padding-left: 50px; position: absolute; top: 0px; left: 50px; width: 50%; background-color: white; z-index: 100;">
+        <div style="text-align: right; padding-right: 50px; padding-top: 5px;">
+            <button type="submit" class="btn btn-primary kfbutton" ng-click="status.isAttachmentCollapsed = true;">{{ 'close' | translate }}</button>
+        </div>
+        <div style="padding: 10px;">
+            <div ng-include="'components/kfutils/attachmentuploader/attachmentuploader.html'"></div>
+        </div>
+    </div>
+    <div class="well" collapse="status.isAnalyticsCollapsed" style="padding-left: 50px; position: absolute; top: 0px; left: 50px; width: 50%; background-color: white; z-index: 100;">
+        <div style="text-align: right; padding-right: 50px; padding-top: 5px;">
+            <button type="submit" class="btn btn-primary kfbutton" ng-click="status.isAnalyticsCollapsed = true">{{ 'close' | translate }}</button>
+        </div>
+        <div style="padding: 10px;">
+            <label>{{ 'assessment_tools' | translate }} ({{ 'beta_version' | translate }}):</label>
+            <ul>
+                <li>
+                    <form action="{{kbdacEntry}}" method="get" ng-submit="openKBDACWindow()" target="kbdac-window">
+                        <input type="hidden" name="incomingServer" value="kf6server">
+                        <input type="hidden" name="kfurl" value="{{hostURL}}">
+                        <input type="hidden" name="username" value="{{community.author.userName}}">
+                        <input type="hidden" name="communityid" value="{{community.community._id}}">
+                        <input type="hidden" name="token" value="{{token}}">
+                        <input type="submit" class="submitLink" value="{{ 'student_profile' | translate }}">
+                    </form>
+                </li>
+                <li ng-if="itmEnabled">
+                    <form action="{{itmEntry}}" method="post" ng-submit="openITMWindow()" target="itm-window">
+                        <div ng-include="'app/itm/itm_params.html'"></div>
+                        <input type="submit" class="submitLink" value="{{ 'Idea Thread Mapper' | translate }}">
+                    </form>
+                </li>
+                <li><a draggable="false" href="" ng-click="openTagCloud()">{{ 'assessment_tools_wordCloud' | translate }}</a></li>
+                <li><a draggable="false" href="" ng-click="openActivityDashboard()">{{ 'activity_dashboard' | translate }}(beta)</a></li>
+                <!--<li><a draggable="false" href="" ng-click="openNoteDashboard()">{{'note_dashboard' | translate}}(beta)</a></li>-->
+                <li><a draggable="false" href="" ng-click="openS2viz()">s2viz(beta)</a></li>
+                <li><a draggable="false" href="" ng-click="openTimemachine()">{{'timemachine' | translate}}(beta)</a></li>
+                <li><a draggable="false" href=""  ng-click="openStudentDictionary()">{{'key_concepts' | translate}}</a></li>
+                <!--<li><a draggable="false" href="" ng-click="openStats()">{{ 'assessment_tools_stats' | translate }}</a></li>-->
+                <li><a draggable="false" href="" ng-click="openAuthorNetwork()">{{ 'assessment_tools_authorNetwork' | translate }}</a></li>
+                <li><a draggable="false" href="" ng-click="openAIJournal()">Traces numériques IA</a></li>
+                <li ng-if="context.data.plugins.lexicalanalysis === true"><a draggable="false" href="" ng-click="openLexicalAnalysis()">{{ 'lexical_analysis' | translate }}</a></li>
+                <li ng-if="context.data.plugins.scaffoldgrowth === true"><a draggable="false" href="" ng-click="openScafoldSupportTracker()">{{ 'scaffold_growth' | translate }}</a></li>
+
+            </ul>
+        </div>
+    </div>
+    <div class="well" collapse="status.isSettingCollapsed" style="padding-left: 50px; position: absolute; top: 0px; left: 50px; width: 50%; background-color: white; z-index: 100;">
+        <div style="text-align: right; padding-right: 50px; padding-top: 5px;">
+            <button type="submit" class="btn  kfbutton" ng-click="status.isSettingCollapsed = true">{{ 'close' | translate }}</button>
+        </div>
+        <div>
+            <label> {{ 'view_temporary_setting' | translate }}: </label>
+            <div style="padding: 10px;">
+                <label>{{ 'connection_showing' | translate }}:</label>
+                <input type="checkbox" ng-model="setting.buildson" ng-change="settingChanged()">{{ 'buildson' | translate }}
+                <input type="checkbox" ng-model="setting.references" ng-change="settingChanged()">{{ 'reference' | translate }}
+                <br>
+                <label>Label:</label>
+                <input type="checkbox" ng-model="setting.showGroup" ng-change="settingChanged()">{{ 'group' | translate }}
+                <input type="checkbox" ng-model="setting.showAuthor" ng-change="settingChanged()">{{ 'author' | translate }}
+                <input type="checkbox" ng-model="setting.showTime" ng-change="settingChanged()">{{ 'time' | translate }}
+                <input type="checkbox" ng-model="setting.language" ng-change="settingChanged()">{{ 'language' | translate }}
+            </div>
+        </div>
+        <div>
+            <label> {{ 'view_temporary_setting_detail' | translate }}: </label>
+            <div style="">
+                <button type="submit" class="btn  KFToolBarButton" ng-click="openViewSetting()">
+                    <img class="KFToolBarImage" src="manual_assets/kf6images/13-settings.png" title="Settings">
+                </button>
+            </div>
+        </div>
+        <div ng-show="isManager()">
+            <label> {{ 'community_setting' | translate }}: </label>
+            <div style="">
+                <button type="submit" class="btn  KFToolBarButton" ng-click="openCommunitySetting()">
+                    <img class="KFToolBarImage" src="manual_assets/kf6images/13-settings.png" title="Settings">
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="well" collapse="status.isHelpCollapsed" style="position: absolute; top: 60px; right: 55px; width: 50%; background-color: white; z-index: 100;">
+        <div style="text-align: right; padding-right: 50px; padding-top: 5px;">
+            <button type="submit" class="btn btn-primary kfbutton" ng-click="status.isHelpCollapsed = true;">{{ 'close' | translate }}</button>
+        </div>
+        <div style="overflow: scroll;">
+            <div ng-include="'app/help/help.html'" ng-controller="HelpCtrl"></div>
+        </div>
+    </div>
+
+    <div class="well" collapse="status.isFilterCollapsed" style="padding-left: 30px; position: absolute; top: 50px; right: 40px; width: 30%; background-color: white; z-index: 100;">
+        <div style="text-align: right; padding-right: 50px; padding-top: 5px;">
+            <button type="submit" class="btn kfbutton" ng-click="status.isFilterCollapsed = true;">{{ 'close' | translate }}</button>
+        </div>
+        <div >
+                <form class="form" name="form" ng-submit="filterFormSubmite(form)" novalidate>
+                        <div class="form-group">
+                            <label>{{ 'title_content' | translate }}</label>
+                            <input  type="text" name="textsearch" class="form-control" ng-model="filter.textSearch" >
+                        </div>
+                        <!-- <div class="form-group">
+                            <label>Authors</label>
+                            <input type="text" name="author" class="form-control" ng-model="filter.author">
+                        </div> -->
+                        <div class="form-group ">
+                            <h5>{{ 'scaffolds' | translate }}</h5>
+                                <label ng-repeat="scaffold in scaffolds[0].supports">
+                                        <input
+                                          type="checkbox"
+                                          name="selectedScaffolds[]"
+                                          ng-model="filter.selectedScaffolds[$index]"
+                                          value="{{scaffold._to.title}}"
+                                          ng-checked="selection.indexOf(scaffold) > -1"
+                                          ng-click="toggleSelection(scaffold)"
+                                        > {{scaffold._to.title}}
+                                      </label>
+
+                        </div>
+                        <div class="form-group">
+                            <h5>{{ 'dates_range' | translate }}</h5>
+                            <label >{{ 'from' | translate }}</label>
+                            <input type="date" name="fromdate" class="form-control" ng-model="filter.fromDate">
+                            <br>
+
+                            <label >{{ 'to' | translate }}</label>
+                            <input type="date" name="todate" class="form-control" ng-model="filter.toDate">
+
+                        </div>
+                        <div class="form-group">
+                                <h5>Types</h5>
+                                <label ng-repeat="contributiontype in contributionTypes">
+                                        <input
+                                          type="checkbox"
+                                          name="selectedContributionTypes"
+                                          ng-model="filter.selectedContributionTypes[$index]"
+                                          value="{{contributiontype}"
+                                          ng-checked="selection.indexOf(contributiontype) > -1"
+                                          ng-click="toggleSelection(contributiontype)"
+                                        > {{contributiontype}}
+
+
+                                      </label>
+                            </div>
+                        </form>
+        </div>
+    </div>
+  <!-- Notes view -->
+
+
+<div class="notelistViewmodal" collapse="status.isNoteViewCollapsed">
+    <div class="well notelistView container" >
+        <div class="row pull-right">
+            <div  class="btn btn-primary KFToolBarButton" ng-click="createNote()"></button><img class="KFToolBarImage kfCreateNoteButton" src="manual_assets/kf6images/01-toolbar-newwriting.png" title="{{ 'note_add' | translate }}"></div>
+            <button type="submit" class="btn btn-primary kfbutton"
+                ng-click="status.isNoteViewCollapsed = true;">{{ 'close' | translate }}</button>
+        </div>
+        <div class="row hireachyNotesContaincer" >
+            <div class="col-lg-4 col-md-4 col-sm-12 ">
+                <div class="row" style="padding-left: 20px;margin-bottom: 0px;">
+                    <form class="form" name="form"  novalidate>
+                        <div class="form-group">
+                            <h5>Mot-clé pour filtrer les notes</h5>
+                            <input class="col-lg-10 col-md-10 col-sm-12"   type="text" name="hirerachy.KeywordInput" class="form-control" ng-model="hirerachyKeywordInput" >
+                            <button class="btn btn-primary"  style="margin-left:5px" ng-click="hireachyKeywords=hirerachyKeywordInput"><span class="glyphicon glyphicon-search"></span></button>
+                        </div>
+                    </form>
+
+                </div>
+
+                <div class="row hireachyNotesList">
+                <parentnote sortednotes='sortedNotesDes' selectednotesinhirerachyview='selectedNotesinHirerachyView' notemap='notesInView' scaffoldref='scaffoldReferences'  hireachykeywords='hireachyKeywords'>
+                </parentnote>
+            </div>
+            </div>
+            <div class="col-lg-8 col-md-8 col-sm-12 hireachyNotesListContent" style="overflow-y: scroll;min-height: 300px;">
+
+                <div class="container row" style="display: inline-block;" ng-if="views.length>0">
+                    <h5>Choisir la perspective de la note élever le propos </h5>
+                    <div class="col-lg-4 col-md-4 colsm-12">
+                    <ui-select ng-model="selectedView" theme="bootstrap" on-select="onHirerachySelectedView($item)" style="width: 300px;">
+                        <ui-select-match placeholder="Choisir une perspective">{{selectedView.title}} </ui-select-match>
+                        <ui-select-choices repeat="view in  views | filter: $select.search ">
+                            <div ng-bind-html="view.title| highlight: $select.search"></div>
+                        </ui-select-choices>
+                </ui-select>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-12">
+                <button class="btn-primary" ng-click="createViewLinksforHirerachyNotes(selectedView)">Ajouter une perspective</button>
+                <button class="btn-primary" ng-click="createRiseabovetoviewfromHirerachyNotes(selectedView)">Ajouter une note élever-le-propos à la perspective</button>
+                </div>
+                </div>
+                <div>
+                    <div class="well readableNote" ng-repeat="(noteid, note) in selectedNotesinHirerachyView">
+                        <div class="row">
+                            <h5 class="col-lg-10 col-md-10 col-sm-10">{{note.title}}</h5>
+                            <h5 class="col-lg-2 col-md-2 col-sm-2 glyphicon glyphicon-remove" style="direction: rtl;" ng-click="remNoteFromSelNotesHirerachyView(noteid)"></h5>
+                        </div>
+
+                        <div ng-bind-html="note.processeddata"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <div class="KFViewNavBar" ng-if="!menuStatus" style="z-index: 99;">
+        <div class="KFCommunityTitle">{{community.community.title}}</div>
+        <div class="KFViewTitle">
+            <span ng-show="!isEditable()"> (Lecture seul)</span>
+            <span ng-if="context.data.plugins.hirerachyView === true" class="glyphicon glyphicon-list" ng-click="status.isNoteViewCollapsed=false;sortNotes()"></span>
+            {{view.title}}
+        </div>
+        <div class="KFUserName">
+            <div style="float: left;height: 30px;width: 200px;" id="lang-select" ng-if="multilanuageEnabled">
+            <ui-select  ng-model="author.lang" theme="bootstrap"  style="width: 200px;" on-select="onSelected()" >
+                <ui-select-match placeholder="Choisir la langue..." >
+                    <img ng-src="https://www.unknown.nu/flags/images/{{allLanguageCode[author.lang]}}-100" style="border: 1px solid black;height: 10px;filter : opacity(100%) ">
+                    {{author.lang}}
+                </ui-select-match>
+                <ui-select-choices repeat="c in languageEnabled | filter:$select.search ">
+                    <img ng-src="https://www.unknown.nu/flags/images/{{allLanguageCode[c]}}-100" style="border: 1px solid black;height: 10px;filter : opacity(100%) ">
+                    &nbsp;{{c}}
+                </ui-select-choices>
+            </ui-select>
+
+        </div>{{community.author.getName()}} ({{community.author.role}}) | <a style="color:inherit" ng-click="logout()">{{ 'logout' | translate }}</a></div>
+    </div>
+    <div class='KFViewToolBar' ng-if="!menuStatus">
+        <span class="input-group">
+            <span class="input-group-btn">
+
+                <div  class="btn btn-primary KFToolBarButton" ng-click="createNote()"></button><img class="KFToolBarImage kfCreateNoteButton" src="manual_assets/kf6images/01-toolbar-newwriting.png" title="{{ 'note_add' | translate }}"></div>
+
+            </span>
+        </span>
+        <span class="input-group" ng-if="googleDocsEnabled">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary KFToolBarButton" ng-click="openGoogleDocSetting()" style="height:36px;">
+                    <img class="KFToolBarImage" src="manual_assets/kf6images/11-toolbar-googledocs.png" title="{{ 'write_in_google' | translate }}"
+                        style="width:22px;">
+                </button>
+            </span>
+        </span>
+        <span class="input-group">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary KFToolBarButton" ng-click="createDrawing()">
+                    <img class="KFToolBarImage" src="manual_assets/kf6images/02-toolbar-newdrawing.png" title="{{ 'drawing_add' | translate }}">
+                </button>
+            </span>
+        </span>
+        <span class="input-group">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary KFToolBarButton" ng-click="openAttachment()">
+                    <img class="KFToolBarImage" src="manual_assets/kf6images/03-toolbar-attachment.png" title="{{ 'attachments_add' | translate }}">
+                </button>
+            </span>
+        </span>
+        <span class="input-group">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary KFToolBarButton" ng-click="status.isViewManagerCollapsed = !status.isViewManagerCollapsed;">
+                    <img class="KFToolBarImage" src="manual_assets/kf6images/04-toolbar-viewmanagement.png" title="{{ 'view_management' | translate }}">
+                </button>
+            </span>
+        </span>
+        <script type="text/ng-template" id="RiseaboveCreationModal.html">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-title">{{ 'rise-above_create' | translate }}</h3>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <label>{{ 'name' | translate }}:</label>
+                <input type="text" class="form-control" ng-model="name"></input>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-warning" type="button" ng-click="cancel()">{{ 'cancel' | translate }}</button>
+                <button class="btn btn-primary" type="button" ng-click="ok()">{{ 'create' | translate }}</button>
+            </div>
+        </script>
+        <span class="input-group">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary KFToolBarButton" ng-click="openModal()">
+                    <img class="KFToolBarImage" src="manual_assets/kf6images/04X-toolbar-newriseabove.png" title="{{ 'new_rise_above' | translate }}">
+                </button>
+            </span>
+        </span>
+        <span class="input-group">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary KFToolBarButton" ng-click="createViewlink()">
+                    <img class="KFToolBarImage" src="manual_assets/kf6images/05-toolbar-viewlink.png" title="{{ 'view_link_add' | translate }}">
+                </button>
+            </span>
+        </span>
+        <span class="input-group">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary KFToolBarButton" ng-click="openScaffolds();">
+                    <img class="KFToolBarImage" src="manual_assets/kf6images/06-toolbar-scaffolds.png" title="{{ 'scaffolds' | translate }}">
+                </button>
+            </span>
+        </span>
+        <span ng-show="isManager()" class="input-group">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary KFToolBarButton" ng-click="openAuthors();">
+                    <img class="KFToolBarImage" src="manual_assets/kf6images/11-user.png" title="{{ 'authors' | translate }}">
+                </button>
+            </span>
+        </span>
+        <span class="input-group">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary KFToolBarButton" ng-click="openGroups();">
+                    <img class="KFToolBarImage" src="manual_assets/kf6images/12-users.png" title="{{ 'groups' | translate }}">
+                </button>
+            </span>
+        </span>
+        <span class="input-group">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary KFToolBarButton" ng-click="openWorkspace()">
+                    <img class="KFToolBarImage" src="manual_assets/kf6images/07-toolbar-personalworkspace.png" title="{{ 'personal_workspace' | translate }}">
+                </button>
+            </span>
+        </span>
+        <span class="input-group">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary KFToolBarButton" ng-click="openSearch()">
+                    <img style="padding-top: 3px" class="KFToolBarImage" src="manual_assets/kf6images/08-toolbar-search.png" title="{{ 'search' | translate }}">
+                </button>
+            </span>
+        </span>
+        <span class="input-group">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary KFToolBarButton" ng-click="status.isSettingCollapsed = !status.isSettingCollapsed">
+                    <img style="padding-top: 3px" class="KFToolBarImage" src="manual_assets/kf6images/13-settings.png" title="{{ 'settings' | translate }}">
+                </button>
+            </span>
+        </span>
+        <span class="input-group">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary KFToolBarButton" ng-click="openAnalytics()">
+                    <img style=" width: 38px;padding-bottom: 3px; padding-top: 3px;" src="manual_assets/kf6images/analytics.png" title="{{ 'assessment_tools' | translate }}">
+                </button>
+            </span>
+        </span>
+        <span ng-if="context.data.plugins.promisingnessidea === true" class="input-group">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary KFToolBarButton" ng-click="openPromisingIdeas()"><img style="width: 30px"  class="" src="manual_assets/kf6images/promising-idea-normal.png" title="{{ 'promising_ideas' | translate }}"></button>
+            </span>
+        </span>
+        <span ng-if="context.data.plugins.filter === true" class="input-group">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary KFToolBarButton" ng-click="status.isFilterCollapsed = false"><img style="width: 25px"  class="" src="manual_assets/kf6images/18-funnel.png" title="{{ 'funnel' | translate }}"></button>
+            </span>
+        </span>
+        <span class="input-group" ng-if="itmEnabled">
+            <form action="{{itmEntry}}" method="post" ng-submit="openITMWindow()" target="itm-window">
+                <div ng-include="'app/itm/itm_params.html'"></div>
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-primary KFToolBarButton" style="height:36px;"><img class="KFToolBarImage" src="manual_assets/kf6images/itmlogo100x100.gif" title="{{ 'idea_thread_tapper' | translate }}" style="width:22px;height:22px;"></button>
+                </span>
+            </form>
+        </span>
+        <span class="input-group">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary KFToolBarButton" ng-click="doExit()">
+                    <img class="KFToolBarImage" src="manual_assets/kf6images/10-toolbar-exit.png" title="{{ 'community_exit' | translate }}">
+                </button>
+            </span>
+        </span>
+    </div>
+    <pre ng-show="isiOS()" id="copyboard" style="font-size: 1px;"></pre>
+    <div ng-if="menuStatus !== 'X'" id="helpButton" class="KFViewRightBar" ng-click="status.isHelpCollapsed = !status.isHelpCollapsed">{{'help' | translate}}</div>
+    <div id="maincanvas" class="KFViewMainCanvas">
+        <div id="viewcanvas" class="KFViewContributionCanvas">
+
+            <div ng-attr-id="{{ref._id}}" class="kfViewRef {{newRefClass(ref)}}" ng-repeat="ref in refs" ng-style="{'top': ref.data.y, 'left': ref.data.x}" style="line-height: 100%;" ng-mousedown="mouseDown(this)" context-menu="onContextOpen(this)" data-target="menu-A"
+            ng-class="{hideRef:!filterByTextSearch(ref) || !filterByType(ref) || !filterByDate(ref) || !filterByScaffold(ref)}">
+
+                <div ng-if="ref.data.showInPlace!==true" style="white-space: nowrap; font-size: 12px;">
+                    <div ng-if="ref._to.type !== 'View'" ng-class="{favNote: context.data.plugins.enableFavourites &&  isFavouriteNote(ref.to)}">
+                        <span ng-click="openContribution(ref.to, $event)" kf-refid="{{ref._id}}" ng-attr-class="icon{{ref.to}}">
+                            <img ng-src="{{ref.getIcon()}}" draggable="false"><img ng-if="notesWithAttachments[ref.to]" src="/manual_assets/kf6images/03-toolbar-attachment.png" width="20px">
+                        </span>
+                        <a ng-click="openContribution(ref.to, $event)" class='kfIcon'>{{ref._to.title}}</a>
+                        <br />
+                        <span ng-if="setting.showGroup" style="font-size: 10px; color: #777777; white-space: nowrap;">
+                            {{ref.getGroupString()}}
+                        </span>
+                        <span class="new-kf-color" ng-if="setting.showAuthor" style="font-size: 10px; color: #777777; white-space: nowrap;">
+                            {{ref.getAuthorString()}}
+                        </span>
+                        <span ng-if="setting.showGroup || setting.showAuthor"><br/></span>
+                        <span ng-if="setting.showTime" class="KFTimeLabel">{{getTimeString(ref._to.modified)}}</span><br>
+                        <span  ng-if="setting.language" ng-repeat="c in langCode">
+                            <img ng-src="https://www.unknown.nu/flags/images/{{c}}-100" ng-class="{'languageFlag':ref._to.langInNote.indexOf(c)>=0}" style="border: 1px solid black;height: 10px;filter : opacity(40%) "></img>
+                        </span>
+                    </div>
+                    <div ng-if="ref._to.type === 'View'" style="white-space: nowrap;">
+                        <span kf-refid="{{ref._id}}" ng-attr-class="icon{{ref.to}}">
+                            <img style="height: 20px" ng-src="{{ref.getIcon()}}" draggable="false">
+                        </span>
+                        <a ng-click="openView(ref.to)" style="color: #0000FF;">{{ref._to.title}}</a>
+                    </div>
+                </div>
+                <div ng-if="ref.data.showInPlace===true" ng-style="{'width': ref.data.width, 'height': ref.data.height}" kf-refid="{{ref._id}}"
+                    ng-attr-class="icon{{ref.to}}">
+                    <div ng-if="ref._to.type === 'Drawing'" ng-bind-html="ref.contribution.data.svg"></div>
+                    <div ng-if="ref._to.type === 'Attachment'">
+                        <div ng-if="ref.contribution.data.type.indexOf('image/')>=0">
+                            <img ng-attr-src="{{ref.contribution.data.url}}" ng-style="{'width': ref.data.width, 'height': ref.data.height}">
+                        </div>
+                        <div ng-if="ref.contribution.mime.indexOf('image/')<0">
+                            <a ng-attr-href="{{ref.contribution.url}}">{{ref.contribution.title}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- for selection proxy-->
+        <div id="selectioncanvas" class="KFViewSelectedCanvas"></div>
+        <div id="dropcanvas" class="kfViewDropCanvas kfViewMarqueeCanvas" context-menu="canvasMenuOpen(this)" data-target="menu-Canvas"></div>
+        <div id="windows" class="KFViewWindowsCanvas"></div>
+    </div>
+
+
+    <div class="dropdown position-fixed" id="menu-Canvas" style="position: absolute; z-index: 20;">
+        <ul class="dropdown-menu" role="menu" style="font-size: 1.27em; min-width:13em;">
+            <li ng-if="canvasMenu === null || !canvasMenu" class="menuitem unclickable" ng-click="">{{ 'paste' | translate }}</li>
+            <li ng-if="canvasMenu !== null && canvasMenu" class="menuitem" ng-click="pasteNote($event)">{{ 'paste' | translate }}</li>
+            <li ng-if="true" class="menuitem" ng-click="createNoteFromRightClick($event)">{{ 'new_note_here' | translate }}</li>
+            <li ng-if="googleDocsEnabled" class="menuitem ng-scope" ng-click="importNoteFromGoogle($event)">{{ 'Import from Google Drive' | translate }}</li>
+        </ul>
+    </div>
+
+    <div class="dropdown position-fixed" id="menu-A" style="position: absolute; z-index: 20;">
+        <ul class="dropdown-menu" role="menu" style="font-size: 1.27em; min-width:13em;">
+            <li ng-if="contextTarget.data !== null && contextTarget._to.type !== 'View'" class="menuitem" ng-click="mOpenContribution()">{{ 'open' | translate }}</li>
+            <li ng-if="contextTarget.data !== null && contextTarget._to.type !== 'View'" class="menuitem" ng-click="copy2Clipboard()">{{ 'copy' | translate }}</li>
+            <li ng-if="contextTarget.data !== null && contextTarget._to.type !== 'View'" class="menuitem" ng-click="mOpenContributionInTab()">{{ 'openInTab' | translate }}</li>
+            <li ng-if="contextTarget.data !== null && contextTarget._to.type !== 'View'" class="menuitem" ng-click="mOpenContributionInPopup()">{{ 'openInWindow' | translate }}</li>
+            <li ng-if="contextTarget.data !== null && contextTarget._to.type === 'View'" class="menuitem" ng-click="mOpenView()">{{ 'open' | translate }}</li>
+            <li ng-if="contextTarget.data !== null && contextTarget._to.type === 'View'" class="menuitem" ng-click="mOpenViewInInternal()">{{ 'openInInternal' | translate }}</li>
+            <li ng-if="contextTarget.data !== null && contextTarget._to.type === 'View'" class="menuitem" ng-click="mOpenViewInPopup()">{{ 'openInWindow' | translate }}</li>
+            <li ng-if="contextTarget.data.showInPlace === true && contextTarget.data !== null && contextTarget._to.type === 'Attachment' && isEditable() && isDeletable && context.data.plugins.drawonimage"
+                class="menuitem" ng-click="drawOnImage()">{{ 'Draw on image' | translate }}</li>
+            <li ng-if="contextTarget.data.showInPlace === true && isEditable()" class="menuitem" ng-click="showAsIcon()">{{ 'show_as_icon' | translate }}</li>
+            <li ng-if="contextTarget.data.showInPlace !== true && contextTarget._to.type !== 'Note' && isEditable()" class="menuitem"
+                ng-click="showInPlace()">{{ 'show_in_place' | translate }}</li>
+            <li ng-if="isSoftfixable()" class="menuitem" ng-click="softfix()">{{ 'position_fix' | translate }}</li>
+            <li ng-if="isUnSoftfixable()" class="menuitem" ng-click="unSoftfix()">{{ 'position_unfix' | translate }}</li>
+            <li ng-if="isFixable()" class="menuitem" ng-click="fix()">{{ 'object_lock' | translate }}</li>
+            <li ng-if="isFixable() && isLockable()" class="menuitem" ng-click="fixAndLock()">{{ 'object_hardlock' | translate }}</li>
+            <!-- <li ng-if="isUnfixable()" class="menuitem" ng-click="unfix()">{{ 'position_unfix' | translate }}</li> -->
+            <li ng-if="isEditable()" class="menuitem" ng-click="createRiseaboveFromContextMenu()">{{ 'rise-above_create' | translate }}</li>
+            <li ng-if="contextTarget.data !== null && isEditable() && isDeletable" class="menuitem" ng-click="delete()">{{ 'delete' | translate }}</li>
+            <!-- add and remove favourites -->
+            <li ng-if=" context.data.plugins.enableFavourites && contextTarget._to.type === 'Note' && !isFavouriteNote(contextTarget.to)" class="menuitem" ng-click="addNoteToFavourite()">Add to favourites</li>
+            <li ng-if="context.data.plugins.enableFavourites  && contextTarget._to.type === 'Note' && isFavouriteNote(contextTarget.to)" class="menuitem" ng-click="remNoteFromFavourite()">Remove from favourites</li>
+
+        </ul>
+    </div>
+</div>
+
+<div ng-show="status.error">
+    {{ 'error' | translate }}: {{status.errorMessage}}
+</div>

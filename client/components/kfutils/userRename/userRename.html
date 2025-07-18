@@ -1,0 +1,16 @@
+<div ng-controller="UserRenameCtrl">
+    <div class="col-md-12" ng-hide="showProcessing || showResults">
+        <input type="file" ng-file-select="onFileSelect($files)">
+        <br>
+        <button ng-click="submit()">Submit</button>
+    </div>
+    <div class="col-md-12" ng-show="showProcessing">
+        <h4>Processing....</h4>
+    </div>
+    <div class="col-md-12" ng-show="showResults">
+        <ul>
+            <li>UserNames Processed : {{result.ok}}</li>
+            <li>Names Modified : {{result.nModified}}</li>
+        </ul>
+    </div>
+</div>

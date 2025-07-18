@@ -1,0 +1,77 @@
+.feedback_form{
+	text-align:center;
+}
+
+.feedback_tb{
+	width:100%;
+}
+
+.feedback_tb select{
+	width:200px;
+}
+
+.feedback_tb label{
+	margin:0px;
+}
+
+.feedback_tb input{
+	width:500px;
+}
+
+.feedback_tb textarea{
+	width:500px;
+	margin-top:5px;
+}
+
+.feedback_tb tr{
+	height:30px;
+	line-height:20px;
+}
+
+.feedback_tb .td_label{
+	text-align:right;
+	width:15%;
+}
+
+.feedback_tb .td_content{
+	text-align:left;
+	width:85%;
+	padding-left:10px;
+}
+
+.td_top{
+	vertical-align:top;
+}
+
+.td_option{
+	padding-left:15%;
+	text-align:left;
+}
+
+.td_option input{
+	width:10px;
+	margin-left:10px;
+}
+
+.tr_200{
+	height:200px;
+}
+
+.tr_20{
+	height:20px;
+}
+
+.feedback_tb td_button{
+	text-align:center;
+}
+
+.msg_area{
+	margin-top:10px;
+	text-align: center;
+    color: red;
+}
+
+.warning_area{
+	color: red;
+	margin-left:10px;
+}

@@ -1,0 +1,137 @@
+#!/bin/bash                                                                                 
+# chkconfig: 345 98 20
+
+# important location                                                                        
+KF6_HOME=/opt/kf6
+KF6_LOG=/var/log/kf6
+
+export ATTACHMENTS_PATH=../kf6-attachments
+export PORT=8080
+export NODE_ENV=production
+
+# arranged by /functions in centos                                                          
+SETCOLOR_SUCCESS="echo -en \\033[1;32m"
+SETCOLOR_FAILURE="echo -en \\033[1;31m"
+SETCOLOR_NORMAL="echo -en \\033[0;39m"
+
+echo_success() {
+  echo -n "["
+  $SETCOLOR_SUCCESS
+  echo -n $"  OK  "
+  $SETCOLOR_NORMAL
+  echo -n "]"
+  echo -ne "\r"
+  return 0
+}
+
+echo_failure() {
+  echo -n "["
+  $SETCOLOR_FAILURE
+  echo -n $"FAILED"
+  $SETCOLOR_NORMAL
+  echo -n "]"
+  echo -ne "\r"
+  return 1
+}
+
+# end arranged by /functions in centos                                                      
+
+# start                                                                                     
+do_start() {
+  isRunning
+  if [ $? -eq 0 ]; then
+      echo -n "Already Running "
+      echo_failure
+      echo ""
+      return 0
+  fi
+
+  echo -n "Starting ${PROGNAME}: "
+
+  # Set Max number of file descriptors for the safety sake                                  
+  ulimit -n 65536 1>/dev/null 2>&1 || true
+
+  # Check Logging Directory                                                                 
+  if [ ! -d "$KF6_LOG" ]; then
+      mkdir $KF6_LOG
+  fi
+
+  cd $KF6_HOME
+  if [ $? -eq 1 ]; then
+      echo_failure
+      echo ""
+      return 1
+  fi
+
+  node server/app.js >> $KF6_LOG/log.log 2>> $KF6_LOG/err.log &
+  if [ $? -eq 1 ]; then
+      echo_failure
+      echo ""
+      return 1
+  fi
+
+  echo_success
+  echo ""
+  return 0
+}
+
+# stop                                                                                      
+do_stop() {
+  isRunning
+  if [ $? -eq 1 ]; then
+      echo -n "Already Stopped "
+      echo_failure
+      echo ""
+      return 0
+  fi
+
+  echo -n "Shutting down ${TD_AGENT_NAME}: "
+  kill `pidof -s node`
+
+  echo_success
+  echo ""
+}
+
+#restart                                                                                    
+do_restart() {
+  do_stop || true
+  do_start
+}
+
+isRunning(){
+  PID=`pidof -s node`
+  if [ -n "$PID" ]; then
+      return 0 #true                                                                        
+  else
+      return 1 #false                                                                       
+  fi
+}
+
+#status                                                                                     
+do_status(){
+  isRunning
+  if [ $? -eq 0 ]; then
+    echo 'kf6 server is running.'
+  else
+    echo 'kf6 server is down.'
+  fi
+}
+
+case "$1" in
+"start" )
+  do_start
+  ;;
+"stop" )
+  do_stop
+  ;;
+"restart" )
+  do_restart
+  ;;
+"status" )
+  do_status
+  ;;
+* )
+  echo "Usage: $0 {start|stop|restart|status}" >&2
+  exit 1
+  ;;
+esac

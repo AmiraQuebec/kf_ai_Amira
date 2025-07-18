@@ -1,0 +1,13 @@
+<div>
+    Admin tools:
+</div>
+<div ng-show="!isAdmin()">
+    Admin permission is needed to show this page.
+</div>
+<div ng-if="isAdmin()">
+    <label>Database Migration:</label>
+    <div>
+        <input type="text" placeholder="password" ng-model="model.password"></input>
+        <button class="btn btn-default" ng-click="migratePressed()">migrate!</button>
+    </div>
+</div>

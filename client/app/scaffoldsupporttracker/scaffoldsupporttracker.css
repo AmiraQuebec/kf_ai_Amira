@@ -1,0 +1,91 @@
+.KFSupport {
+    font-size: 10px;
+    font: bold;
+    margin-left: 2px;
+    width: 200px;
+  }
+
+.panel {
+    width: 75%;
+    margin-right: 5%;
+    margin-left: 5%;
+    margin-top: 10px;
+    background-color: #39393d!important;
+    border-color: #e2e2e2;
+    border: 1px solid transparent;
+    height: 350px;
+    color: white;
+    overflow: auto;
+}
+
+.action-checkbox {
+    padding-left: 5%;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    line-height: 10px;
+    display: inline;
+}
+
+.check-box-panel {
+    width: 90%;
+    float: left;
+    display: inline;
+    margin-top: 30px;
+    margin-left: 30px;
+    border-style: dotted;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.selected-items-panel {
+    margin-right: 10px;
+}
+
+.selected-item {
+    display: inline;
+    margin-right: 10px;
+    font-size: 16px;
+    color: turquoise;
+    font-family: Trebuchet MS;
+}
+
+.action-checkbox input[type=checkbox] {
+    display: none;
+}
+
+
+/* to hide the checkbox itself */
+
+.action-checkbox input[type=checkbox] + label:before {
+    font-family: FontAwesome;
+    display: inline-block;
+}
+
+.action-checkbox input[type=checkbox] + label:before {
+    content: "\f096";
+}
+
+
+/* unchecked icon */
+
+.action-checkbox input[type=checkbox] + label:before {
+    letter-spacing: 10px;
+}
+
+
+/* space between checkbox and label */
+
+.action-checkbox  input[type=checkbox]:checked + label:before {
+    content: "\f046";
+    color: turquoise;
+}
+
+
+/* checked icon */
+
+.action-checkbox  input[type=checkbox]:checked + label:before {
+    letter-spacing: 5px;
+}
+
+
+/* allow space for check mark */

@@ -1,0 +1,30 @@
+
+version: '3'
+
+services:
+  kf6test:
+    restart: always
+    build: .
+    # image: registry.arcc.albany.edu/jj976495/docker-tomcat_base:master
+    expose:
+      - 9000
+    ports:
+      - 9000
+    environment:
+      NODE_ENV: production
+      KF6_HOME: /app
+      PORT: 9000
+      LOGDIR: /logs
+      ATTACHMENTS_PATH: /attachments
+      MONGOLAB_URI: mongodb://host.docker.internal/kf6-test
+      EMAIL_PASSWORD: kf6helpfunction
+    volumes:
+      - /tmp/attachments:/attachments
+      - /tmp/logs:/logs
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=web"
+      - "traefik.port=9000"
+      - "traefik.frontend.rule=Host:kf6-test.rit.albany.edu"
+
+

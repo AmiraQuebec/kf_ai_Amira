@@ -1,0 +1,49 @@
+<div class="col-md-12">
+    <div style="margin-top: 15px;">
+
+        <div class="well well-lg">
+            <button type="submit" class="btn btn-primary kfbutton" ng-click="reset()">{{ 'reset' | translate }}</button>
+            
+            <div style="padding: 5px 0">
+                <label>{{ 'views' | translate }}:</label><br>
+                <ui-select ng-model="selected.views" theme="select2" multiple ng-disabled="disabled" style="width: 80%;">
+                    <ui-select-match placeholder="{{ 'view_select' | translate }}...">{{$item.title}}</ui-select-match>
+                    <ui-select-choices repeat="view in views | filter: $select.search | orderBy:'title'| limitTo:80">
+                        <div ng-bind-html="view.title | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
+                <button type="button" class="btn btn-primary kfbutton" ng-click="addViews()">{{ 'add' | translate }}</button>
+            </div>
+
+            <div ng-show="isAdmin()">
+                <div style="padding: 5px 0;">
+                    <label>{{ 'authors' | translate }}:</label>
+                    <div style="width: 400px;" ng-include="'components/kfutils/authorselector/authorselector.html'"></div>
+                </div>
+            </div>
+
+            <div style="height: 100px;">
+                    <label>{{ 'dates' | translate }}:</label>
+                    <br>
+                    <input type="hidden" class="form-control" datepicker-popup="{{format}}" ng-model="from" is-open="fromOpened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="{{ 'close' | translate }}" />
+                    <button type="button" class="btn btn-primary kfbutton" ng-click="openFrom($event)">{{ 'from' | translate }}</button>  
+                    <span id="from"></span>
+                    <input type="hidden" class="form-control" datepicker-popup="{{format}}" ng-model="to" is-open="toOpened" datepicker-options="dateOptions" show-weeks="false" date-disabled="disabled(date, mode)" ng-required="true" close-text="{{ 'close' | translate }}" />
+                    <button type="button" class="btn btn-primary kfbutton" ng-click="openTo($event)" style="display: inline-block; margin-top: 5px">{{ 'to' | translate }}</button>
+                    <span id="to"></span>  
+            </div>
+            <div class="input-group">
+                <input type="text" class="form-control" ng-model="queryString" id="search">
+                <button type="submit" class="btn btn-primary kfbutton" ng-click="search()">{{ 'show' | translate }}</button>
+            </div>            
+        </div>
+    </div>
+    <hr>
+    <div id="basicstats">
+        <div id="notesyear"></div>
+        <div id="notesweek"></div>
+        <div id="notesauthors"></div>
+        <div id="scaffoldsused"></div>
+    </div>
+
+</div>

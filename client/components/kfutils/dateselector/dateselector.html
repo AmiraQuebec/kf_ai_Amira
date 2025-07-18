@@ -1,0 +1,7 @@
+<link rel="stylesheet" href="manual_components/select2-css/3.4.5/select2.css">
+<div ng-controller="DateSelectorCtrl">
+    <input type="hidden" class="form-control" datepicker-popup="{{format}}" ng-model="from" is-open="fromOpened " datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="{{ 'close' | translate }}" />
+    <button type="button" class="btn btn-primary kfbutton" ng-click="openFrom($event)">{{ 'from' | translate }}</button>
+    <input type="hidden" class="form-control" datepicker-popup="{{format}}" ng-model="to" is-open="toOpened" datepicker-options="dateOptions" show-weeks="false" date-disabled="disabled(date, mode)" ng-required="true" close-text="{{ 'close' | translate }}" />
+    <button type="button" class="btn btn-primary kfbutton" ng-click="openTo($event)">{{ 'to' | translate }}</button>
+</div>

@@ -1,0 +1,119 @@
+<div class="col-md-12">
+    <div>
+        <label>{{ 'manager' | translate }}</label>
+        <ul>
+            <li ng-repeat="manager in getManagers()" on-finish-render="renderDataTable()">{{manager.name}}
+                <a ng-click="removeFromManager(manager)" class="trash">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div style="width: 100%;" ng-include="'components/kfutils/authorselector/authorselector.html'"></div>
+</div>
+<div class="col-md-12">
+    <label>{{ 'authors_management' | translate }}:</label>
+    <div style="width: 100%;" ng-include="'components/kfutils/useruploader/useruploader.html'"></div>
+    <!--<p class="input-group">
+        <input type="text" class="form-control" placeholder="filter text here." ng-model="queryString">
+        <span class="input-group-btn">
+            <button type="submit" class="btn btn-primary" ng-click="count()">Filter</button>
+        </span>
+    </p>-->
+   <!-- <div>
+        <div style="float: right;">
+            <pagination total-items="pager.total" ng-model="pager.page" max-size="maxSize" items-per-page="pager.pagesize" class="pagination-sm"
+                boundary-links="true" rotate="false" ng-change="pageChanged()"></pagination>
+        </div>
+        <div style="clear: both;"></div>
+        <div style="width: 100%; float: left; text-align: right;">
+            CurrentPage: {{pager.page}} ({{pager.getStart()}} - {{pager.getEnd()}}) / Total: {{pager.total}} authors were found.
+        </div>
+        <div style="clear: both;"></div>
+        <div style="float: left;">
+            <button type="button" ng-csv="getTable()" csv-header="getTableHeader()" filename="authordetails.csv" add-bom="true">Download as CSV</button>
+        </div>
+    </div>
+-->
+    <div>
+        <div style="float: left;">
+            <button type="button" ng-csv="getTable()" csv-header="getTableHeader()" filename="authordetails.csv" add-bom="true">{{ 'download_as_csv' | translate }}</button>
+        </div>
+    </div>
+    <div style="height: 10px;"></div>
+    <div>
+        <table id="authorManagerTable" class="table table-striped table-hover table-bordered table-lg">
+            <thead>
+                <tr>
+                    <th scope="col">{{ 'firstName' | translate }}</th>
+                    <th scope="col">{{ 'lastName' | translate }}</th>
+                    <th scope="col">{{ 'username' | translate }}</th>
+                    <th scope="col">{{ 'email' | translate }}</th>
+                    <th scope="col">{{ 'password_modify' | translate }}</th>
+                </tr>
+            </thead>
+            <tr ng-repeat="author in authors">
+                <td>{{author.firstName}}</td>
+                <td>{{author.lastName}}</td>
+                <td>{{author.userName}}</td>
+                <td>
+                    <span class="text-muted">{{author.email}}</span>
+                </td>
+                <td>
+                    <div class="col-lg-6 col-md-6 col-xs-6 col-sm-6">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="{{ 'new_password_here' | translate }}." ng-model="author.password">
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" type="button" ng-click="resetPassword(author)">{{ 'reset' | translate }}</button>
+                            </span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="row">
+   <!--     <div class="col-md-12">
+            <h3>Rename Users</h3>
+        </div>
+-->
+        <!--<div>
+            <div class="col-md-12">
+                <p>Description : This Feature allows managers to assign pseudonyms to Authors in a community.</p>
+                <p>Instructions : Click and edit the desired FirstName and LastName, then click Rename Users to rename all the user.</p>
+                <p>Note: All columns other than firstName, lastName and userName are ignored and pseudonyms are applied community wide.</p>
+            </div>
+        </div>
+-->
+        <div>
+            <div class="col-md-12">
+                <p>{{ 'authors_management_instructions' | translate }}</p>
+                <p>{{ 'authors_management_descriptions' | translate }}</p>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <button class="btn btn-primary" type="button" ng-click="renameAllUser()">{{ 'rename_user' | translate }}</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h3>{{ 'rename_user' | translate }} - CSV</h3>
+        </div>
+        <div class="col-md-12"><button class="btn btn-info" type="button" ng-click="showRenameFeature = !showRenameFeature">{{ 'more_info' | translate }}</button>
+        </div>
+
+        <div ng-show="showRenameFeature">
+            <div class="col-md-10">
+                    <p>{{ 'rename_user_descriptions' | translate }}</p>
+                    <p>{{ 'rename_user_instructions' | translate }}</p>
+                    <p>{{ 'rename_user_note' | translate }}</p>
+            </div>
+            <div class="col-md-12">
+                <div style="width: 100%;" ng-include="'components/kfutils/userRename/userRename.html'"></div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+</div>

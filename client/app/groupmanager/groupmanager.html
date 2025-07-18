@@ -1,0 +1,21 @@
+<div class="col-md-12">
+    {{ 'group_manager_view' | translate }}
+    <div>
+        <label>{{ 'groups' | translate }}</label>
+        <ul>
+            <li ng-repeat="group in groups">
+                <a class="KFGroupManagerAnchor" ng-click="selectGroup(group)">{{group.title}}</a> &nbsp;&nbsp;
+                <a class="KFGroupManagerAnchor trash" ng-click="removeGroup(group)"><span class="glyphicon glyphicon-trash"></span></a>
+            </li>
+        </ul>
+    </div>
+    <div>
+        <label>{{ 'group_new' | translate }}</label>
+        <p class="input-group">
+            <input type="text" class="form-control" placeholder="{{ 'title' | translate }}" ng-model="input.groupTitle">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary" ng-click="addGroup()">{{ 'group_new' | translate }}</button>
+             </span>
+        </p>
+    </div>
+</div>

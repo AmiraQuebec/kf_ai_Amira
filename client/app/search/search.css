@@ -1,0 +1,24 @@
+.KFSearchResult td, th {
+    padding: 3px;
+}
+.KFSearchResult {
+    vertical-align: top;
+}
+
+.KFSearchLink:link { color: #0000ff; }
+.KFSearchLink:visited { color: #000090; }
+.KFSearchLink:hover { color: #ff8000; }
+
+mark{
+    background: orange;
+    color: black;
+}
+
+.nopadding {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* .hideNote{
+    display: none;
+} */

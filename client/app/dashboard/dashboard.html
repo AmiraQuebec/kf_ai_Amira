@@ -1,0 +1,166 @@
+<div class="container">
+    <div class="col-md-12">
+        <h1>Knowledge Forum {{ 'activity_dashboard' | translate }}</h1>
+        <hr>
+        <div class="row">
+            <div id="type-chart">
+                <strong>Types</strong>
+
+                <div class="clearfix"></div>
+            </div>
+            <div id="viewSelect">
+                <strong>{{ 'views' | translate }}</strong>
+                <br>
+            </div>
+            <div id="author-chart">
+                <br>
+                <strong>{{ 'authors' | translate }}</strong>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <hr>
+            <strong>{{ 'daily_activity_timeline' | translate }}</strong>
+            <button id="showHide" class="btn btn-default pull-right">{{ 'show' | translate }} / {{ 'hide' | translate }}</button>
+            <div id="dailyActivity" style="display: none;">
+                <div id="line-chart">
+                    <span class="reset" style="display: none;">range: <span class="filter"></span></span>
+                    <a class="reset" ng-click="reset();" style="display: none;">{{ 'reset' | translate }}</a>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div id="range-chart">
+                </div>
+                <p class="muted pull-right" style="margin-right: 15px;">{{ 'time_range_zoom' | translate }}</p>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <hr>
+            <!-- Statics Chart -->
+            <!--<button id="staticsDownload" class="btn btn-default pull-right" ng-click="staticsTableDownload()">Download Activity Statics</button>-->
+
+            <br><br><br>
+            <table id="dc-statics-table" class="table table-hover table-striped dc-statics-table">
+                <tfoot >
+                <tr>
+                    <th>{{ 'average' | translate }}</th>
+                    <th id="aRead">{{ 'read_count' | translate }}</th>
+                    <th id="aModified">M Count</th>
+                    <th id="aCreated">C Count</th>
+                    <th id="aTotal">T Count</th>
+                </tr>
+                <tr>
+                    <th>Total</th>
+                    <th id="tRead">{{ 'read_count' | translate }}</th>
+                    <th id="tModified">M Count</th>
+                    <th id="tCreated">C Count</th>
+                    <th id="tTotal">T Count</th>
+                </tr>
+                </tfoot>
+            </table>
+            <hr>
+            <!-- Table Count Chart -->
+            <div>
+                <div class="dc-data-count">
+                    <span class="filter-count"></span>  {{ 'selected_out_of' | translate }}  <span class="total-count"></span> {{ 'records' | translate }} | <a
+                    href="javascript:dc.filterAll(); dc.renderAll();">{{ 'reset_all' | translate }}</a>
+                </div>
+            </div>
+
+            <!-- Data Table -->
+            <table class="table table-hover dc-data-table">
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!-- START: NEW UI
+<div class="container">
+    <h1>Knowledge Forum Activity Dashboard</h1>
+    <div class="row">
+        <div class="col-md-2" id="piChart">
+
+            <div id="type-chart">
+                <strong>Types</strong>
+                <div class="clearfix"></div>
+            </div>
+            <button id="showHide"class="btn btn-success">Show / Hide Daily Activity Timeline </button>
+        </div>
+        <div class="col-md-10" id="rd">
+            <div id="dailyActivity">
+                <div id="line-chart">
+                    <strong>Daily activity timeline</strong>
+                    <span class="reset" style="display: none;">range: <span class="filter"></span></span>
+                    <a class="reset" ng-click="reset();" style="display: none;">reset</a>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="row" id="rangeChart">
+                    <div id="range-chart">
+                    </div>
+                    <p class="muted pull-right" style="margin-right: 15px;">select a time range to zoom in</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-10 col-lg-offset-1"><hr></div>
+
+    <div class="col-md-6">
+        <div class="row">
+            <div>
+                <div id="paging" class="">
+                    <div class="dc-data-count">
+                        Showing <span id="begin" class="count"></span>-<span id="end" class="count"></span> of <span id="size" class="count"></span> | <span class="filter-count"></span> selected out of <span class="total-count"></span> records | <a
+                        href="javascript:dc.filterAll(); dc.renderAll();">Reset All</a>
+                    </div>
+                    <div class="btn-group pull-right" role="group" >
+                        <button id="last" type="button" class="btn btn-success" ng-click="last()">&laquo; Previous</button>
+                        <button id="next" type="button" class="btn btn-primary" ng-click="next()">Next &raquo;</button>
+                    </div>
+                </div>
+
+            </div>
+            <table class="table table-hover dc-data-table">
+            </table>
+        </div>
+    </div>
+
+    <div class="col-md-6 " id="authorsChart">
+        <div id="author-chart">
+            <strong>Authors</strong>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $("#showHide").click(function () {
+            $("#dailyActivity").slideToggle( "slow", function() {
+                // Animation complete.
+            });
+        });
+    });
+
+</script>
+<!-- END: NEW UI -->
+
+<script>
+    $(document).ready(function () {
+        $("#showHide").click(function () {
+            $("#dailyActivity").slideToggle("slow", function () {
+                // Animation complete.
+            });
+        });
+    });
+
+</script>
+

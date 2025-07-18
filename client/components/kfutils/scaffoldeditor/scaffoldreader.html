@@ -1,0 +1,10 @@
+<div ng-controller="ScaffoldeditorCtrl" class="col-md-12">
+    <div>
+        <label>Supports</label>
+        <ul>
+            <li ng-repeat="supportref in contribution.supports">
+                <a class="KFScaffoldManagerAnchor" ng-click="selectSupport(supportref)">{{supportref._to.title}}</a>
+            </li>
+        </ul>
+    </div>
+</div>

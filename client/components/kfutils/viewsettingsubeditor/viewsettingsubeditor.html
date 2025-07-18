@@ -1,0 +1,15 @@
+<div ng-controller="ViewsettingsubeditorCtrl" class="col-md-12">
+    <label> {{ 'enable_view_setting' | translate }}</label>
+    <div style="padding: 10px;">
+        <label>{{ 'connection_showing' | translate }}:</label>
+        <input type="checkbox" ng-model="contribution.data.viewSetting.buildson" ng-change="settingChanged()">{{ 'buildson' | translate }}
+        <input type="checkbox" ng-model="contribution.data.viewSetting.references" ng-change="settingChanged()">{{ 'reference' | translate }}
+        <br>
+        <label>Label:</label>
+        <input type="checkbox" ng-model="contribution.data.viewSetting.showGroup" ng-change="settingChanged()">{{ 'group' | translate }}
+        <input type="checkbox" ng-model="contribution.data.viewSetting.showAuthor" ng-change="settingChanged()">{{ 'author' | translate }}
+        <input type="checkbox" ng-model="contribution.data.viewSetting.showTime" ng-change="settingChanged()">time{{ 'time' | translate }}
+        <input type="checkbox" ng-model="contribution.data.viewSetting.language" ng-change="settingChanged()">{{ 'language' | translate }}
+
+    </div>
+</div>

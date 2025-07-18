@@ -1,0 +1,23 @@
+.KFSearchResult td, th {
+    padding: 3px;
+}
+.KFSearchResult {
+    vertical-align: top;
+}
+
+.KFSearchLink:link { color: #0000ff; }
+.KFSearchLink:visited { color: #000090; }
+.KFSearchLink:hover { color: #ff8000; }
+
+#search{
+  display:none;
+}
+
+.select2-container-multi .select2-choices{
+  border-radius: 4px;
+}
+
+#from, #to{
+  display: block;
+  height: 14px;
+}

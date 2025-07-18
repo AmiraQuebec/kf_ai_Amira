@@ -1,0 +1,63 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>{{ 'language_modify' | translate }}</h1>
+        </div>
+        <div class="col-sm-12">
+            <!-- {{ 'feature_not_currently_available' | translate }} -->
+            <!-- TODO: improve select to replace buttons -->
+            <div ng-controller="LanguageCtrl">
+                <button ng-click="changeLanguage('en')">English</button>
+                <button ng-click="changeLanguage('es')">Español / Spanish</button>
+                <button ng-click="changeLanguage('fr')">Français / French</button>
+                <button ng-click="changeLanguage('cn')">Chinese</button>
+                <button ng-click="changeLanguage('zh_CN')">Chinese-Simplified</button>
+                <button ng-click="changeLanguage('ja')">Japanese</button>
+                <button ng-click="changeLanguage('fi')">Finish</button>
+                <button ng-click="changeLanguage('pt')">Portuguese</button>
+                <button ng-click="changeLanguage('it')">Italiano</button>
+            </div>
+            <!--
+            <select ng-controller="LanguageCtrl">
+              <option>- {{ 'language_select' | translate }} -</option>
+              <option ng-click="changeLanguage('en')">English</option>
+              <option ng-click="changeLanguage('fr')">Français</option>
+            </select>
+            -->
+        </div>
+        <div class="col-sm-12">
+            <h1>{{ 'password_modify' | translate }}</h1>
+        </div>
+        <div class="col-sm-12">
+            <form class="form" name="form" ng-submit="changePassword(form)" novalidate>
+
+                <div class="form-group">
+                    <label>{{ 'password_current' | translate }}</label>
+
+                    <input type="password" name="password" class="form-control" ng-model="user.oldPassword"
+                           mongoose-error/>
+                    <p class="help-block" ng-show="form.password.$error.mongoose">
+                        {{ errors.other }}
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label>{{ 'password_new' | translate }}</label>
+
+                    <input type="password" name="newPassword" class="form-control" ng-model="user.newPassword"
+                           ng-minlength="3" required/>
+                    <p class="help-block"
+                       ng-show="(form.newPassword.$error.minlength || form.newPassword.$error.required) && (form.newPassword.$dirty || submitted)">
+                        {{ 'password_restrictions' | translate }}
+                    </p>
+                </div>
+
+                <p class="help-block"> {{ message }} </p>
+
+                <button class="btn btn-lg btn-primary" type="submit">{{ 'save' | translate }}</button>
+            </form>
+        </div>
+    </div>
+</div>

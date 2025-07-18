@@ -1,0 +1,118 @@
+#authornetwork {
+  /*margin-left: 40px;*/
+}
+
+#authornetwork #network{
+  /*width: 70%;*/
+  /*float: right;*/
+  border: 1px solid #ccc!important;
+  border-radius: 16px;
+  resize: both;
+  overflow: auto;
+  margin: 0 5px 5px 0;
+}
+#authornetwork #infos{
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  width: 23%;
+  height: 600px !important;
+  /*float: right;*/
+}
+#authornetwork ul{
+  margin: 0;
+}
+
+#authornetwork h2{
+  font-size: 15px;
+}
+#authornetwork path.link {
+  fill: none;
+  stroke: #666;
+}
+
+#authornetwork path.marker_only {
+  fill: none;
+  stroke-opacity: .5;
+}
+
+#authornetwork #flechenoire{
+  fill: #000;
+  fill-opacity: 1;
+}
+#authornetwork #flecherouge{
+  fill: #800;
+  fill-opacity: 1;
+}
+#authornetwork #flecheverte{
+  fill: #080;
+  fill-opacity: 1;
+}
+
+#authornetwork #flecheinactif{
+  fill: #666;
+  fill-opacity: .2;
+}
+
+#authornetwork .inactif{
+  stroke-opacity: .2;
+  stroke: #666;
+}
+
+#authornetwork circle {
+  fill: #ccc;
+  stroke: #333;
+  stroke-width: 1.5px;
+}
+
+#authornetwork text {
+  font: 10px sans-serif;
+  pointer-events: none;
+}
+
+#authornetwork text.shadow {
+  stroke: #fff;
+  stroke-width: 3px;
+  stroke-opacity: .8;
+}
+
+#groups ul, #legendes ul{
+  list-style-type: none;
+}
+#legendes ul {
+
+}
+
+#legendes ul li {
+  height: 20px;
+  line-height: 20px;
+  padding-bottom: 12px;
+}
+
+#legendes ul li span{
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  margin-right: 8px;
+}
+
+.authorNetworkGroups, .authorNetworkViews{
+    display: inline-block;
+    margin-left: 20px;
+}
+
+.date-time-selector, .filters {
+    margin-top: 20px;
+}
+
+@media screen and (max-width: 920px){
+  #infos{
+    width: 100%;
+    float: none;
+    margin: 0;
+  }
+  #network{
+    width: 100%;
+    float: none;
+  }
+}

@@ -1,0 +1,30 @@
+<div ng-controller="VieweditorCtrl" class="col-md-12">
+    <!-- notification setting -->
+    <div>
+        <input type="checkbox" ng-model="setting.notificationSettingEnabled" ng-change="notificationSettingEnabledChanged()">{{ 'enable_notification_setting' | translate }}
+        <div style="padding-left: 20px;" ng-show="setting.notificationSettingEnabled">
+            <label>Notification: </label>
+            <div>
+                <input type="checkbox" ng-model="setting.receiveNotification" ng-change="notificationSettingChanged()">{{ 'view_notification' | translate }}
+            </div>
+        </div>
+    </div>
+    <!-- view setting -->
+    <div style="height: 10px;"></div>
+    <div>
+        <input type="checkbox" ng-model="setting.viewSettingEnabled" ng-change="viewsettingEnabledChanged()"> {{ 'enable_view_setting' | translate }}
+        <div ng-show="setting.viewSettingEnabled" ng-include="'components/kfutils/viewsettingsubeditor/viewsettingsubeditor.html'"></div>
+    </div>
+    <!-- scaffold setting -->
+    <div style="height: 10px;"></div>
+    <input type="checkbox" ng-model="contribution.data.scaffoldSettingEnabled"> {{ 'enable_scaffold_setting' | translate }}
+    <div ng-if="contribution.data.scaffoldSettingEnabled" ng-include="'components/kfutils/scaffoldsettingsubeditor/scaffoldsettingsubeditor.html'"></div>
+    <!-- community setting -->
+    <div style="height: 10px;"></div>
+    <div ng-show="isManager()">
+        <label>{{ 'community_setting' | translate }}: </label>
+        <div style="">
+            <button type="submit" class="btn btn-primary KFToolBarButton" ng-click="openRootContext()"><img class="KFToolBarImage" src="manual_assets/kf6images/13-settings.png" title="Settings"></button>
+        </div>
+    </div>
+</div>

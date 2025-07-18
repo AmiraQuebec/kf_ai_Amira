@@ -1,0 +1,30 @@
+<div ng-controller="ViewAuthorDateSelectorCtrl ">
+    <div style=" float:left;height: 200px; width:50%;;">
+        <div style="padding: 5px ;">
+            <label>{{ 'views' | translate }}:</label>
+            <div ng-include="'components/kfutils/viewselector/viewselector.html'"></div>
+        </div>
+        <div style="padding: 5px;">
+            <label>{{ 'authors' | translate }}:</label>
+            <div ng-include="'components/kfutils/authorselector/authorselector.html'"></div>
+        </div>
+        <div style=" height: 100px; float: left; width:50%">
+            <label style="padding: 5px;  float: left;">Dates:</label>
+            <div class="col-md-6">
+                <div style="float: left" ng-include="'components/kfutils/dateselector/dateselector.html'"></div>
+            </div>
+        </div>
+        <button ng-show="selectedItems.length!=0" style=" float: left; " ng-click="clearSelectedItems()">{{ 'clear_selected_items' | translate }}</button>
+    </div>
+    <div style=" float:right; width: 50%;height: 200px;">
+        <div class="panel" style=" float: right; height: 150px; ">
+            <div>
+                <span style="color:white;" class="selected-item">{{ 'selected_items' | translate }}:</span>
+                <div ng-repeat="item in selectedItems" class="selected-item">
+                    {{item.viewTitle}} {{item.author}} {{item.fromDate}} {{item.toDate}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr style="clear: both;height: 2px;background-color: #33BBFF; " />
+</div>

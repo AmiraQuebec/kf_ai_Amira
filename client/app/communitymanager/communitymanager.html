@@ -1,0 +1,213 @@
+<div class="container container-community">
+    <div class="col-lg-6 new-kf-color">
+        <h2 style="padding-top: 56px;">{{ 'participation' | translate }} {{ getCurrentUser().getName() }}</h2>
+
+        <div class="joint-box">
+            <h5 class="joint-com-title">Joindre une communauté :</h5>
+            <h6>Communauté :</h6>
+            <ui-select ng-model="selected.community" theme="bootstrap" ng-disabled="disabled"
+                       style="width: 400px;">
+                <ui-select-match placeholder="{{ 'community_select' | translate }}">{{selected.community.title}}
+                    {{toTimeString(selected.community.created)}}
+                </ui-select-match>
+                <ui-select-choices
+                    repeat="community in communities | filter: {title: $select.search} | orderBy:'created':true | orderBy:'title'">
+                    <div ng-bind-html="community.title | highlight: $select.search"></div>
+                    <small>
+                        <div ng-bind-html="toTimeString(community.created)"></div>
+                    </small>
+                </ui-select-choices>
+            </ui-select>
+            <h6>Code d’adhésion :</h6>
+            <input id="codeRegister" type="text" class="form-control com-input" placeholder="" ng-model="selected.key">
+            <span class="input-group-btn">-->
+                <button type="submit" class="btn btn-primary community-register-btn"
+                        ng-click="addRegistration()">{{ 'join' | translate }}</button>
+            </span>
+        </div>
+        <div ng-show="isAdmin()">
+            <div style="padding-bottom: 60px!important; margin-bottom: 50px;" class="joint-box">
+                <label class="joint-com-title">{{ 'community_create' | translate }}:</label>
+                <h6>{{ 'title' | translate }}:</h6>
+                <div>
+                    <input type="text" class="form-control com-input" placeholder=""
+                           ng-model="newCommunity.title">
+                </div>
+
+                <h6>{{ 'community_registration_key' | translate }}:</h6>
+                <input type="text" class="form-control com-input" placeholder=""
+                       ng-model="newCommunity.key">
+
+                <h6>{{ "Code d'adhésion administrateur" | translate }}:</h6>
+                <input type="text" class="form-control com-input" placeholder=""
+                       ng-model="newCommunity.key_admin">
+
+
+                <button type="submit" class="btn btn-primary community-register-btn"
+                        ng-click="addNewCommunity()">{{ 'add' | translate }}</button>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <h3 class="new-kf-color com-title-list">{{ 'my_community' | translate }} :</h3>
+        <table>
+            <tr ng-repeat="registration in myRegistrations | orderBy: ['order', '_community.title']"
+                ng-if="registration._community.title!='CTL5036H Design Experiments' || isAdmin()" class="tableRow">
+                <td style="padding-left: 20px;font-size : 15px; color : red; font-weight : bold;"
+                    ng-if="registration._community.title == 'JICS 2019-2020'">{{registration._community.title}}
+                </td>
+                <td style="padding-left: 20px;" ng-if="registration._community.title != 'JICS 2019-2020'">
+                    {{registration._community.title}}
+                </td>
+                <td style="padding-left: 10px;">
+                    <!-- TODO i18n (created: {{toTimeString(registration._community.created)}}) -->
+                </td>
+                <td style="padding-left: 20px;">
+                    <!-- TODO i18n {{registration.role}} -->
+                </td>
+                <td style="padding-left: 20px;">
+                    <span ng-show="registration._community.archived">Archived</span>
+                    <span ng-show="!registration._community.archived">
+                            <button class="community-joint-btn"
+                                    ng-click="enterCommunity(registration)">{{ 'community_enter' | translate }}</button>
+                        </span>
+                </td>
+                <td ng-show="managemode" style="text-align: right;">
+                    <input type="number" ng-model="registration.order">
+                </td>
+                <td>
+                        <span ng-show="isAdmin()" style="padding-left: 20px;"><a
+                            href='communityeditor/{{registration.communityId}}'>{{ 'manage' | translate }}</a>
+                        </span>
+                </td>
+            </tr>
+            <tr ng-show="managemode">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <button ng-click="saveOrder();">{{ 'community_join' | translate }}</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+<!--<div class="col-md-12" style="padding-left: 50px;">-->
+<!--    <label id="my-communities">{{ 'kbc_myKBCsTitle' | translate }}:</label>-->
+<!--    <table>-->
+<!--        <tr ng-repeat="registration in myRegistrations | orderBy: ['order', '_community.title']"-->
+<!--            ng-if="registration._community.title!='CTL5036H Design Experiments' || isAdmin()" class="tableRow">-->
+<!--            <td style="padding-left: 20px;font-size : 15px; color : red; font-weight : bold;"-->
+<!--                ng-if="registration._community.title == 'JICS 2019-2020'">{{registration._community.title}}</td>-->
+<!--            <td style="padding-left: 20px;" ng-if="registration._community.title != 'JICS 2019-2020'">-->
+<!--                {{registration._community.title}}</td>-->
+<!--            <td style="padding-left: 10px;">-->
+<!--                &lt;!&ndash; TODO i18n (created: {{toTimeString(registration._community.created)}}) &ndash;&gt;-->
+<!--            </td>-->
+<!--            <td style="padding-left: 20px;">-->
+<!--                &lt;!&ndash; TODO i18n {{registration.role}} &ndash;&gt;-->
+<!--            </td>-->
+<!--            <td style="padding-left: 20px;">-->
+<!--                <span ng-show="registration._community.archived">Archived</span>-->
+<!--                <span ng-show="!registration._community.archived">-->
+<!--                    <button ng-click="enterCommunity(registration)">{{ 'community_enter' | translate }}</button>-->
+<!--                </span>-->
+<!--            </td>-->
+<!--            <td ng-show="managemode" style="text-align: right;">-->
+<!--                <input type="number" ng-model="registration.order">-->
+<!--            </td>-->
+<!--            <td>-->
+<!--                <span ng-show="isAdmin()" style="padding-left: 20px;"><a-->
+<!--                        href='communityeditor/{{registration.communityId}}'>Manage</a>-->
+<!--                </span>-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--        <tr ng-show="managemode">-->
+<!--            <td></td>-->
+<!--            <td></td>-->
+<!--            <td></td>-->
+<!--            <td></td>-->
+<!--            <td>-->
+<!--                <button ng-click="saveOrder();">{{ 'community_join' | translate }}</button>-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--    </table>-->
+
+<!--    <div style="height: 100px;"></div>-->
+<!--    <label>{{ 'community_join' | translate }}:</label>-->
+<!--    <div style="padding-left: 50px;">-->
+<!--        <table>-->
+<!--            <tr>-->
+<!--                <td style="text-align: right;">{{ 'community' | translate }}:</td>-->
+<!--                <td>-->
+<!--                    <ui-select ng-model="selected.community" theme="bootstrap" ng-disabled="disabled"-->
+<!--                        style="width: 400px;">-->
+<!--                        <ui-select-match placeholder="{{ 'community_select' | translate }}">{{selected.community.title}}-->
+<!--                            &lt;{{toTimeString(selected.community.created)}}&gt;</ui-select-match>-->
+<!--                        <ui-select-choices-->
+<!--                            repeat="community in communities | filter: {title: $select.search} | orderBy:'created':true | orderBy:'title'">-->
+<!--                            <div ng-bind-html="community.title | highlight: $select.search"></div>-->
+<!--                            <small>-->
+<!--                                <div ng-bind-html="toTimeString(community.created)"></div>-->
+<!--                            </small>-->
+<!--                        </ui-select-choices>-->
+<!--                    </ui-select>-->
+<!--                    <p style="text-align: right;">{{communities.length}} {{ 'community_possible' | translate }}.</p>-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td style="text-align: right;">{{ 'community_registration_key' | translate }}:</td>-->
+<!--                <td>-->
+<!--                    <input type="text" class="form-control" placeholder="" ng-model="selected.key">-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td></td>-->
+<!--                <td style="float: right;">-->
+<!--                    <span class="input-group-btn">-->
+<!--                        <button type="submit" class="btn btn-primary"-->
+<!--                            ng-click="addRegistration()">{{ 'join' | translate }}</button>-->
+<!--                    </span>-->
+<!--                </td>-->
+<!--        </table>-->
+<!--    </div>-->
+<!--    <br>-->
+<!--    <div ng-show="isAdmin()">-->
+<!--        <label>{{ 'community_create' | translate }}:</label>-->
+<!--        <div style="padding-left: 50px;">-->
+<!--            <table>-->
+<!--                <tr>-->
+<!--                    <td style="text-align: right;">{{ 'title' | translate }}:</td>-->
+<!--                    <td style="width: 400px;">-->
+<!--                        <input type="text" class="form-control" placeholder="" ng-model="newCommunity.title">-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td style="text-align: right;">{{ 'community_registration_key' | translate }}:</td>-->
+<!--                    <td>-->
+<!--                        <input type="text" class="form-control" placeholder="" ng-model="newCommunity.key">-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td></td>-->
+<!--                    <td style="float: right;">-->
+<!--                        <span class="input-group-btn">-->
+<!--                            <button type="submit" class="btn btn-primary"-->
+<!--                                ng-click="addNewCommunity()">{{ 'add' | translate }}</button>-->
+<!--                        </span>-->
+<!--                    </td>-->
+<!--            </table>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div style="height: 10px;">-->
+<!--        <label>{{ 'add' | translate }}</label>-->
+<!--        <br>-->
+<!--        <button type="submit" class="btn btn-primary" ng-click="managemode = !managemode;">{{ 'add' | translate }}</button>-->
+<!--    </div>-->
+
+
+<!--</div>-->

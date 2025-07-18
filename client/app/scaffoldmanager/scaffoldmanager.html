@@ -1,0 +1,43 @@
+<div class="well" collapse="status.isSavingProgressMonitorCollapsed" style="padding-left: 50px; position: absolute; top: 0px; left: 0px; width: 100%; height: 400px; background-color: white; z-index: 100;">
+    <div>
+        Saved.
+    </div>
+    <div style="text-align: right; padding-right: 100px; padding-top: 5px;">
+        <button type="submit" class="btn btn-primary kfbutton" ng-click="status.isSavingProgressMonitorCollapsed=true">OK</button>
+    </div>
+</div>
+<div class="col-md-12">
+    <div ng-show="isManager()">
+        <label> {{ 'community_scaffold_setting' | translate }}: </label>
+        <div style="">
+            <button type="submit" class="btn btn-primary KFToolBarButton" ng-click="openRootContext()"><img class="KFToolBarImage" src="manual_assets/kf6images/13-settings.png" title="Settings"></button>
+        </div>
+    </div>
+    <div style="height: 20px;"></div>
+    <div>
+        <label>{{ 'scaffolds_repository' | translate }}</label>
+        <ul ui-sortable style="cursor: move;" ng-model="scaffolds">
+            <li ng-repeat="scaffold in scaffolds">
+                <a class="KFScaffoldManagerAnchor" ng-click="editScaffold(scaffold)">{{scaffold.title}}</a>
+                <span ng-show="isManager()">
+                    &nbsp;&nbsp;
+                    <a class="KFGroupManagerAnchor trash" ng-click="removeScaffold(scaffold)"><span class="glyphicon glyphicon-trash"></span>
+                </a>
+                </span>
+            </li>
+        </ul>
+        <div ng-show="isManager()" style="text-align: right;">
+            <button type="submit" class="btn btn-primary" ng-click="saveOrder()">{{ 'save_order' | translate }}</button>
+        </div>
+    </div>
+    <div style="height: 10px;"></div>
+    <div ng-show="isManager()">
+        <label>{{ 'scaffolds_new' | translate }}</label>
+        <p class="input-group">
+            <input type="text" class="form-control" placeholder="{{ 'input_new_scaffold_title' | translate }}" ng-model="input.scaffoldTitle">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary" ng-click="addScaffold()">{{ 'scaffold_add_new' | translate }}</button>
+             </span>
+        </p>
+    </div>
+</div>

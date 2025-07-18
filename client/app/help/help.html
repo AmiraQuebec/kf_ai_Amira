@@ -1,0 +1,36 @@
+<div>
+	<div class="feedback_form">
+		<label>{{ 'send_feedback' | translate }}</label>
+		<table class="feedback_tb">
+			<tr>
+				<td class="td_label"><label>{{ 'from' | translate }}:</label></td>
+				<td class="td_content">
+					<select ng-model="userInfo" ng-change="update(userInfo)" ng-options="opt.value as opt.name for opt in emails">
+					</select>
+				</td>
+			</tr>
+			<tr ng-show="warningShow" style="height:20px;">
+				<td class="td_option" colspan="2">
+					<div id="warning_div" class="warning_area">{{ 'will_not_be_contacted' | translate }}</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="td_label"><span style="color:red">*</span>&nbsp;<label>{{ 'title' | translate }}:</label></td>
+				<td class="td_content"><input type="text" ng-model="input.fbTitle"/></td>
+			</tr>
+			<tr class="tr_200">
+				<td class="td_label td_top"><span style="color:red">*</span>&nbsp;<label>{{ 'description' | translate }}:</label></td>
+				<td class="td_content"><textarea ng-model="input.fbContent" rows=8></textarea></td>
+			</tr>
+			<tr class="tr_200">
+				<td class="td_option" colspan="2"><input type="checkbox" ng-model="checkboxes.browser"/>{{ 'include_browser_info' | translate }}<input type="checkbox" ng-model="checkboxes.community"/>  {{ 'include_community_name' | translate }}</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><button class="btn btn-primary kfbutton" ng-click="clearForm()" style="float:left;margin-left:10px;">{{ 'clear' | translate }}</button><button class="btn btn-primary kfbutton" style="float:left;margin-left:410px;" ng-click="sendFeedback()">{{ 'send' | translate }}</button></td>
+			</tr>
+		</table>
+	</div>
+	<div id="msg_div" ng-show="msgShow" class="msg_area">{{msg}}</div>
+
+</div>

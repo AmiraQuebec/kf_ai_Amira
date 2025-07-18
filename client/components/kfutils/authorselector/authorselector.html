@@ -1,0 +1,14 @@
+<link rel="stylesheet" href="manual_components/select2-css/3.4.5/select2.css">
+<div ng-controller="AuthorSelectorCtrl">
+    <ui-select ng-model="selected.author" theme="select2" ng-disabled="disabled" style="width: 80%;">
+        <ui-select-match placeholder="{{ 'author_select' | translate }}">{{selected.author.getName()}} <span ng-if="hideUserNameInAuthorSelector !== true">&lt;{{selected.author.userName}}&gt;</span></ui-select-match>
+        <ui-select-choices repeat="author in authors | filter: $select.search | orderBy:'userName'| limitTo:80">
+            <div ng-bind-html="author.getName() | highlight: $select.search"></div>
+            <small><div ng-if="hideUserNameInAuthorSelector !== true" ng-bind-html="author.userName | highlight: $select.search"></div></small>
+        </ui-select-choices>
+    </ui-select>
+
+    <button type="button" class="btn btn-primary kfbutton" ng-click="addAuthor()">{{ 'add' | translate }}</button>
+
+    <p>{{authors.length}} {{ 'authors_community' | translate }}.</p>
+</div>

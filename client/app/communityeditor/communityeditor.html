@@ -1,0 +1,30 @@
+<div class="col-md-12">
+    <label>{{ 'admin' | translate }}</label>
+    <div>
+        <label>{{ 'title' | translate }}:</label>
+        <input type="text" class="form-control" placeholder="" ng-model="community.title">
+        <br>
+        <label>{{ 'key' | translate }}:</label>
+        <input type="text" class="form-control" placeholder="" ng-model="community.registrationKey">
+        <br>
+        <label>{{ 'manager_key' | translate }}:</label>
+        <input type="text" class="form-control" placeholder="" ng-model="community.managerRegistrationKey">
+        <br>
+        <label>{{ 'archived' | translate }}:</label>
+        <input type="checkbox" class="form-control" placeholder="" ng-model="community.archived">
+        <div style="text-align: right;">
+            <button type="submit" class="btn btn-primary" ng-click="save()">{{ 'save' | translate }}</button>
+        </div>
+    </div>
+    <div>
+        <label>{{ 'block_writers_login' | translate }}</label>
+        <br> ({{ 'dont_use_if_not_admin' | translate }}.) <br>
+        <button type="submit" class="btn btn-primary" ng-click="blockLoginWriters()">BlockLoginWriters</button>
+        <button type="submit" class="btn btn-primary" ng-click="unblockLoginWriters()">UnblockLoginWriters</button>
+    </div>
+    <div>
+        <label>{{ 'update_cash' | translate }}</label>
+        <br> ({{ 'dont_use_if_not_admin' | translate }}.) <br>
+        <button type="submit" class="btn btn-primary" ng-click="updateAllCash()">UpdateAllCash</button>
+    </div>
+</div>

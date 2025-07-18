@@ -1,0 +1,8 @@
+<div ng-controller="GroupCtrl">
+    <label>Group Members:</label>
+    <ul>
+        <li ng-repeat="member in group._members">
+            {{member.getName()}}
+        </li>
+    </ul>
+</div>

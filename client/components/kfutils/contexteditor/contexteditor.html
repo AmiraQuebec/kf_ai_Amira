@@ -1,0 +1,112 @@
+<div ng-controller="ContexteditorCtrl" class="col-md-12">
+    <!-- view setting -->
+    <input type="checkbox" ng-model="viewSetting.enabled" ng-change="viewsettingEnabledChanged()"> {{ 'enable_specific_view_setting' | translate }}
+
+    <div ng-show="viewSetting.enabled" ng-include="'components/kfutils/viewsettingsubeditor/viewsettingsubeditor.html'"></div>
+    <div style="height: 10px;"></div>
+
+    <!-- scaffold setting -->
+    <div ng-include="'components/kfutils/scaffoldsettingsubeditor/scaffoldsettingsubeditor.html'"></div>
+    <div style="height: 10px;"></div>
+
+    <!-- for Japanese version -->
+    <input type="checkbox" ng-model="contribution.data.freemode"> {{ 'free_mode' | translate }}
+    <div style="height: 3px;"></div>
+    <input type="checkbox" ng-model="contribution.data.flipname"> {{ 'flip_name' | translate }}
+    <div style="height: 10px;"></div>
+
+    <label>{{ 'colour_palette_assignment_of_promising_idea' | translate }}</label>
+    <br/> {{ 'select_colour' | translate }}
+    <div>
+        <table style="width: 100%; border-collapse: collapse;" ng-repeat="colordata in promisingColorData">
+            <tr>
+                <th style="width: 10%;" ng-if="colordata.color===''">{{ 'colourless' | translate }}</th>
+                <th style="width: 10%;" ng-if="colordata.color!==''"><input type="checkbox" ng-model="contribution.data.plugins[colordata.color]"
+                        ng-change=""> {{colordata.color}}</th>
+                <th style="width: 90%;"> <a href="#" editable-text="colordata.data" onaftersave="savePromisingIdeacolorobj(colordata.data,colordata.color, colordata.id, colordata.obj)">{{
+                        colordata.data || 'empty' }}</a></th>
+            </tr>
+        </table>
+        <br>
+    </div>
+    <!-- feature settings -->
+    <label>{{ 'feature_setting_context' | translate }}</label>
+    <div>
+        <input type="checkbox" ng-model="contribution.data.features.preventOverlap" ng-change=""> {{ 'prevent_note_overlap' | translate }}
+        <br>
+    </div>
+    <!-- plugin setting -->
+    <div style="height: 10px;"></div>
+    <label>{{ 'plugin_setting_context' | translate }}</label>
+    <div>
+        <input type="checkbox" ng-model="contribution.data.plugins.lexicalanalysis" ng-change=""> {{ 'lexical_analysis' | translate }}
+        <br>
+        <input type="checkbox" ng-model="contribution.data.plugins.scaffoldgrowth" ng-change="">  {{ 'scaffold_growth' | translate }}
+        <br>
+        <input type="checkbox" ng-model="contribution.data.plugins.promisingnessidea" ng-change=""> {{ 'promising_ideas' | translate }}
+        <br>
+        <input type="checkbox" ng-model="contribution.data.plugins.googledocs" ng-change=""> Google Docs
+        <br>
+        <input disabled type="checkbox" ng-model="contribution.data.plugins.googledrive" ng-change=""> Google Drive
+        <br>
+        <input type="checkbox" ng-model="contribution.data.plugins.drawonimage" ng-change=""> {{ 'draw_on_image' | translate }}
+        <br>
+        <input type="checkbox" ng-model="contribution.data.plugins.itm" ng-change=""> ITM
+        <br>
+        <input type="checkbox" ng-model="contribution.data.plugins.multilanguage" ng-change=""> {{ 'multi_lingual_notes' | translate }}
+        <br>
+        <input type="checkbox" ng-model="contribution.data.plugins.sideToSideNotePosition" ng-change=""> {{ 'note_side_by_side' | translate }}
+        <br>
+        <input type="checkbox" ng-model="contribution.data.plugins.filter" ng-change=""> {{ 'view_filter' | translate }}
+        <br>
+        <input type="checkbox" ng-model="contribution.data.plugins.hirerachyView" ng-change=""> {{ 'hierarchy_view_notes' | translate }}
+        <br>
+        <input type="checkbox" ng-model="contribution.data.plugins.enableFavourites" ng-change=""> {{ 'enable_favourites' | translate }}
+        <br>
+        <input type="checkbox" ng-model="contribution.data.plugins.translateToEnglish" ng-change=""> {{ 'enable_translate_english' | translate }}
+        <br>
+        <input type="checkbox" ng-model="contribution.data.plugins.translateToChinese" ng-change=""> {{ 'enable_translate_chinise' | translate }}
+
+        <br>
+        {{ 'server_address' | translate }} ITM : <input style="width: 200px" type="text" ng-model="contribution.data.settings.itmServer" ng-change="" placeholder="https://itm.arcc.albany.edu">
+        <br>
+        <input type="checkbox" id="hideUserNameInAuthorSelectorCheckbox" ng-model="contribution.data.hideUserNameInAuthorSelector" ng-change=""> {{ 'hide_username_author_seector' | translate }}
+        <br>
+
+    </div>
+    <div class="itm-result">
+        <div class="text-right text-primary" ng-show="status.createdITMCommunity">{{ 'create_itm_community_succeeded' | translate }}</div>
+        <div class="text-right text-danger" ng-show="status.createITMCommunityFailed">{{status.createITMCommunityError}}</div>
+    </div>
+
+    <br>
+    <div ng-if="contribution.data.plugins.multilanguage">
+        <table>
+            <tr>
+                <td style="text-align: right;">{{ 'default_language' | translate }} : </td>
+                <td>
+                    <ui-select ng-model="contribution.data.defaultLang" theme="bootstrap"  style="width: 700px;" on-select="onSelected()">
+                        <ui-select-match placeholder="Please Select Default Language..." >{{contribution.data.defaultLang}}</ui-select-match>
+                        <ui-select-choices repeat="l in languageNames | filter:$select.search " position='up'>
+                            <div ng-bind-html="l"></div>
+                        </ui-select-choices>
+                    </ui-select>
+
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right;">{{ 'select_language' | translate }} : </td>
+                <td>
+                    <ui-select multiple ng-model="contribution.data.languages" theme="bootstrap"  style="width: 700px;">
+                        <ui-select-match placeholder="Please Select Language..." >{{$item }}</ui-select-match>
+                        <ui-select-choices repeat="lang in languageNames | filter:$select.search ">
+                            <div ng-bind-html="lang"></div>
+                        </ui-select-choices>
+                    </ui-select>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br>
+</div>

@@ -1,0 +1,83 @@
+<div ng-hide="status.error" class="col-md-12" style="padding: 0px;">
+    <div class="KFViewNavBar2" ng-if="!menuStatus">
+        <div class="KFCommunityTitle">(Timemachine) {{community.community.title}}</div>
+        <div class="KFViewTitle">{{view.title}}<span ng-show="!isEditable()"> (read only)</span>
+        </div>
+        <div class="KFUserName">{{community.author.getName()}} ({{community.author.role}})</div>
+    </div>
+    <div id="maincanvas" class="KFViewMainCanvas2">
+        <div id="viewcanvas" class="KFViewContributionCanvas">
+            <div ng-attr-id="{{ref._id}}" class="kfViewRef" ng-repeat="ref in refs" ng-style="{'top': ref.data.y, 'left': ref.data.x}" style="line-height: 100%;" ng-mousedown="mouseDown(this)" context-menu="onContextOpen(this)" data-target="menu-A">
+                <div ng-if="ref.data.showInPlace!==true" style="white-space: nowrap; font-size: 12px;">
+                    <div ng-if="ref._to.type !== 'View'">
+                        <span ng-click="openContribution(ref.to, $event)" kf-refid="{{ref._id}}" ng-attr-class="icon{{ref.to}}">
+                            <img ng-src="{{ref.getIcon()}}" draggable="false">
+                        </span>
+                        <a ng-click="openContribution(ref.to, $event)" class='kfIcon'>{{ref._to.title}}</a>
+                        <br />
+                        <span ng-if="setting.showAuthor" style="font-size: 10px; color: #777777; white-space: nowrap;">
+                            {{ref.getAuthorString()}}
+                            <br/>
+                        </span>
+                        <span ng-if="setting.showTime" class="KFTimeLabel">{{getTimeString(ref._to.modified)}}</span>
+                    </div>
+                    <div ng-if="ref._to.type === 'View'" style="white-space: nowrap;">
+                        <span kf-refid="{{ref._id}}" ng-attr-class="icon{{ref.to}}">
+                            <img ng-src="{{ref.getIcon()}}" draggable="false">
+                        </span>
+                        <a ng-click="openView(ref.to)" style="color: #0000FF;">{{ref._to.title}}</a>
+                    </div>
+                </div>
+                <div ng-if="ref.data.showInPlace===true" ng-style="{'width': ref.data.width, 'height': ref.data.height}" kf-refid="{{ref._id}}" ng-attr-class="icon{{ref.to}}">
+                    <div ng-if="ref._to.type === 'Drawing'" ng-bind-html="ref.contribution.data.svg"></div>
+                    <div ng-if="ref._to.type === 'Attachment'">
+                        <div ng-if="ref.contribution.data.type.indexOf('image/')>=0">
+                            <img ng-attr-src="{{ref.contribution.data.url}}" ng-style="{'width': ref.data.width, 'height': ref.data.height}">
+                        </div>
+                        <div ng-if="ref.contribution.mime.indexOf('image/')<0">
+                            <a ng-attr-href="{{ref.contribution.url}}">{{ref.contribution.title}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- for selection proxy-->
+        <div id="selectioncanvas" class="KFViewSelectedCanvas"></div>
+        <div id="dropcanvas" class="kfViewDropCanvas kfViewMarqueeCanvas"></div>
+        <div id="windows" class="KFViewWindowsCanvas"></div>
+    </div>
+    <div style="height: 15px; padding-left: 20px;">
+        <span>{{player.currentRecordString}}</span>
+    </div>
+    <div class="KFTimelineBar" stye="height: 100px;">
+        <div id="timeline"></div>
+    </div>
+    <div ng-show="player.initialized()" class="KFTimelineController" style="height: 25px;">
+        <div style="float: left; width: 80%; text-align: center;">
+            <button ng-class="{disabled: player.isPlayingOrFirst()}" type="submit" class="btn btn-primary" ng-click="player.toFirst()">|&lt;</button>
+            <button ng-class="{disabled: player.isPlayingOrFirst()}" type="submit" class="btn btn-primary" ng-click="player.backstep()">&lt;</button>
+            <button ng-class="{disabled: player.isPlayingOrLast()}" type="submit" class="btn btn-primary" ng-click="player.step()">&gt;</button>
+            <button ng-class="{disabled: player.isPlayingOrLast()}" type="submit" class="btn btn-primary" ng-click="player.toLast()">&gt;|</button>
+            <button type="submit" class="btn btn-primary" ng-click="player.togglePlay()">{{player.playerButtonLabel()}}</button>
+        </div>
+        <div style="float: right; width: 20%; text-align: center;">
+            <button type="submit" class="btn btn-primary" ng-click="scaleDownBig()">--</button>
+            <button type="submit" class="btn btn-primary" ng-click="scaleDown()">-</button>
+            <button type="submit" class="btn btn-primary" ng-click="focus()">*</button>
+            <button type="submit" class="btn btn-primary" ng-click="scaleUp()">+</button>
+            <button type="submit" class="btn btn-primary" ng-click="scaleUpBig()">++</button>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <button type="submit" class="btn btn-primary" ng-click="scaleFit()">Fit</button>
+        </div>
+    </div>
+    <div ng-hide="player.initialized()" style="height: 30px;">
+        Initializing...
+    </div>
+    <div class="dropdown position-fixed" id="menu-A" style="position: absolute; z-index: 20;">
+        <ul class="dropdown-menu" role="menu">
+        </ul>
+    </div>
+</div>
+<div ng-show="status.error">
+    {{ 'error' | translate }}: {{status.errorMessage}}
+</div>

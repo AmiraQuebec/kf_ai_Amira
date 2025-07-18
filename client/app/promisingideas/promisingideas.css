@@ -1,0 +1,44 @@
+.highlighted { background: gold }
+
+.KFBarButton:hover {
+    border-color: #BBB;
+    /* background-color: #BBB; */
+}
+.KFBarButton {
+    width: 34px;
+    border: 3px solid #DDD;
+   padding: 1px;
+}
+
+.action-searchbox {
+    clear: both;
+    float: right;
+}
+
+.action-searchbox input {
+    width: 120px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    background-image: url('/manual_assets/kf6images/08-toolbar-search.png');
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 40px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+
+.action-searchbox input:focus {
+    width: 100%;
+}
+
+.box {
+  float: left;
+  width: 30px;
+  height: 10px;
+  margin-top: 5px;
+ /* padding: 5px;*/
+  border: 1px solid rgba(0, 0, 0, .2);
+}

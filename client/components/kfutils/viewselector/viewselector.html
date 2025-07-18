@@ -1,0 +1,11 @@
+<link rel="stylesheet" href="manual_components/select2-css/3.4.5/select2.css">
+<div ng-controller="ViewSelectorCtrl">
+    <ui-select ng-model="selected.views" theme="select2" multiple ng-disabled="disabled" style="width: 80%;">
+        <ui-select-match placeholder="{{ 'selected_one_or_more_view' | translate }}...">{{$item.title}}</ui-select-match>
+        <ui-select-choices repeat="view in views | filter: $select.search | orderBy:'title'| limitTo:80">
+            <div ng-bind-html="view.title | highlight: $select.search"></div>
+        </ui-select-choices>
+    </ui-select>
+    <button type="button" class="btn btn-primary kfbutton create" ng-click="addViews()">Filtrer</button>
+</div>
+

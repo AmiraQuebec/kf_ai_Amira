@@ -1,0 +1,75 @@
+<br/>
+<label style="font-size:  15pt; "><b>{{ 'lexical_analysis' | translate }}</b></label>
+<br/>
+<br/>
+
+<p style="text-align: left;">
+  <button ng-class="{true: 'btn-primary', false: 'btn-default'}[status.detailCollapsed]" ng-click="status.detailCollapsed = !status.detailCollapsed">{{ 'selector' | translate }}</button></p>
+    <div collapse="status.detailCollapsed">
+        <div ng-include="'components/kfutils/viewauthordateselector/viewauthordateselector.html'"></div>
+        <div style="padding: 5px; clear:both;" class="text-center">
+            <label for="text"> {{ 'lexicon' | translate }} (<span style="color: red"> {{ 'lexicon_phrase_separated_by' | translate }} <b>";"</b></span> )</label>:
+            <br>
+            <textarea id="text" cols="70" rows="10" ng-model="textareaText"></textarea>
+            <div><button ng-click=" search()" ng-model="queryString" class="btn btn-success kfbutton create">{{ 'word_tracker' | translate }}</button></div>
+        </div>
+    </div>
+    <div ng-if="textareaText.length !=0 && status.detailCollapsed">
+        <div ng-if="queryString === ''">
+            <label style="font-size:  12pt; "><b>{{ 'word_reiteration_tracker' | translate }} {{currentCommunity.community.title}} </b></label>
+        </div>
+        <div ng-if="queryString !== ''">
+            <label style="font-size:  12pt; "><b>{{ 'word_reiteration_tracker' | translate }} ({{views}} / {{authors}} / {{fromdate}} / {{todate}})</b></label>
+        </div>
+        <button ng-class="{true: 'btn-primary', false: 'btn-default'}[status.detailsCollapsed]" ng-click="detailsControl()">{{ 'details' | translate }}:</button>
+        <button ng-class="{true: 'btn-primary', false: 'btn-default'}[status.barchartCollapsed]" ng-click="barchartControl()">{{ 'chart_bar' | translate }}:</button>
+        <button ng-class="{true: 'btn-primary', false: 'btn-default'}[status.radarchartCollapsed]" ng-click="radarchartControl()">{{ 'chart_radar' | translate }}:</button>
+        <div style="padding: 5px;" collapse="status.barchartCollapsed">
+            <canvas id="bar" class="chart chart-bar" chart-data="data" chart-labels="labels">
+            </canvas>
+        </div>
+        <div style="padding: 5px;" collapse="status.radarchartCollapsed">
+            <canvas id="radar" class="chart chart-radar" chart-data="data" chart-labels="labels">
+            </canvas>
+        </div>
+        <div style="padding: 5px;" collapse="status.detailsCollapsed">
+            <div class="KFSearchResult">
+                <div ng-if="status.status === 'searching'">
+                    {{ 'searching' | translate }}...
+                </div>
+                <div ng-if="status.status === 'noresult'">
+                    {{ 'no_contributions_found' | translate }}.
+                </div>
+                <div ng-if="status.status === 'searched'">
+                    <button type="button" ng-csv="lexicons" csv-header="getHeader()" filename="test.csv">{{ 'export_csv' | translate }}</button>
+                    <br/>
+                    <br/>
+                    <div ng-if="status.loading === true">
+                    </div>
+                    <div ng-if="status.loading !== true">
+                        <table border='1' style="width: 100%;" id="table1">
+                            <tr>
+                                <th style="width: 15%;"> {{ 'lexicon' | translate }}</th>
+                                <th style="width: 15%;">{{ 'frequency' | translate }}</th>
+                                <th>{{ 'in' | translate }} {{ 'contribution' | translate }}</th>
+                            </tr>
+                            <tr class="KFSearchResult" ng-repeat="lexicon in lexicons">
+                                <td>{{lexicon .word}}</td>
+                                <td> {{lexicon .maxcount}}</td>
+                                <td>
+                                    <div ng-repeat="info in lexiconsInfo" ng-if=" info.word===lexicon .word">
+                                        <div kfelement draggable="true">
+                                            <span><img ng-src="{{getIcon(info.note)}}" draggable="false"></span>
+                                            <a class="KFSearchLink" href="contribution/{{info.note._id}}" target="_blank" draggable="false">{{info.note.title}}</a>--{{info.count }}
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <div style="height: 20px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+    </div>

@@ -1,0 +1,83 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>{{ 'register' | translate }}</h1>
+        </div>
+        <div class="col-sm-12">
+            <form class="form" name="form" ng-submit="register(form)" novalidate>
+                <div class="form-group" ng-class="{ 'has-success': form.firstName.$valid && submitted, 'has-error': form.firstName.$invalid && submitted }">
+                    <label>{{ 'firstName' | translate }}</label>
+                    <input type="text" name="firstName" class="form-control" ng-model="user.firstName" required/>
+                    <p class="help-block" ng-show="form.firstName.$error.required && submitted">
+                        {{ 'register_error_firstName' | translate }}
+                    </p>
+                </div>
+                <div class="form-group" ng-class="{ 'has-success': form.lastName.$valid && submitted, 'has-error': form.lastName.$invalid && submitted }">
+                    <label>{{ 'lastName' | translate }}</label>
+                    <input type="text" name="lastName" class="form-control" ng-model="user.lastName" required/>
+                    <p class="help-block" ng-show="form.lastName.$error.required && submitted">
+                        {{ 'register_error_lastName' | translate }}
+                    </p>
+                </div>
+                <div class="form-group" ng-class="{ 'has-success': form.email.$valid && submitted, 'has-error': form.email.$invalid && submitted }">
+                    <label>{{ 'email' | translate }}</label>
+                    <input type="email" name="email" class="form-control" ng-model="user.email" mongoose-error/>
+                    <p class="help-block" ng-show="form.email.$error.email && submitted">
+                        {{ 'register_error_email_invalid' | translate }}
+                    </p>
+                    <!-- <p class="help-block" ng-show="form.email.$error.required && submitted">
+                        {{ 'register_error_email_required' | translate }}
+                    </p> -->
+                    <p class="help-block" ng-show="form.email.$error.mongoose">
+                        {{ errors.email }}
+                    </p>
+                </div>
+		<!-- TODO i18n -->
+                <div class="form-group" ng-class="{ 'has-success': form.userName.$valid && submitted, 'has-error': form.userName.$invalid && submitted }">
+                    <label>{{ 'username' | translate }}</label>
+                    <input type="text" name="userName" class="form-control" ng-model="user.userName" ng-minlength="2" ng-maxlength="50" ng-pattern="/^[a-zA-Z][.0-9a-zA-Z@_-]{1,100}$/" required mongoose-error/>
+                    <p class="help-block" ng-show="!form.userName.$error.minlength && !form.userName.$error.maxlength && form.userName.$error.pattern">
+                        The userName cannot be accepted. You can use only alphabetic characters, numbers, and "._@-". Non alphabetic characters cannot be used at the first.
+                    </p>
+                    <p class="help-block" ng-show="form.userName.$error.required && submitted">
+                        {{ 'register_error_username_required' | translate }}
+                    </p>
+                    <p class="help-block" ng-show="form.userName.$error.minlength && !form.userName.$error.required">
+                        The userName is too short.
+                    </p>
+                    <p class="help-block" ng-show="form.userName.$error.maxlength">
+                        The userName is too long.
+                    </p>
+                    <p class="help-block" ng-show="form.userName.$error.mongoose">
+                        {{ errors.userName }}
+                    </p>
+                </div>
+                <div class="form-group" ng-class="{ 'has-success': form.password.$valid && submitted, 'has-error': form.password.$invalid && submitted }">
+                    <label>{{ 'password' | translate }}</label>
+                    <input type="password" name="password" class="form-control" ng-model="user.password" ng-minlength="4" required mongoose-error/>
+                    <p class="help-block" ng-show="(form.password.$error.minlength || form.password.$error.required) && submitted">
+                        {{ 'password_restrictions' | translate }}
+                    </p>
+                    <p class="help-block" ng-show="form.password.$error.mongoose">
+                        {{ errors.password }}
+                    </p>
+                </div>
+              <div class="form-group"  ng-class="{ 'has-error': !captchaSigned && submitted }">
+                <label>{{ 'security_check' | translate }}</label>
+                <div vc-recaptcha size="normal" on-success="setResponse(response)"></div>
+                <p class="help-block" ng-show="(!captchaSigned && submitted)">Please confirm that you are not a robot</p>
+
+              </div>
+              <br />
+                <div>
+                    <button class="btn btn-inverse btn-lg btn-login btn-primary" type="submit" ng-disabled="!captchaSigned">
+                        {{ 'register' | translate }}
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    <hr>
+</div>
