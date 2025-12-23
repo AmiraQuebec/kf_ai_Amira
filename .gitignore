@@ -129,3 +129,4 @@ kf6@6.11.14
 # broken/pre-reset backups
 client/manual_components/svg-edit-2.8.1/svg-editor.html.broken.*
 client/manual_components/svg-edit-2.8.1/svg-editor.html.pre-reset.*
+client/manual_components/kf-svg-injector.js.disabled
