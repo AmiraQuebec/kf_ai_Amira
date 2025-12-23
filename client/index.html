@@ -14,13 +14,30 @@
     <title>Knowledge Forum</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+	<!-- Favicons -->
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon_32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/favicon_16.png" sizes="16x16">
+<link rel="apple-touch-icon" href="/favicon_180.png" sizes="180x180">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0d3b66">
+
+<meta property="og:title" content="Knowledge Forum AI">
+<meta property="og:description" content="Espace de co�laboration des connaissances propuls� par l�IA.">
+<meta property="og:image" content="https://kfai.online/favicon_512.png">
+<meta property="og:url" content="https://kfai.online">
+<meta property="og:type" content="website">
+
+
+
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(client) app/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="manual_components/kf-login-modal.css?v=4">
+
+    <link rel="stylesheet" href="manual_components/kf-bootstrap-override.css?v=6"> 
     <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css" />
     <link rel="stylesheet" href="bower_components/angular-bootstrap-colorpicker/css/colorpicker.css" />
     <link rel="stylesheet" href="bower_components/dcjs/dc.css" />
@@ -29,6 +46,7 @@
     <link rel="stylesheet" href="bower_components/datatables.net-dt/css/jquery.dataTables.css" />
     <link rel="stylesheet" href="bower_components/datatables.net-buttons-dt/css/buttons.dataTables.css" />
     <link rel="stylesheet" href="bower_components/angular-ui-tree/dist/angular-ui-tree.css" />
+    <script src="bower_components/jsPlumb/dist/js/jsplumb.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
     <link rel="stylesheet" href="bower_components/annotator/annotator.min.css" />
@@ -62,6 +80,7 @@
     <link rel="stylesheet" href="app/stats/stats.css">
     <link rel="stylesheet" href="app/studentdictionary/studentdictionary.css">
     <link rel="stylesheet" href="app/timemachine/timemachine.css">
+    <link rel="stylesheet" href="app/view/view-fix.css">
     <link rel="stylesheet" href="app/view/view.css">
     <link rel="stylesheet" href="app/viewmanager/viewmanager.css">
     <link rel="stylesheet" href="app/wcloud/wcloud.css">
@@ -73,7 +92,27 @@
     <link rel="stylesheet" href="components/modal/modal.css">
     <!-- endinjector -->
     <!-- endbuild -->
-</head>
+  <script src="manual_components/kf-drawing-onload-shim.js"></script>
+  <script src="manual_components/kf-drawing-onload-shim.js"></script>
+  <script>
+(function () {
+  if (location.pathname.indexOf('/scaffoldmanager/') !== -1) {
+    document.documentElement.classList.add('is-scaffoldmanager');
+  }
+})();
+</script>
+<script>
+  (function () {
+    var p = location.pathname;
+    if (p === '/' || /\/(main|account\/login|login)/.test(p)) {
+      document.documentElement.classList.add('is-landing');
+    }
+  })();
+</script>
+<link rel="stylesheet" href="manual_components/kf-landing-center.css?v=1">
+<link rel="stylesheet" href="manual_components/kf-upload-fix.css?v=20250930">
+
+  </head>
 
 <body ng-app="kf6App" style="overscroll-behavior-y:none; overscroll-behavior-x:none;">
     <!--[if lt IE 7]>
@@ -102,9 +141,16 @@
     <script src="bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
     <!-- (Yoshiaki) Tinymce should be installed manually for plugin loading -->
-    <script src="bower_components/tinymce/tinymce.min.js"></script>
     <!-- build:js({client,node_modules}) app/vendor.js -->
     <!-- (Yoshiaki) Preload plugins for optimization and reducing traffic of 301 non-modified -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/jquery-ui/jquery-ui.js?v=1114"></script>
+    <script src="manual_components/jquery-size-polyfill.js"></script>
+    <script src="bower_components/tinymce/tinymce.min.js"></script>
+<script>
+tinymce.baseURL = '/bower_components/tinymce';
+tinymce.suffix = '.min';
+</script>
     <script src="bower_components/tinymce/themes/modern/theme.min.js"></script>
     <script src="bower_components/tinymce/plugins/advlist/plugin.min.js"></script>
     <script src="bower_components/tinymce/plugins/autolink/plugin.min.js"></script>
@@ -112,6 +158,9 @@
     <script src="bower_components/tinymce/plugins/link/plugin.min.js"></script>
     <script src="bower_components/tinymce/plugins/image/plugin.min.js"></script>
     <script src="bower_components/tinymce/plugins/lists/plugin.min.js"></script>
+     <script src="manual_components/rgbcolor.js"></script>
+    <script src="manual_components/StackBlur.js"></script>
+    <script src="manual_components/canvg.js"></script>
     <script src="bower_components/tinymce/plugins/charmap/plugin.min.js"></script>
     <script src="manual_components/drawing-tool/plugin.min.js"></script>
     <script src="bower_components/tinymce/plugins/print/plugin.min.js"></script>
@@ -138,21 +187,28 @@
     <script src="bower_components/tinymce/plugins/noneditable/plugin.min.js"></script>
     <script src="bower_components/tinymce/plugins/fullpage/plugin.min.js"></script>
     <!-- bower:js -->
-    <script src="bower_components/jquery/dist/jquery.js"></script>
+    
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    
+    <!-- <script src="components/ui-bootstrap-compat.js"></script> -->
+    <!-- <script src="components/ui-bootstrap-tabs-compat.js"></script> -->
     <script src="bower_components/lodash/lodash.js"></script>
     <script src="bower_components/angular-socket-io/socket.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-    <script src="bower_components/jquery-ui/jquery-ui.js"></script>
-    <script src="bower_components/angular-ui-tinymce/src/tinymce.js"></script>
     <script src="bower_components/angular-ui-sortable/sortable.js"></script>
     <script src="bower_components/ng-context-menu/dist/ng-context-menu.js"></script>
-    <script src="bower_components/jsPlumb/dist/js/jsplumb.js"></script>
-    <script src="bower_components/ng-file-upload/angular-file-upload.js"></script>
+
+    <!-- (shim pour vieux navigateurs, optionnel)
+ <!-- <script src="bower_components/ng-file-upload/ng-file-upload-shim.min.js"></script> --><!-- la lib -->
+<script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
+    <script src="bower_components/angular-file-upload/angular-file-upload.js"></script>
+<script src="manual_components/ngfileupload-bridge.js"></script>
+
+
     <script src="bower_components/angular-ui-select/dist/select.js"></script>
     <script src="bower_components/d3/d3.js"></script>
     <script src="bower_components/d3-cloud/build/d3.layout.cloud.js"></script>
@@ -169,16 +225,15 @@
     <script src="bower_components/vis/dist/vis.js"></script>
     <script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
     <script src="bower_components/highcharts/highcharts.js"></script>
-    <script src="bower_components/ngjs-color-picker/dist/ngjs-color-picker.js"></script>
+    <!-- ngjs-color-picker désactivé (doublon Angular) -->
     <script src="bower_components/mark.js/dist/mark.js"></script>
     <script src="bower_components/angular-recaptcha/release/angular-recaptcha.js"></script>
     <script src="bower_components/blob-polyfill/Blob.js"></script>
     <script src="bower_components/file-saver.js/FileSaver.js"></script>
     <script src="bower_components/angular-file-saver/dist/angular-file-saver.bundle.js"></script>
-    <script src="bower_components/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="bower_components/datatables.net/js/dataTables.js"></script>
     <script src="bower_components/datatables.net-buttons/js/dataTables.buttons.js"></script>
     <script src="bower_components/datatables.net-buttons/js/buttons.colVis.js"></script>
-    <script src="bower_components/datatables.net-buttons/js/buttons.flash.js"></script>
     <script src="bower_components/datatables.net-buttons/js/buttons.html5.js"></script>
     <script src="bower_components/datatables.net-buttons/js/buttons.print.js"></script>
     <script src="bower_components/jszip/dist/jszip.js"></script>
@@ -189,14 +244,22 @@
     <script src="bower_components/showdown/dist/showdown.js"></script>
     <script src="bower_components/ng-showdown/dist/ng-showdown.js"></script>
     <script src="bower_components/ngstorage/ngStorage.js"></script>
+    <script src="bower_components/jsPlumb/dist/js/jsplumb.js"></script>
     <!-- endbower -->
-    <script src="bower_components/annotator/annotator-full.min.js"></script>
     <script src="bower_components/highcharts/modules/exporting.js"></script>
     <script src="bower_components/socket.io-client/dist/socket.io.js"></script>
-    <script src="bower_components/jsPlumb/dist/js/jsplumb.min.js"></script>
     <!-- endbuild -->
+   <!-- <script src="bower_components/tinymce/tinymce.min.js"></script> -->
+    <script src="bower_components/angular-ui-tinymce/src/tinymce.js"></script> 
     <!-- build:js({.tmp,client}) app/app.js -->
-    <script src="app/app.js"></script>
+   <script src="manual_components/ai-minwords.js?v=2025-09-20-01"></script>
+   <script src="manual_components/http-guard.js"></script>
+   <script src="manual_components/annotator-stub.js"></script>
+
+  
+    <script src="manual_components/jsplumb-compat.js"></script>
+   <script src="app/app.js"></script>
+    
     <!-- injector:js -->
     <script src="app/account/account.js"></script>
     <script src="app/account/login/idul/idul.controller.js"></script>
@@ -268,6 +331,7 @@
     <script src="components/community/accesscontrol.service.js"></script>
     <script src="components/community/community.service.js"></script>
     <script src="components/datatable-editor/dataTables.cellEdit.js"></script>
+    <script src="components/jsplumb-compat.js"></script>
     <script src="components/kfutils/attachmentuploader/attachmentuploader.controller.js"></script>
     <script src="components/kfutils/authorselector/authorselector.controller.js"></script>
     <script src="components/kfutils/contexteditor/contexteditor.controller.js"></script>
@@ -286,17 +350,26 @@
     <script src="components/kfutils/vieweditor/vieweditor.controller.js"></script>
     <script src="components/kfutils/viewselector/viewselector.controller.js"></script>
     <script src="components/kfutils/viewsettingsubeditor/viewsettingsubeditor.controller.js"></script>
+    <script src="components/modal-hotfix.js"></script>
     <script src="components/modal/modal.service.js"></script>
+    <script src="components/modal/uib-shim.js"></script>
     <script src="components/mongoose-error/mongoose-error.directive.js"></script>
     <script src="components/navbar/navbar.controller.js"></script>
+    <!-- <script src="components/panel-fix.js"></script> -->
     <script src="components/socket/socket.service.js"></script>
+    <!-- <script src="components/tabset-compat.js"></script> -->
+< REMOVED duplicate:
+
+-->
     <!-- endinjector -->
     <!-- endbuild -->
-    <script src="manual_components/rgbcolor.js"></script>
-    <script src="manual_components/StackBlur.js"></script>
-    <script src="manual_components/canvg.js"></script>
-    <script src="http://code.angularjs.org/1.0.8/i18n/angular-locale_fr-fr.js"></script>
-
+   
+    
+<!-- shim-angularFileUpload: auto-inserted to avoid [$injector:nomod] when the old angular-file-upload lib is missing 
+<script>(function(){try{angular.module("angularFileUpload")}catch(e){angular.module("angularFileUpload",[])}})();</script> -->
+ <script src="manual_components/kf-svgfix.js"></script> 
+<link rel="stylesheet" href="manual_components/kf-menu-fix.css?v=2"> 
+<script src="manual_components/kf-contextmenu-bridge.js?v=1"></script>
 </body>
 
 </html>

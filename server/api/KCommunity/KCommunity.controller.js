@@ -2,6 +2,8 @@
 
 var mongoose = require('mongoose');
 var _ = require('lodash');
+var mongoose = require('mongoose');
+function oid(id){ try { return mongoose.Types.ObjectId(id); } catch(e){ return null; }}
 
 var KCommunity = require('./KCommunity.model');
 var KContribution = require('../KContribution/KContribution.model');

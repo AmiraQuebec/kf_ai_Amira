@@ -1,0 +1,26 @@
+/* ===== Échafaudage : tout à gauche ===== */
+
+/* Conteneur de la page d'échafaudage (il existe dans le template) */
+#scaffoldmanager,
+#scaffoldmanager * { text-align: left !important; }
+
+/* Ancres / titres spécifiques */
+.KFScaffoldManagerAnchor,
+a.KFScaffoldManagerAnchor { text-align: left !important; display: block !important; }
+
+/* Panneau ouvert par l’icône “roue” (view setting subeditor) */
+#view-setting-subeditor,
+.KFViewSettingSubEditor,
+#view-setting-subeditor *,
+.KFViewSettingSubEditor * { text-align: left !important; }
+
+/* Si la “roue” ouvre une modale bootstrap, sécuriser aussi */
+.modal .modal-body,
+.modal .modal-body * { text-align: left !important; }
+
+/* Conserver les zones explicitement à droite et les libellés de boutons */
+.text-right,
+[style*="text-align:right"] { text-align: right !important; }
+.btn, .btn * { text-align: center !important; }
+/* Reset global : ne jamais centrer toute la page */
+html, body { text-align: left !important; }

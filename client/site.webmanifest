@@ -1,0 +1,15 @@
+{
+  "name": "Knowledge Forum AI",
+  "short_name": "KF AI",
+  "icons": [
+    { "src": "/favicon_16.png",  "sizes": "16x16",  "type": "image/png" },
+    { "src": "/favicon_32.png",  "sizes": "32x32",  "type": "image/png" },
+    { "src": "/favicon_64.png",  "sizes": "64x64",  "type": "image/png" },
+    { "src": "/favicon_180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/favicon_512.png", "sizes": "512x512", "type": "image/png" }
+  ],
+  "theme_color": "#0d3b66",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "start_url": "/"
+}

@@ -1,0 +1,21 @@
+/* ===== Page d’accueil seulement ===== */
+
+/* Remet .text-center à... center, même si votre override global l’a cassé */
+.is-landing .text-center { text-align: center !important; }
+
+/* Boutons de connexion/inscription centrés */
+.is-landing .btn-row,
+.is-landing .login-buttons,
+.is-landing .auth-buttons { text-align: center !important; }
+
+/* (Optionnel) Right pane : barre verticale + padding, comme l’instance OK */
+.is-landing .login-right,
+.is-landing .col-right,
+.is-landing .right-pane {
+  border-left: 8px solid #0E4A89;
+  padding-left: 36px !important;
+}
+
+/* (Optionnel) Titre + intro, pour retrouver les proportions “OK” */
+.is-landing h1 { font-weight: 700; color:#0E4A89; line-height:1.1; }
+.is-landing .lead { max-width: 46rem; line-height: 1.6; }

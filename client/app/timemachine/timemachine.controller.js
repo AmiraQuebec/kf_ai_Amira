@@ -247,7 +247,7 @@ angular.module('kf6App')
         /* ----------- connections --------- */
 
         $scope.connectionIdCounter = 0;
-        $scope.jsPlumb = undefined;
+        Object.defineProperty($scope,'jsPlumb',{value:undefined,writable:true,configurable:true});
         $scope.repaintRequest = false;
         $scope.$watch('repaintRequest', function() {
             if ($scope.repaintRequest === false) {

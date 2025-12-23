@@ -1,9 +1,24 @@
 <div ng-controller="AttachmentUploaderCtrl">
-    <div class="">
-        <input type="file" ng-file-select="onFileSelect($files)">
-        <div class="drop-box" ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="optional-css-class-name-or-function" ng-show="dropSupported">{{ 'attachments_drop' | translate }}</div>
-        <div ng-file-drop-available="dropSupported=true" ng-show="!dropSupported">{{ 'attachments_drop_notSupported' | translate }}</div>
-        <progressbar ng-if="progress>=0" animate="true" value="progress" type="success"><b>{{progress}} %</b>
-        </progressbar>
-    </div>
+  <input type="file"
+         ngf-select="onFileSelect($files)"
+         ngf-multiple="true">
+
+  <div class="drop-box"
+       ngf-drop="onFileSelect($files)"
+       ngf-drag-over-class="'optional-css-class-name-or-function'"
+       ngf-drop-available="dropSupported=true"
+       ng-show="dropSupported">... ou glisser-d&eacute;poser le(s) fichier(s) ici.</div>
+
+  <div ng-show="!dropSupported">Le glisser-d&eacute;poser n'est pas pris en charge par votre navigateur.</div>
+<!-- Barre de progression Bootstrap (affichée quand progress >= 0) -->
+<div class="progress kf-progress" ng-if="progress >= 0">
+  <div class="progress-bar"
+       ng-class="{'progress-bar-success': progress >= 100, 'progress-bar-info': progress < 100}"
+       role="progressbar"
+       aria-valuemin="0" aria-valuemax="100"
+       aria-valuenow="{{progress}}"
+       ng-style="{'width': (progress || 0) + '%'}">
+    {{progress}} %
+  </div>
+</div>
 </div>

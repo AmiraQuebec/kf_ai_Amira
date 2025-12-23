@@ -1,0 +1,1 @@
+dist/ng-file-upload.js

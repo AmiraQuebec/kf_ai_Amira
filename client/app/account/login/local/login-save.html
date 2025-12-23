@@ -67,7 +67,7 @@
                     <div class="modal-header">
                         <h4 class="modal-title text-center new-kf-color">CONNEXION</h4>
                         <h5 class="modal-title text-center new-kf-color">COMPTE KF LOCAL</h5>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <button type="button" class="close" ng-click="$dismiss()">&times;</button>
                     </div>
                     <div class="modal-body">
                         <form id="local-form" class="form" name="form" ng-submit="login(form)" novalidate>
@@ -112,7 +112,7 @@
                     <div class="modal-header">
                         <h4 class="modal-title text-center new-kf-color">CONNEXION</h4>
                         <h5 class="modal-title text-center new-kf-color">IDUL ULAVAL</h5>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <button type="button" class="close" ng-click="$dismiss()">&times;</button>
                     </div>
                     <div class="modal-body">
                         <form id="idul-form" class="form" name="form" ng-submit="loginIDUL(form)" novalidate>
@@ -158,7 +158,7 @@
                     <div class="modal-header">
                         <h4 class="modal-title text-center new-kf-color text-capitalize">{{ 'register' | translate
                             }}</h4>
-                        <button style="bottom: 55px!important;" type="button" class="close" data-dismiss="modal">&times;</button>
+                        <button style="bottom: 55px!important;" type="button" class="close" ng-click="$dismiss()">&times;</button>
                     </div>
                     <div class="modal-body">
                         <form class="form" name="form" ng-submit="register(form)" novalidate>

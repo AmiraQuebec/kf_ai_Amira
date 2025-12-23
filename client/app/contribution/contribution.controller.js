@@ -3833,6 +3833,11 @@ function onSvgInitialized() {
     }
     //wnd.svgEditor.showSaveWarning = false;
 }
+
+
+
+
+
 angular.module('kf6App')
     .controller('NoteTranslatorCtrl', function($scope, $modalInstance,noteText,$http) {
         $scope.translatedNoteText="";

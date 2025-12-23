@@ -29,13 +29,14 @@ module.exports = function (grunt) {
         babel: {
             options: {
                 sourceMap: true,
-                presets: ['@babel/preset-env']
+                presets: ['env']
             },
             dist: {
                 files: [{
                     expand: true,
-                    cwd: 'client/', // Adjust this if your source files are located elsewhere
-                    src: ['**/*.js'],
+                    cwd: 'client/',
+                      filter: 'isFile', // Adjust this if your source files are located elsewhere
+                    src: ['**/*.js', '!bower_components/**/src/intro.js', '!bower_components/**/src/outro.js', '!bower_components/**/src/module.js'],
                     dest: 'dist/client/', // Output directory
                     ext: '.js'
                 }]

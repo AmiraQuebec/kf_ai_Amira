@@ -1,5 +1,7 @@
 'use strict';
-
+var mongoose = require("mongoose");
+function oid(id){ try { return mongoose.Types.ObjectId(id); } catch(e){ return null; }}
+function toObjectId(id){ try { return mongoose.Types.ObjectId(id); } catch(e){ return null; }}
 var _ = require('lodash');
 var KLink = require('./KLink.model');
 var KObject = require('../KObject/KObject.model');

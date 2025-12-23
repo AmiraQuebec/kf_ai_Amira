@@ -61,6 +61,7 @@ module.exports = function(app) {
     if ('production' === env) {
         app.use(favicon(path.join(config.root, 'public', 'favicon.ico')));
         app.use(express.static(path.join(config.root, 'public')));
+app.use('/bower_components', require('express').static(require('path').join(__dirname, '../../client/bower_components')));
         app.set('appPath', config.root + '/public');
 
         //logging

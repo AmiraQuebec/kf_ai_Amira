@@ -261,6 +261,25 @@ function truncateText(text, maxLength) {
 function handleExplain(req, res, rawText, logTexts, user, kobj, community, requestInLast24h) {
     console.log("Starting handleExplain");
     console.log("rawText"+rawText);
+//nouveau bloc pour tester le nombre de mots minimum pour pouvoir suggérr collabot
+function countWords(text) {
+  if (!text) return 0;
+  // Split basique par espaces : robuste et compatible vieux Node
+  var words = text.trim().match(/\S+/g);
+  return words ? words.length : 0;
+}
+
+  var MIN_WORDS = 10;                   // ajuste la valeur si besoin (faut garder la même valeur dans le fichier ai-minwords.js
+  var wordCount = countWords(rawText);  // rawText tel que reçu ici
+  if (wordCount < MIN_WORDS) {
+    return res.status(400).json({
+      error: 'Votre texte est trop court',
+      details: `Minimum ${MIN_WORDS} mots requis`,
+      wordCount: wordCount,
+      minWords: MIN_WORDS
+    });
+  }
+//ça finit ici, on va le tester
     var studentTempContribution = "";
     var llmResponse = ""
     if (rawText) {

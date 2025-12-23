@@ -107,8 +107,6 @@
 
 </style>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 <!-- Floating Panel -->
@@ -433,6 +431,7 @@
                                 <span>{{ 'never_edit_now' | translate }}/span></div>
                             <textarea ng-show="mceEditor" ui-tinymce="tinymceOptions" ng-model="copy.body"
                                       id="noteee"></textarea>
+
                             <div class="KFContainer" ng-if="isGoogleDoc" style="float:left;margin-top:1px;width: 100%;">
                                 <label>Videos:</label>
                                 <span class="videoRow" ng-repeat="attachment in images"
@@ -800,7 +799,7 @@
                     </div>
                 </div>
             </tab>
-            <tab class="KFTab" heading="Idées prometteuses" select="promisingIdeaSelected()"
+            <tab ng-if="false" class="KFTab" heading="Idées prometteuses" select="promisingIdeaSelected()"
                  deselect="promisingIdeaDeselected()"
                  ng-show="status.ispromisingideaTabDisplayed&&context.data.plugins.promisingnessidea=== true">
                 <label>{{ 'promising_idea' | translate }}:</label>
@@ -907,7 +906,7 @@
         </tabset>
     </div>
 
-    <div class="well" collapse="status.ispromisingideaCollapsed"
+    <div ng-if="false" class="well" collapse="status.ispromisingideaCollapsed"
          style="padding-left: 0px; position: absolute; top:0px; left: 0px; width: 100%; min-height: 100% !important; height: 100%;background-color: white; z-index: 100;">
 
         <label style="font-size:  11pt; text-align: center; text-decoration: underline; padding-left: 10px;">
@@ -1051,7 +1050,7 @@
                 <div class="modal-footer" style="text-align: unset">
                     <span class="small"></span>
                     <div style="text-align: right">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">fermer</button>
+                        <button type="button" class="btn btn-default" ng-click="$dismiss()">fermer</button>
                     </div>
                 </div>
             </div>

@@ -2,11 +2,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-<script>
-    $(function () {
-        $("#myModal").appendTo("body");
-    });
-</script>
 
 <div ng-include="'components/navbar/navbar.html'"></div>
 <div class="bg-img-wrapper">
@@ -24,34 +19,39 @@
                         leur
                         résolution. </p>
                 </div>
-                <div style="    padding-right: 59px;" class="col-md-6 login-separator">
-                    <h1 class="new-kf-color text-center">Connexion</h1>
-                    <h3 style="margin-top: -5px; padding-bottom: 16px;" class="text-center new-kf-color">avec</h3>
-                    <div class="login-div">
+          <div class="col-md-6 login-right">
+    <h1 class="new-kf-color text-center">Accès au</h1>
+    <h3 class="new-kf-color text-center" style="margin-top:-5px; padding-bottom:16px;">
+        Knowledge Forum
+    </h3>
 
+    <div class="login-div">
+        <!-- Bouton Connexion -->
+        <a href=""
+           class="btn btn-lg kf-login-btn"
+           data-toggle="modal"
+           data-target="#modalLoginLocal">
+            <span class="login-btn">Connexion</span>
+        </a>
 
-                        <a href="" style="background-color:#073B7D" data-toggle="modal" data-target="#modalLoginLocal"
-                           class="btn btn-lg login-btn login-local"><span
-                            class="login-btn">{{ 'account_local' | translate }}</span></a>
+        <!-- Bouton Inscription -->
+        <a href=""
+           class="btn btn-lg kf-login-btn"
+           data-toggle="modal"
+           data-target="#modalRegister">
+            <span class="login-btn">Inscription</span>
+        </a>
+    </div>
 
+    <p class="new-kf-color login-invite">
+        Si vous n'avez pas de compte, cliquez sur « Inscription » pour créer votre accès.
+    </p>
+</div>
 
-                        <a href="" style="background-color:#073B7D" class="btn btn-lg idul-btn" data-toggle="modal"
-                           data-target="#modalLoginIdul"
-                        ><span
-                            style="position: relative;
-                            " class=" login-btn">{{ 'account_idul' | translate }}</span></a>
-                    </div>
-                    <p style="padding-top: 30px" class="new-kf-color text-center">
-                        {{ 'login_signup_invite' | translate }}:
-                        <br>
-                        <br>
-                        <a href="" data-toggle="modal" data-target="#modalRegister"
-                           style="background-color:#073B7D; width: 179px;" class="btn btn-lg"><span
-                            class="login-btn">{{ 'register' | translate }}</span></a>
-                </div>
             </div>
 
         </div>
+       <div class="app-version-wrapper">
         <span class="new-kf-color app-version">v 6.11.14</span>
         <br>
         <span class="new-kf-color app-version">IKIT/OISE/UT</span>
@@ -60,15 +60,17 @@
         <br>
         <br>
         <br>
-        <br>
+        <br> </div>
         <!-- Modal LOCAL -->
         <div id="modalLoginLocal" class="modal fade center" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title text-center new-kf-color">CONNEXION</h4>
-                        <h5 class="modal-title text-center new-kf-color">COMPTE KF LOCAL</h5>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h5 class="modal-title text-center new-kf-color">COMPTE KF</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+  <span aria-hidden="true">&times;</span>
+</button>
                     </div>
                     <div class="modal-body">
                         <form id="local-form" class="form" name="form" ng-submit="login(form)" novalidate>
@@ -113,7 +115,9 @@
                     <div class="modal-header">
                         <h4 class="modal-title text-center new-kf-color">CONNEXION</h4>
                         <h5 class="modal-title text-center new-kf-color">IDUL ULAVAL</h5>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+  <span aria-hidden="true">&times;</span>
+</button>
                     </div>
                     <div class="modal-body">
                         <!--                        <form id="idul-form"  novalidate>-->
@@ -156,14 +160,14 @@
         <!--        Modal REGISTER-->
         <div id="modalRegister" class="modal fade center" tabindex="-1">
             <div class="modal-dialog">
-                <div class="modal-content-register">
+                <div class="modal-content modal-content-register">
+
                     <div class="modal-header">
                         <h4 class="modal-title text-center new-kf-color text-capitalize">{{ 'register' | translate
                             }}</h4>
-                        <button style="bottom: 55px!important;" type="button" class="close" data-dismiss="modal">
-                            &times;
-                        </button>
-                    </div>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+  <span aria-hidden="true">&times;</span>
+</button>                    </div>
                     <div class="modal-body">
 
                         <form id="register" class="form" name="formRegister" ng-submit="register(form)" novalidate>
@@ -288,9 +292,12 @@
                     </div>
                 </div>
             </div>
+
         </div>
+
     </div>
 </div>
+
 
 <!--<script>-->
 <!--    $('#local-form').submit(function () {-->
@@ -314,3 +321,4 @@
 
 
 </script>
+

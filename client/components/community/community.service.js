@@ -34,7 +34,7 @@ angular.module('kf6App')
 
         var enter = function (newId, authorHandler, communityHandler, viewHandler) {
             if (!newId) {
-                console.warn('bad newId: ' + newId);
+                console.warn('bad  (newId||"") : ' + newId);
                 return;
             }
             var currentUserId = Auth.getCurrentUser()._id;

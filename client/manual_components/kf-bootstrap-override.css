@@ -1,0 +1,43 @@
+/* --- Neutraliser tous les wrappers “text-center” Bootstrap/KF --- */
+.text-center,
+div.text-center,
+.row.text-center,
+.panel.text-center,
+.form-group.text-center,
+.well.text-center {
+  text-align: left !important;
+}
+
+/* Conserver les titres de modales centrés */
+.modal-header h3,
+.modal-header h4 { text-align: center !important; }
+
+/* “Well” et descendants : forcer à gauche (sauf boutons) */
+.well, .well *:not(button){ text-align:left !important; }
+.well ul, .well ol, .well li, .well label, .well form, .well input[type="submit"],
+.well a, .well p, .well div:not([style*="text-align: right"]){ text-align:left !important; }
+div[collapse] label, div[collapse] ul, div[collapse] li, div[collapse] form{ text-align:left !important; }
+div[style*="text-align: right"][style*="padding-right"]{ text-align:right !important; }
+
+/* Corps des modales (KF/bootbox) : à gauche ; boutons lisibles */
+.modal .modal-body, .modal .modal-body *{ text-align:left !important; }
+.bootbox-body, .bootbox-body *{ text-align:left !important; }
+.modal .modal-body .btn, .bootbox-body .btn{ text-align:center !important; }
+
+/* --- Pages ÉCHAFAUDAGE & panneau “roue” (settings) --- */
+/* page scaffold manager */
+#scaffoldmanager, .scaffoldmanager,
+#scaffoldmanager *, .scaffoldmanager * { text-align:left !important; }
+
+/* sous-éditeur de réglages (la modale ouverte via la roue) */
+#view-setting-subeditor, .KFViewSettingSubEditor,
+#view-setting-subeditor *, .KFViewSettingSubEditor * { text-align:left !important; }
+
+/* lisibilité des labels/listes dans modales */
+.modal-body label,
+.modal-body ul,
+.modal-body li,
+.modal-body a {
+  text-align: left !important;
+  display: block !important;
+}

@@ -9,6 +9,11 @@ var path = require('path');
 
 module.exports = function(app) {
 
+// Legacy: /api/links/from/<id>/child -> /api/links/from/<id>
+app.get(/^\/api\/links\/from\/([^\/]+)\/child$/, function(req, res) {
+  return res.redirect(308, '/api/links/from/' + req.params[0]);
+});
+
     //The code which allows CrossDomainAccess to API
     app.use(function(req, res, next) {
         res.header('Access-Control-Allow-Origin', '*');

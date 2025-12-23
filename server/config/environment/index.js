@@ -22,7 +22,10 @@ var all = {
     logDir: process.env.LOGDIR || '/var/log/kf6',
 
     // Server port
-    port: process.env.PORT || 8000,
+    port: process.env.PORT || 3000,
+
+    // Server IP
+    ip: process.env.IP || '0.0.0.0',
 
     // Should we populate the DB with sample data?
     seedDB: false,

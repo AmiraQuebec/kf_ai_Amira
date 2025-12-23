@@ -1,0 +1,34 @@
+/* Panneau pièces jointes : taille sur le contenu, jamais rogné */
+#kf-attach-well { 
+  height: auto !important;
+  overflow: visible !important;
+}
+
+/* Zone de drop : pleine largeur, texte non coupé */
+#kf-attach-well .drop-box {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-height: 64px !important;
+  padding: 8px 10px !important;
+  white-space: normal !important;
+}
+
+/* Barre de progression : marge pour éviter l’aspect "coupé" */
+#kf-attach-well .progress { height: 22px; margin-top: 12px; }
+#kf-attach-well .progress-bar { line-height: 22px; font-weight: 700; text-align: center; }
+/* Progress bar de l'uploader KF */
+.kf-progress {
+  margin-top: 12px;
+  width: 90%;
+  min-width: 280px;
+}
+.kf-progress .progress-bar {
+  text-align: center;
+  font-weight: 700;
+}
+
+/* Assure le vert Bootstrap */
+.progress-bar-success { background-color: #5cb85c; }
+
+#kf-attach-well.ng-hide { display: none !important; } /* rien ne capte les clics quand caché */

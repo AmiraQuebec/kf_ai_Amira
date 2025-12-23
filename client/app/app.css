@@ -162,10 +162,6 @@ a:hover {
     padding-right: 30px !important;
 }
 
-.login-div {
-    position: relative !important;
-    left: 68px !important;
-}
 
 @media only screen and (max-width: 1200px) {
     .login-div {
@@ -218,7 +214,7 @@ a:hover {
     }
 
     .login-div {
-        text-align: center !important;
+       /**  text-align: center !important; */
         left: 0px!important;
     }
 
@@ -433,8 +429,88 @@ a:hover {
     margin-top: 58px!important;
     margin-left: 25px;
     width: 95%;
-    /* height: calc(98vh - 40px) !important; */
+   /*  height: calc(98vh - 40px) !important; */
     overflow: scroll;
     background-color: white;
     z-index: 85;
+}
+/* Fix: empêcher le centrage global des modales (help.css) */
+.modal-body,
+.modal .modal-content,
+.modal .modal-body {
+  text-align: left !important;
+}
+
+/* Au cas où certains blocs héritent encore du centrage */
+.modal-body p,
+.modal-body ul,
+.modal-body ol,
+.modal-body label,
+.modal-body .checkbox,
+.modal-body .radio {
+  text-align: left !important;
+}
+
+
+/* Colonne de droite (accès / boutons / phrase) */
+.login-right {
+    text-align: center;
+}
+
+/* Conteneur des deux boutons : centré, mais légèrement décalé vers la gauche */
+.login-right .login-div {
+    display: flex;
+    justify-content: center;
+    gap: 40px;          /* espace entre Connexion et Inscription */
+    margin-top: 20px;
+    margin-left: -30px; /* décalage vers la gauche (ajuste -20/-40 si tu veux) */
+}
+
+/* Style commun des deux boutons */
+.kf-login-btn {
+    background-color: #073B7D !important;
+    border-color: #073B7D !important;
+    color: #ffffff !important;
+    min-width: 179px;
+    border-radius: 4px;
+}
+
+/* Hauteur un peu réduite via le padding */
+.kf-login-btn.btn-lg {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+/* Texte bien centré dans le bouton */
+.kf-login-btn .login-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+/* Phrase sous les boutons, centrée sous le groupe */
+.login-invite {
+    margin-top: 25px;
+    font-size: 14px;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+/* Pour que le footer soit ancré en bas à droite */
+.bg-overlay {
+    position: relative;
+}
+
+/* Bloc version en bas à droite, comme avant */
+.app-version-wrapper {
+    position: absolute;
+    right: 40px;      /* ajuste si tu veux plus à gauche/droite */
+    bottom: 15px;     /* descends ou remontes ici (ex: 25px, 30px…) */
+    text-align: right;
+}
+
+/* Chaque ligne de version sur sa propre ligne */
+.app-version {
+    display: block;
 }

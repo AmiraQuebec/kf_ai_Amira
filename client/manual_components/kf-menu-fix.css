@@ -1,0 +1,15 @@
+/* Caché au démarrage, mais SANS !important pour que le JS puisse l’ouvrir */
+#menu-A, #menu-Canvas {
+  display: none;                 /* <- enlever !important */
+  position: fixed !important;
+  z-index: 2147483647 !important;
+  left: -9999px; 
+  top: -9999px;
+}
+
+/* La liste interne reste en “menu” simple */
+#menu-A .dropdown-menu, 
+#menu-Canvas .dropdown-menu {
+  display: block;
+  margin: 0;
+}

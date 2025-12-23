@@ -84,3 +84,30 @@ $ sudo service mongod start
 $ grunt serve
 ```
 
+# IMPORTANT: 
+TinyMCE doit être installé manuellement pour permettre le chargement correct des plugins.
+Pour savoir les versions exactes à installer, u peux vérifier directement dans le fichier bower.json
+angular-sanitize doit être en version 1.4.14 pour correspondre Ã  angular 1.4.14
+# Si les dessins ne s'affichent plus, vérifier les versions dans bower_components
+# Si les dessins ne s'affichent pas dans une nouvelle note comme des pièces jointes, assure toi de :
+charge ng-file-upload côté client
+
+<script src="/bower_components/ng-file-upload/ng-file-upload.js"></script>
+
+
+remplace le faux shim par un bridge minimal (conserve $upload)
+public/bower_components/angular-file-upload/angular-file-upload.js :
+
+(function(angular){'use strict';
+  angular.module('angularFileUpload',['ngFileUpload'])
+    .factory('$upload',['Upload',function(Upload){return Upload;}]);
+})(window.angular);
+
+
+ordre de scripts (avant app/app.js)
+ng-file-upload.js ? angular-file-upload.js (bridge) ? tes scripts.
+
+contrôle rapide (console)
+
+inj=angular.element(document.body).injector();
+inj.has('Upload') && inj.has('$upload') && inj.get('$upload')===inj.get('Upload')

@@ -1,5 +1,5 @@
 .feedback_form{
-	text-align:center;
+	text-align:left;
 }
 
 .feedback_tb{
@@ -62,12 +62,12 @@
 }
 
 .feedback_tb td_button{
-	text-align:center;
+	text-align:left;
 }
 
 .msg_area{
 	margin-top:10px;
-	text-align: center;
+	text-align:left;
     color: red;
 }
 
@@ -75,3 +75,4 @@
 	color: red;
 	margin-left:10px;
 }
+

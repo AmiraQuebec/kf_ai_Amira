@@ -271,13 +271,13 @@ fieldset legend{
     /*border: 1px solid #000000;*/
 
     overflow: scroll;
-    top: 30px;
-    left: 34px;
-    width: calc(100% - 34px);
+    top: 80px;
+    left: 50px;
+    width: calc(100% - 50px);
     height: 100vh;
     /* for safari <7.0  */
 
-    height: calc(100vh - 30px);
+    height: calc(100vh - 80px);
 }
 
 /* This style is going to be added to maincanvas for riseabove */

@@ -1,0 +1,73 @@
+/* --- FINAL FIX: remove the horizontal bar inside login/register modals --- */
+
+/* Let .modal-content be "normal" (no internal scrollbars) */
+#modalLoginLocal .modal-content,
+#modalLoginIdul .modal-content,
+#modalRegister   .modal-content,
+.modal-content-register {
+  overflow-x: visible !important;
+  box-sizing: border-box !important;
+  max-width: 100% !important;
+}
+
+/* The only place allowed to scroll is the body, and only vertically */
+#modalLoginLocal .modal-body,
+#modalLoginIdul .modal-body,
+#modalRegister   .modal-body {
+  overflow-x: hidden !important;     /* <-- removes the horizontal bar */
+  overflow-y: auto   !important;
+  max-height: calc(100vh - 180px) !important;
+}
+
+/* Safety: nothing inside the body can exceed the body’s width */
+#modalLoginLocal .modal-body > *,
+#modalLoginIdul .modal-body > *,
+#modalRegister   .modal-body > * {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* (Register form only) Rows inside a modal sometimes overflow because of
+   Bootstrap’s negative margins. Neutralize them to be safe. */
+#modalRegister .modal-body .row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Dialog sizing & centering (keeps your current look) */
+#modalLoginLocal .modal-dialog,
+#modalLoginIdul .modal-dialog,
+#modalRegister   .modal-dialog {
+  width: auto !important;
+  max-width: 720px !important;
+  margin: 8vh 20px !important;
+}
+
+/* Close icon position (no impact on width) */
+.modal-header .close {
+  position: absolute !important;
+  right: 12px !important;
+  top: 10px !important;
+  float: none !important;
+  z-index: 1 !important;
+}
+/* Le header devient la référence du positionnement */
+#modalLoginLocal .modal-header,
+#modalLoginIdul .modal-header,
+#modalRegister .modal-header {
+  position: relative;
+  padding-right: 44px;   /* pour ne pas chevaucher le titre centré */
+}
+
+/* La croix bien en haut-droite du header */
+#modalLoginLocal .modal-header .close,
+#modalLoginIdul .modal-header .close,
+#modalRegister .modal-header .close {
+  position: absolute;
+  right: 12px;
+  top: 10px;
+  float: none;           /* on neutralise le float Bootstrap */
+  margin: 0;
+  line-height: 1;
+  font-size: 26px;       /* ajuste si tu veux */
+}

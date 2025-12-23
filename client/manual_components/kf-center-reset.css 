@@ -1,0 +1,22 @@
+/* Remet l'alignement à gauche uniquement dans les conteneurs concernés */
+.bootbox .modal-body,
+.bootbox-body,
+.modal .modal-body,
+.panel-body,
+.well,
+.bootbox .modal-body *, .bootbox-body *,
+.modal .modal-body *, .panel-body *, .well *,
+/* Échafaudage (noms de classes/ids variés) */
+[id*="scaffold"], [class*="scaffold"],
+[id*="Scaffold"], [class*="Scaffold"],
+[id*="scaffold"] *, [class*="scaffold"] *,
+[id*="Scaffold"] *, [class*="Scaffold"] * {
+  text-align: left !important;
+}
+/* Ajouts pour être sûr */
+.ng-binding,
+a.ng-binding,
+.KFScaffoldManagerAnchor {
+    text-align: left !important;
+    display: block;
+}

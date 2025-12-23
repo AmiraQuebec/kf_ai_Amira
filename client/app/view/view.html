@@ -24,7 +24,7 @@
             <div ng-include="'app/viewmanager/viewmanager.html'" ng-controller="ViewmanagerCtrl"></div>
         </div>
     </div>
-    <div class="well" collapse="status.isAttachmentCollapsed" style="padding-left: 50px; position: absolute; top: 0px; left: 50px; width: 50%; background-color: white; z-index: 100;">
+    <div id="kf-attach-well" class="well ng-animate-disabled" ng-show="!status.isAttachmentCollapsed" style="padding-left: 50px; position: absolute; top: 0px; left: 50px; width: 50%; background-color: white; z-index: 100; overflow:visible;">
         <div style="text-align: right; padding-right: 50px; padding-top: 5px;">
             <button type="submit" class="btn btn-primary kfbutton" ng-click="status.isAttachmentCollapsed = true;">{{ 'close' | translate }}</button>
         </div>
@@ -32,13 +32,14 @@
             <div ng-include="'components/kfutils/attachmentuploader/attachmentuploader.html'"></div>
         </div>
     </div>
-    <div class="well" collapse="status.isAnalyticsCollapsed" style="padding-left: 50px; position: absolute; top: 0px; left: 50px; width: 50%; background-color: white; z-index: 100;">
+    <div class="well" collapse="status.isAnalyticsCollapsed" style="padding-left: 50px; position: absolute; top: 0px; left: 50px; width: 50%; background-color:white; z-index:100; overflow:visible;">
         <div style="text-align: right; padding-right: 50px; padding-top: 5px;">
             <button type="submit" class="btn btn-primary kfbutton" ng-click="status.isAnalyticsCollapsed = true">{{ 'close' | translate }}</button>
         </div>
         <div style="padding: 10px;">
             <label>{{ 'assessment_tools' | translate }} ({{ 'beta_version' | translate }}):</label>
             <ul>
+                 <!--
                 <li>
                     <form action="{{kbdacEntry}}" method="get" ng-submit="openKBDACWindow()" target="kbdac-window">
                         <input type="hidden" name="incomingServer" value="kf6server">
@@ -49,6 +50,8 @@
                         <input type="submit" class="submitLink" value="{{ 'student_profile' | translate }}">
                     </form>
                 </li>
+                 -->
+
                 <li ng-if="itmEnabled">
                     <form action="{{itmEntry}}" method="post" ng-submit="openITMWindow()" target="itm-window">
                         <div ng-include="'app/itm/itm_params.html'"></div>
@@ -185,7 +188,7 @@
                 <div class="row" style="padding-left: 20px;margin-bottom: 0px;">
                     <form class="form" name="form"  novalidate>
                         <div class="form-group">
-                            <h5>Mot-clé pour filtrer les notes</h5>
+                            <h5>Mot-clÃ© pour filtrer les notes</h5>
                             <input class="col-lg-10 col-md-10 col-sm-12"   type="text" name="hirerachy.KeywordInput" class="form-control" ng-model="hirerachyKeywordInput" >
                             <button class="btn btn-primary"  style="margin-left:5px" ng-click="hireachyKeywords=hirerachyKeywordInput"><span class="glyphicon glyphicon-search"></span></button>
                         </div>
@@ -201,7 +204,7 @@
             <div class="col-lg-8 col-md-8 col-sm-12 hireachyNotesListContent" style="overflow-y: scroll;min-height: 300px;">
 
                 <div class="container row" style="display: inline-block;" ng-if="views.length>0">
-                    <h5>Choisir la perspective de la note élever le propos </h5>
+                    <h5>Choisir la perspective de la note Ã©lever le propos </h5>
                     <div class="col-lg-4 col-md-4 colsm-12">
                     <ui-select ng-model="selectedView" theme="bootstrap" on-select="onHirerachySelectedView($item)" style="width: 300px;">
                         <ui-select-match placeholder="Choisir une perspective">{{selectedView.title}} </ui-select-match>
@@ -212,7 +215,7 @@
                     </div>
                     <div class="col-lg-8 col-md-8 col-sm-12">
                 <button class="btn-primary" ng-click="createViewLinksforHirerachyNotes(selectedView)">Ajouter une perspective</button>
-                <button class="btn-primary" ng-click="createRiseabovetoviewfromHirerachyNotes(selectedView)">Ajouter une note élever-le-propos à la perspective</button>
+                <button class="btn-primary" ng-click="createRiseabovetoviewfromHirerachyNotes(selectedView)">Ajouter une note Ã©lever-le-propos Ã  la perspective</button>
                 </div>
                 </div>
                 <div>
@@ -431,10 +434,18 @@
                     <div ng-if="ref._to.type === 'Drawing'" ng-bind-html="ref.contribution.data.svg"></div>
                     <div ng-if="ref._to.type === 'Attachment'">
                         <div ng-if="ref.contribution.data.type.indexOf('image/')>=0">
-                            <img ng-attr-src="{{ref.contribution.data.url}}" ng-style="{'width': ref.data.width, 'height': ref.data.height}">
+                            <img ng-attr-src="{{ref.contribution.data.url}}"
+     ng-style="{'width': ref.data.width, 'height': ref.data.height}"
+     draggable="false"
+     context-menu="onContextOpen(this)" data-target="menu-A">
+
                         </div>
                         <div ng-if="ref.contribution.mime.indexOf('image/')<0">
-                            <a ng-attr-href="{{ref.contribution.url}}">{{ref.contribution.title}}</a>
+                            <a ng-attr-href="{{ref.contribution.url}}"
+   context-menu="onContextOpen(this)" data-target="menu-A">
+   {{ref.contribution.title}}
+</a>
+
                         </div>
                     </div>
                 </div>

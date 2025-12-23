@@ -17,7 +17,7 @@ angular.module('kf6App', [
         'ngCookies',
         'chart.js',
         'ngCsv',
-        'ngjsColorPicker',
+
         'xeditable',
         'vcRecaptcha',
         'ngFileSaver',
@@ -25,6 +25,8 @@ angular.module('kf6App', [
         'ng-showdown',
         'ngStorage'
     ])
+
+
     .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
         $urlRouterProvider.otherwise('/');
 

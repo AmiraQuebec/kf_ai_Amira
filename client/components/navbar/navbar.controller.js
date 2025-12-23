@@ -7,7 +7,7 @@ angular.module('kf6App')
       'title': 'home',
       'link': '/'
     }];
-    $scope.isCollapsed = true;
+    $scope.isCollapsed = false;
     $scope.isLoggedIn = Auth.isLoggedIn;
     $scope.isAdmin = Auth.isAdmin;
     $scope.getCurrentUser = Auth.getCurrentUser;
