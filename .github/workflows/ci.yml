@@ -23,7 +23,7 @@ jobs:
           git clone https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git repo
           cd repo
           git checkout ${GITHUB_SHA}
-                - name: Install dependencies (npm install)
+      - name: Install dependencies (npm install)
         run: |
           cd repo
           npm install --no-audit --no-fund
