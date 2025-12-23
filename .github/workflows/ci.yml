@@ -35,7 +35,16 @@ jobs:
           export TMPDIR="$PWD/.tmp"
 
           # install complet (inclut devDependencies)
-          npm install --no-audit --no-fund
+          npm install --no-audit --no-fund --verbose || (
+          echo "===== npm install FAILED ====="
+          echo "PWD=$(pwd)"
+          echo "----- npm-debug.log (tail) -----"
+          test -f npm-debug.log && tail -n 200 npm-debug.log || echo "No npm-debug.log found"
+          echo "----- ls node_modules/.staging -----"
+          ls -la node_modules/.staging 2>/dev/null || true
+          exit 1
+           )
+
 
       - name: Run tests (if any)
         run: |
