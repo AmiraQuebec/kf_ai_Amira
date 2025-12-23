@@ -99,3 +99,27 @@ Thumbs.db
 public.bak.*
 client/.backup-*/
 client/bower_components.*
+# Big binaries / downloaded tools
+*.deb
+ngrok
+node
+
+# Local KF build/archives
+kf6@6.11.14/
+manual_assets/
+vendor/
+
+# Random local test files
+test.txt
+deps_problematic.txt
+# server-side leftovers / working files we don't want in git
+client/app/**/**.safe
+client/app/**/**.cb-bak-*
+client/**/**.fix.*
+client/**/**.probleme
+client/app/i18n/
+client/client/
+kf6@6.11.14/
+kf6-config-backup/
+cloudflared-*.deb*
+setting.js
