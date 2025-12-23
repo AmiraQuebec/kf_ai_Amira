@@ -12,14 +12,22 @@ jobs:
       image: node:6.17.1
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Install git (if missing)
+        run: |
+          command -v git >/dev/null 2>&1 || (apt-get update && apt-get install -y git ca-certificates)
 
-      - name: Show versions (inside container)
+      - name: Checkout with git
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git clone https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git repo
+          cd repo
+          git checkout ${GITHUB_SHA}
+          git status --porcelain
+          ls -la
+
+      - name: Versions
         run: |
           node -v
           npm -v
-          uname -a
-          ls -la
-          test -f package.json && echo "package.json OK"
-          test -f bower.json && echo "bower.json OK" || true
 
