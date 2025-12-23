@@ -123,3 +123,9 @@ kf6@6.11.14/
 kf6-config-backup/
 cloudflared-*.deb*
 setting.js
+# KF local archive / big folder
+kf6@6.11.14
+
+# broken/pre-reset backups
+client/manual_components/svg-edit-2.8.1/svg-editor.html.broken.*
+client/manual_components/svg-edit-2.8.1/svg-editor.html.pre-reset.*
