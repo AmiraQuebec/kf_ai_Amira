@@ -27,7 +27,13 @@ jobs:
       - name: Install dependencies (npm install)
         run: |
           cd repo
-          npm install --no-audit --no-fund || (echo "---- npm-debug.log ----" && tail -n 200 npm-debug.log && exit 1)
+          rm -rf node_modules
+          rm -rf ~/.npm
+          npm config set cache /tmp/.npm
+          npm config set unsafe-perm true
+          npm cache clean || true
+          npm install --no-audit --no-fund || (echo "---- npm-debug.log (tail) ----" && tail -n 200 npm-debug.log && exit 1)
+
 
 
           git status --porcelain
