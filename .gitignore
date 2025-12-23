@@ -93,3 +93,9 @@ pids
 .Trashes
 ehthumbs.db
 Thumbs.db
+# Extra backups we actually have in this server
+*.bak*
+*.backup*
+public.bak.*
+client/.backup-*/
+client/bower_components.*
