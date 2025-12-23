@@ -1,4 +1,4 @@
-name: CI
+name: CI (legacy node6)
 
 on:
   push:
@@ -6,19 +6,20 @@ on:
   workflow_dispatch:
 
 jobs:
-  smoke:
+  legacy_smoke:
     runs-on: ubuntu-latest
+    container:
+      image: node:6.17.1
+
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "18"
-          cache: "npm"
-
-      - run: node -v
-      - run: npm -v
-
-      - name: Install dependencies
-        run: npm ci
+      - name: Show versions (inside container)
+        run: |
+          node -v
+          npm -v
+          uname -a
+          ls -la
+          test -f package.json && echo "package.json OK"
+          test -f bower.json && echo "bower.json OK" || true
 
